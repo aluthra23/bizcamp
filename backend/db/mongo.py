@@ -17,7 +17,3 @@ except Exception as e:
     print(e)
 
 db = client["biz_data"]
-
-print(db)
-
-db.users.insert_one({"omg":"hi"})
