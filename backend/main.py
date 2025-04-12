@@ -3,8 +3,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from db.mongo import db
 from bson import ObjectId #vedant import
 import datetime
+from dotenv import load_dotenv
+import os
+from qdrant_manager import QdrantManager
+load_dotenv()
 
 app = FastAPI()
+
+qdrant_manager = QdrantManager(qdrant_api_key=os.getenv('QDRANT_API_KEY'), google_api_key= os.getenv('GOOGLE_API_KEY'), host=os.getenv('QDRANT_LINK'), port=6333)
 
 # Enable CORS (adjust allowed origins as needed)
 app.add_middleware(
@@ -181,8 +187,11 @@ async def chat_with_meeting(meeting_id: str, request: Request):
         user_message = data.get("message", "")
         
         # Mock response for now
+        print(meeting_id)
+        message = qdrant_manager.chat(collection_name=meeting_id, prompt=user_message)
+
         response = {
-            "message": f"This is a mock response to: '{user_message}' for meeting {meeting_id}",
+            "message": str(message),
             "meeting_id": meeting_id,
             "timestamp": datetime.datetime.now().isoformat()
         }
