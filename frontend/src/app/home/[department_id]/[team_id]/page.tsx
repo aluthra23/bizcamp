@@ -356,7 +356,7 @@ export default function TeamPage() {
                             headerToolbar={{
                                 left: 'prev,next today',
                                 center: 'title',
-                                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                                right: 'dayGridMonth,timeGridWeek,timeGridDay', 
                             }}
                             events={calendarEvents}
                             eventClick={handleEventClick}
