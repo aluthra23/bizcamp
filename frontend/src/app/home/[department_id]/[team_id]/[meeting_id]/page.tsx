@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
+import { processAudioChunk, initializeCollection, restartCollection } from './actions';
 
 // Define types
 interface Attendee {
@@ -101,17 +102,232 @@ const meetingData: Record<string, MeetingDetails> = {
     }
 };
 
+
+interface DurationModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: (durationMs: number) => void;
+}
+
+function DurationModal({ isOpen, onClose, onConfirm }: DurationModalProps) {
+  const [hours, setHours] = useState(1);
+  const [minutes, setMinutes] = useState(15);
+
+  if (!isOpen) return null;
+
+  const handleConfirm = () => {
+    const durationMs = (hours * 60 * 60 * 1000) + (minutes * 60 * 1000);
+    onConfirm(durationMs);
+    onClose();
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+      <div className="glass-effect rounded-xl border border-white/10 p-6 w-full max-w-sm mx-auto">
+        <h2 className="text-xl font-semibold text-white mb-4">Set Recording Duration</h2>
+        
+        <div className="flex flex-col sm:flex-row gap-4 mb-6">
+          {/* Hours */}
+          <div className="flex-1">
+            <label className="block text-sm font-medium text-text-secondary mb-1">Hours</label>
+            <select 
+              value={hours}
+              onChange={(e) => setHours(Number(e.target.value))}
+              className="w-full px-3 py-2 bg-surface border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-light"
+            >
+              {[...Array(5)].map((_, i) => (
+                <option key={i} value={i}>{i}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Minutes */}
+          <div className="flex-1">
+            <label className="block text-sm font-medium text-text-secondary mb-1">Minutes</label>
+            <select 
+              value={minutes}
+              onChange={(e) => setMinutes(Number(e.target.value))}
+              className="w-full px-3 py-2 bg-surface border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-light"
+            >
+              {[...Array(12)].map((_, i) => (
+                <option key={i} value={i*5}>{i*5}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div className="flex flex-col-reverse sm:flex-row justify-end gap-3">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 bg-surface border border-white/10 rounded-full text-white hover:bg-surface-light transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleConfirm}
+            className="px-4 py-2 bg-gradient-to-r from-primary to-accent text-white rounded-full hover:opacity-90 transition-opacity"
+          >
+            Start Recording
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function MeetingPage() {
     const router = useRouter();
     const params = useParams();
     const departmentId = params.department_id as string;
     const teamId = params.team_id as string;
     const meetingId = params.meeting_id as string;
+    
+    // Recording state
+    const [transcriptionStarted, setTranscriptionStarted] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+    const streamRef = useRef<MediaStream | null>(null);
+    const intervalRef = useRef<NodeJS.Timeout | null>(null);
+    const chunksRef = useRef<Blob[]>([]);
+    const durationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     // Try to get the meeting data, or use default if not found
     const [meeting, setMeeting] = useState<MeetingDetails | null>(
         meetingData[meetingId] || meetingData['_default'] || null
     );
+
+    useEffect(() => {
+        return () => {
+            handleStopTranscription();
+            if (durationTimeoutRef.current) {
+                clearTimeout(durationTimeoutRef.current);
+            }
+        };
+    }, []);
+
+    const startNewRecordingInterval = async () => {
+        if (!streamRef.current) return;
+
+        // Stop current recording if exists
+        if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+            mediaRecorderRef.current.stop();
+        }
+
+        // Clear previous chunks
+        chunksRef.current = [];
+
+        // Create new MediaRecorder with appropriate options
+        const options = {
+            mimeType: 'audio/webm;codecs=opus',
+            audioBitsPerSecond: 128000
+        };
+
+        try {
+            mediaRecorderRef.current = new MediaRecorder(streamRef.current, options);
+
+            mediaRecorderRef.current.ondataavailable = (event) => {
+                if (event.data.size > 0) {
+                    chunksRef.current.push(event.data);
+                }
+            };
+
+            mediaRecorderRef.current.onstop = async () => {
+                if (chunksRef.current.length > 0) {
+                    const audioBlob = new Blob(chunksRef.current, { type: 'audio/webm;codecs=opus' });
+                    try {
+                        await processAudioChunk(audioBlob, meetingId);
+                    } catch (error) {
+                        console.error("Error processing audio chunk:", error);
+                    }
+                    chunksRef.current = []; // Clear chunks after processing
+                }
+            };
+
+            // Start new recording
+            mediaRecorderRef.current.start();
+        } catch (error) {
+            console.error("Error creating MediaRecorder:", error);
+        }
+    };
+
+    const handleStartTranscription = async (durationMs?: number) => {
+        try {
+            await initializeCollection(meetingId);
+            console.log("Starting transcription...");
+
+            if (transcriptionStarted) return;
+
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            streamRef.current = stream;
+            
+            // Start first interval
+            await startNewRecordingInterval();
+
+            // Set up interval to restart recording every 10 seconds
+            intervalRef.current = setInterval(async () => {
+                await startNewRecordingInterval();
+            }, 10000);
+
+            setTranscriptionStarted(true);
+
+            // Set up auto-stop if duration is provided
+            if (durationMs) {
+                durationTimeoutRef.current = setTimeout(() => {
+                    handleStopTranscription();
+                }, durationMs);
+            }
+
+            // Update meeting to show it has transcription
+            if (meeting) {
+                setMeeting({
+                    ...meeting,
+                    hasTranscription: true
+                });
+            }
+        } catch (error) {
+            console.error("Error accessing microphone:", error);
+            alert("Failed to access the microphone. Please ensure your microphone is connected and you've granted permission to use it.");
+        }
+    };
+
+    const handleStopTranscription = () => {
+        try {
+            // Clear the interval
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+                intervalRef.current = null;
+            }
+
+            // Stop current recording
+            if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+                mediaRecorderRef.current.stop();
+            }
+
+            // Stop media stream
+            if (streamRef.current) {
+                streamRef.current.getTracks().forEach(track => track.stop());
+                streamRef.current = null;
+            }
+
+            mediaRecorderRef.current = null;
+            chunksRef.current = [];
+            console.log("Audio recording stopped.");
+        } catch (error) {
+            console.error("Error stopping transcription:", error);
+        } finally {
+            setTranscriptionStarted(false);
+        }
+    };
+
+    const handleRestartCollection = async () => {
+        try {
+            await restartCollection(meetingId);
+            console.log("Collection restarted successfully.");
+        } catch (error) {
+            console.error("Error restarting collection:", error);
+            alert("Failed to restart the collection.");
+        }
+    };
 
     if (!meeting) {
         return (
@@ -152,25 +368,49 @@ export default function MeetingPage() {
 
                 {/* Meeting header */}
                 <div className="glass-effect rounded-xl p-6 border border-white/10 mb-8">
-                    <div className="flex justify-between items-start mb-4">
+                    <div className="flex flex-col md:flex-row justify-between items-start mb-4 gap-4">
                         <div>
                             <h1 className="text-2xl font-bold text-white">{meeting.name}</h1>
                             <p className="text-text-secondary mt-1">{meeting.description}</p>
                         </div>
 
-                        {meeting.hasTranscription && (
-                            <Link
-                                href={`/home/${departmentId}/${teamId}/${meetingId}/transcription`}
-                                className="bg-gradient-to-r from-primary to-accent text-white px-4 py-2 rounded-full font-medium flex items-center gap-2"
+                        <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                            {transcriptionStarted && (
+                                <div className="flex items-center bg-primary/20 rounded-full px-3 py-1 text-primary-light gap-2">
+                                    <div className="relative">
+                                        <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                                        <div className="absolute inset-0 w-3 h-3 bg-red-500 rounded-full animate-ping"></div>
+                                    </div>
+                                    <span className="text-sm">Recording</span>
+                                </div>
+                            )}
+                            
+                            <button
+                                onClick={transcriptionStarted ? handleStopTranscription : () => setIsModalOpen(true)}
+                                className={`
+                                    px-4 py-2 rounded-full transition-colors text-white
+                                    ${transcriptionStarted 
+                                    ? 'bg-red-500 hover:bg-red-600' 
+                                    : 'bg-gradient-to-r from-green-500 to-teal-500 hover:opacity-90'}
+                                `}
                             >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-                                    <path d="M19.07 5.93a10 10 0 0 1 0 12.14"></path>
-                                </svg>
-                                View Transcription
-                            </Link>
-                        )}
+                                {transcriptionStarted ? 'Stop Recording' : 'Start Recording'}
+                            </button>
+
+                            {meeting.hasTranscription && (
+                                <Link
+                                    href={`/home/${departmentId}/${teamId}/${meetingId}/transcription`}
+                                    className="bg-gradient-to-r from-primary to-accent text-white px-4 py-2 rounded-full font-medium flex items-center gap-2"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                                        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                                        <path d="M19.07 5.93a10 10 0 0 1 0 12.14"></path>
+                                    </svg>
+                                    View Transcription
+                                </Link>
+                            )}
+                        </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
@@ -317,6 +557,15 @@ export default function MeetingPage() {
                     </div>
                 </div>
             </main>
+            
+            {/* Duration Modal */}
+            <DurationModal 
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onConfirm={(durationMs) => {
+                    handleStartTranscription(durationMs);
+                }}
+            />
         </div>
     );
 }
