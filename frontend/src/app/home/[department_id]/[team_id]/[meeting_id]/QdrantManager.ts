@@ -10,7 +10,7 @@ interface SearchResult {
   score: number;
 }
 
-const googleApiKeyList = [process.env.GOOGLE_API_KEY_1 || '', process.env.GOOGLE_API_KEY_2 || '', process.env.GOOGLE_API_KEY_3 || '']
+const googleApiKey = process.env.GOOGLE_API_KEY || '';
 
 export interface Point {
   id: string | number; // ID can be a string or a number
@@ -136,7 +136,7 @@ export class QdrantManager {
     }
 
     // Get embedding from Google's Generative AI
-    const genAI = new GoogleGenerativeAI(googleApiKeyList[Math.floor(Math.random() * googleApiKeyList.length)]);
+    const genAI = new GoogleGenerativeAI(googleApiKey);
     const model = genAI.getGenerativeModel({ model: 'text-embedding-004' });
     const result = await model.embedContent(text);
     const embedding = result.embedding.values;
