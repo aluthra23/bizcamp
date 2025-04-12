@@ -65,13 +65,11 @@ export default function DepartmentModal({
       }
 
       const newDepartment = await response.json();
-
-      // Generate a simple ID for UI purposes (in case backend ID is complex)
-      const simpleDepartmentId = name.toLowerCase().replace(/\s+/g, '-');
       
+      // Pass the department with the MongoDB _id to the parent component
       onDepartmentAdded({
         ...newDepartment,
-        id: simpleDepartmentId,
+        id: newDepartment.name.toLowerCase().replace(/\s+/g, '-'),
         teamCount: 0 // New departments start with 0 teams
       });
       

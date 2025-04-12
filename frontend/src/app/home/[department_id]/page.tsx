@@ -13,73 +13,110 @@ interface Team {
 }
 
 interface Department {
+    _id: string;
     name: string;
     description: string;
     teams: Team[];
+    company_id?: string;
 }
 
-interface DepartmentData {
-    [key: string]: Department;
-}
-
-// Sample department data
-const departmentData: DepartmentData = {
-    'eng': {
-        name: 'Engineering',
-        description: 'Software development and infrastructure teams',
-        teams: [
-            { id: 'frontend', name: 'Frontend', meetingCount: 8, members: 6 },
-            { id: 'backend', name: 'Backend', meetingCount: 12, members: 7 },
-            { id: 'mobile', name: 'Mobile', meetingCount: 5, members: 4 },
-            { id: 'devops', name: 'DevOps', meetingCount: 6, members: 3 },
-            { id: 'qa', name: 'QA', meetingCount: 10, members: 5 },
-        ]
-    },
-    'product': {
-        name: 'Product',
-        description: 'Product management and design teams',
-        teams: [
-            { id: 'design', name: 'Design', meetingCount: 7, members: 4 },
-            { id: 'pm', name: 'Product Management', meetingCount: 15, members: 5 },
-            { id: 'research', name: 'User Research', meetingCount: 9, members: 3 },
-        ]
-    },
-    'marketing': {
-        name: 'Marketing',
-        description: 'Brand, growth, and communications teams',
-        teams: [
-            { id: 'brand', name: 'Brand', meetingCount: 6, members: 4 },
-            { id: 'growth', name: 'Growth', meetingCount: 8, members: 5 },
-        ]
-    },
-    'sales': {
-        name: 'Sales',
-        description: 'Sales and business development teams',
-        teams: [
-            { id: 'americas', name: 'Americas', meetingCount: 12, members: 8 },
-            { id: 'emea', name: 'EMEA', meetingCount: 10, members: 6 },
-            { id: 'apac', name: 'APAC', meetingCount: 8, members: 5 },
-            { id: 'enterprise', name: 'Enterprise', meetingCount: 14, members: 7 },
-        ]
-    },
-    'hr': {
-        name: 'HR',
-        description: 'People operations and talent acquisition teams',
-        teams: [
-            { id: 'people-ops', name: 'People Operations', meetingCount: 7, members: 4 },
-            { id: 'recruiting', name: 'Recruiting', meetingCount: 9, members: 6 },
-        ]
-    }
+// Sample teams data (we'll use this for now since we don't have a teams API yet)
+const sampleTeams: { [key: string]: Team[] } = {
+    'eng': [
+        { id: 'frontend', name: 'Frontend', meetingCount: 8, members: 6 },
+        { id: 'backend', name: 'Backend', meetingCount: 12, members: 7 },
+        { id: 'mobile', name: 'Mobile', meetingCount: 5, members: 4 },
+        { id: 'devops', name: 'DevOps', meetingCount: 6, members: 3 },
+        { id: 'qa', name: 'QA', meetingCount: 10, members: 5 },
+    ],
+    'product': [
+        { id: 'design', name: 'Design', meetingCount: 7, members: 4 },
+        { id: 'pm', name: 'Product Management', meetingCount: 15, members: 5 },
+        { id: 'research', name: 'User Research', meetingCount: 9, members: 3 },
+    ],
+    'marketing': [
+        { id: 'brand', name: 'Brand', meetingCount: 6, members: 4 },
+        { id: 'growth', name: 'Growth', meetingCount: 8, members: 5 },
+    ],
+    'sales': [
+        { id: 'americas', name: 'Americas', meetingCount: 12, members: 8 },
+        { id: 'emea', name: 'EMEA', meetingCount: 10, members: 6 },
+        { id: 'apac', name: 'APAC', meetingCount: 8, members: 5 },
+        { id: 'enterprise', name: 'Enterprise', meetingCount: 14, members: 7 },
+    ],
+    'hr': [
+        { id: 'people-ops', name: 'People Operations', meetingCount: 7, members: 4 },
+        { id: 'recruiting', name: 'Recruiting', meetingCount: 9, members: 6 },
+    ],
+    'default': [
+        { id: 'team-1', name: 'Team 1', meetingCount: 0, members: 0 },
+        { id: 'team-2', name: 'Team 2', meetingCount: 0, members: 0 },
+    ]
 };
 
 export default function DepartmentPage() {
     const router = useRouter();
     const params = useParams();
     const departmentId = params.department_id as string;
+    
+    const [department, setDepartment] = useState<Department | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    
+    useEffect(() => {
+        const fetchDepartmentData = async () => {
+            setIsLoading(true);
+            setError(null);
+            
+            try {
+                // First, fetch all departments to find the one we need
+                const response = await fetch('/api/backend/departments');
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch departments');
+                }
+                
+                const departments = await response.json();
+                const currentDepartment = departments.find((dept: any) => dept._id === departmentId);
+                
+                if (currentDepartment) {
+                    // If there's a matching department, use its data
+                    const departmentWithTeams = {
+                        ...currentDepartment,
+                        // Determine which sample teams to use based on the department name
+                        teams: getTeamsForDepartment(currentDepartment.name)
+                    };
+                    
+                    setDepartment(departmentWithTeams);
+                } else {
+                    setError('Department not found');
+                }
+            } catch (err) {
+                console.error('Error fetching department data:', err);
+                setError('Failed to load department data');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        
+        fetchDepartmentData();
+    }, [departmentId]);
+    
+    // Function to get teams for a department based on its name
+    const getTeamsForDepartment = (departmentName: string) => {
+        const key = departmentName.toLowerCase().replace(/\s+/g, '-');
+        return sampleTeams[key] || sampleTeams['default'];
+    };
 
-    const [department, setDepartment] = useState<Department | null>(departmentData[departmentId] || null);
+    if (isLoading) {
+        return (
+            <div className="min-h-screen bg-background flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+            </div>
+        );
+    }
 
-    if (!department) {
+    if (error || !department) {
         return (
             <div className="min-h-screen bg-background flex items-center justify-center">
                 <div className="text-center p-8">

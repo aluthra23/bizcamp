@@ -143,15 +143,15 @@ export default function HomePage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {departments.map((dept) => (
-              <div key={dept.id} className="relative">
+              <div key={dept._id} className="relative">
                 <Link
-                  href={`/home/${dept.id}`}
+                  href={`/home/${dept._id}`}
                   className="block"
                 >
                   <div className="glass-effect rounded-xl p-6 border border-white/10 transition hover:border-primary/50 hover:bg-white/5">
                     <div className="absolute top-4 right-4">
                       <button 
-                        onClick={(e) => toggleMenu(e, dept.id)}
+                        onClick={(e) => toggleMenu(e, dept._id)}
                         className="text-white/60 hover:text-white p-1 rounded-full transition-colors focus:outline-none"
                         aria-label="Options"
                       >
@@ -160,7 +160,7 @@ export default function HomePage() {
                         </svg>
                       </button>
                       
-                      {menuOpenId === dept.id && (
+                      {menuOpenId === dept._id && (
                         <div 
                           className="absolute right-0 mt-1 w-48 rounded-md shadow-lg bg-gray-900 border border-white/10 z-20"
                           onClick={(e) => e.stopPropagation()}
