@@ -53,9 +53,9 @@ export default function TeamPage() {
     const [showAddMeetingModal, setShowAddMeetingModal] = useState(false);
     const [showMeetingDetailModal, setShowMeetingDetailModal] = useState(false);
     const [selectedMeeting, setSelectedMeeting] = useState<Meeting | null>(null);
-    const [newMeeting, setNewMeeting] = useState({ 
-        title: '', 
-        description: '', 
+    const [newMeeting, setNewMeeting] = useState({
+        title: '',
+        description: '',
         meeting_date: new Date().toISOString().split('T')[0],
         meeting_time: '09:00'
     });
@@ -70,18 +70,18 @@ export default function TeamPage() {
         const fetchTeamData = async () => {
             setIsLoading(true);
             setError(null);
-            
+
             try {
                 // Fetch the specific team directly by its ID
                 const teamResponse = await fetch(`/api/backend/teams/${teamId}`);
-                
+
                 if (!teamResponse.ok) {
                     throw new Error('Failed to fetch team');
                 }
-                
+
                 const teamData = await teamResponse.json();
                 setTeam(teamData);
-                
+
                 // Now fetch meetings for this team
                 await fetchMeetings(teamId);
             } catch (err) {
@@ -91,18 +91,18 @@ export default function TeamPage() {
                 setIsLoading(false);
             }
         };
-        
+
         fetchTeamData();
     }, [departmentId, teamId]);
-    
+
     const fetchMeetings = async (teamId: string) => {
         try {
             const response = await fetch(`/api/backend/teams/${teamId}/meetings`);
-            
+
             if (!response.ok) {
                 throw new Error('Failed to fetch meetings');
             }
-            
+
             const meetingsData = await response.json();
             setMeetings(meetingsData);
 
@@ -110,11 +110,11 @@ export default function TeamPage() {
             const events = meetingsData.map((meeting: Meeting) => {
                 // Create start date from the meeting_date ISO string
                 const startDate = new Date(meeting.meeting_date);
-                
+
                 // Create end date (60 minutes after start time)
                 const endDate = new Date(startDate);
                 endDate.setMinutes(endDate.getMinutes() + 60);
-                
+
                 return {
                     id: meeting._id,
                     title: meeting.title,
@@ -166,16 +166,16 @@ export default function TeamPage() {
         setFormErrors(errors);
         return isValid;
     };
-    
+
     const handleAddMeeting = async (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         if (!validateForm()) return;
-        
+
         try {
             // Combine date and time into a single ISO string
             const combinedDateTime = `${newMeeting.meeting_date}T${newMeeting.meeting_time}:00`;
-            
+
             const response = await fetch(`/api/backend/teams/${teamId}/meetings`, {
                 method: 'POST',
                 headers: {
@@ -188,18 +188,18 @@ export default function TeamPage() {
                     teamId: teamId
                 }),
             });
-            
+
             if (!response.ok) {
                 throw new Error('Failed to add meeting');
             }
-            
+
             // Refresh the meetings list
             await fetchMeetings(teamId);
-            
+
             // Reset the form and close the modal
-            setNewMeeting({ 
-                title: '', 
-                description: '', 
+            setNewMeeting({
+                title: '',
+                description: '',
                 meeting_date: new Date().toISOString().split('T')[0],
                 meeting_time: '09:00'
             });
@@ -291,8 +291,8 @@ export default function TeamPage() {
                             <h1 className="text-2xl font-bold text-white">{team.name}</h1>
                             <p className="text-text-secondary mt-1">{team.description}</p>
                         </div>
-                        <Button 
-                            onClick={() => setShowAddMeetingModal(true)} 
+                        <Button
+                            onClick={() => setShowAddMeetingModal(true)}
                             className="bg-gradient-to-r from-primary to-accent"
                         >
                             + Schedule Meeting
@@ -383,7 +383,7 @@ export default function TeamPage() {
                             headerToolbar={{
                                 left: 'prev,next today',
                                 center: 'title',
-                                right: 'dayGridMonth,timeGridWeek,timeGridDay', 
+                                right: 'dayGridMonth,timeGridWeek,timeGridDay',
                             }}
                             events={calendarEvents}
                             eventClick={handleEventClick}
@@ -407,7 +407,7 @@ export default function TeamPage() {
                     </div>
                 </div>
             </main>
-            
+
             {/* Add Meeting Modal */}
             <Modal
                 isOpen={showAddMeetingModal}
@@ -422,13 +422,13 @@ export default function TeamPage() {
                         <input
                             type="text"
                             value={newMeeting.title}
-                            onChange={(e) => setNewMeeting({...newMeeting, title: e.target.value})}
+                            onChange={(e) => setNewMeeting({ ...newMeeting, title: e.target.value })}
                             className={`w-full bg-surface border ${formErrors.title ? 'border-red-500' : 'border-white/10'} rounded-lg p-2 text-white focus:outline-none focus:ring-2 focus:ring-primary`}
                             required
                         />
                         {formErrors.title && <p className="text-red-500 text-xs mt-1">{formErrors.title}</p>}
                     </div>
-                    
+
                     <div className="grid grid-cols-2 gap-4 mb-4">
                         <div>
                             <label className="block text-text-secondary text-sm font-medium mb-2">
@@ -437,13 +437,13 @@ export default function TeamPage() {
                             <input
                                 type="date"
                                 value={newMeeting.meeting_date}
-                                onChange={(e) => setNewMeeting({...newMeeting, meeting_date: e.target.value})}
+                                onChange={(e) => setNewMeeting({ ...newMeeting, meeting_date: e.target.value })}
                                 className={`w-full bg-surface border ${formErrors.meeting_date ? 'border-red-500' : 'border-white/10'} rounded-lg p-2 text-white focus:outline-none focus:ring-2 focus:ring-primary`}
                                 required
                             />
                             {formErrors.meeting_date && <p className="text-red-500 text-xs mt-1">{formErrors.meeting_date}</p>}
                         </div>
-                        
+
                         <div>
                             <label className="block text-text-secondary text-sm font-medium mb-2">
                                 Time *
@@ -451,28 +451,28 @@ export default function TeamPage() {
                             <input
                                 type="time"
                                 value={newMeeting.meeting_time}
-                                onChange={(e) => setNewMeeting({...newMeeting, meeting_time: e.target.value})}
+                                onChange={(e) => setNewMeeting({ ...newMeeting, meeting_time: e.target.value })}
                                 className={`w-full bg-surface border ${formErrors.meeting_time ? 'border-red-500' : 'border-white/10'} rounded-lg p-2 text-white focus:outline-none focus:ring-2 focus:ring-primary`}
                                 required
                             />
                             {formErrors.meeting_time && <p className="text-red-500 text-xs mt-1">{formErrors.meeting_time}</p>}
                         </div>
                     </div>
-                    
+
                     <div className="mb-6">
                         <label className="block text-text-secondary text-sm font-medium mb-2">
                             Description *
                         </label>
                         <textarea
                             value={newMeeting.description}
-                            onChange={(e) => setNewMeeting({...newMeeting, description: e.target.value})}
+                            onChange={(e) => setNewMeeting({ ...newMeeting, description: e.target.value })}
                             className={`w-full bg-surface border ${formErrors.description ? 'border-red-500' : 'border-white/10'} rounded-lg p-2 text-white focus:outline-none focus:ring-2 focus:ring-primary`}
                             rows={3}
                             required
                         />
                         {formErrors.description && <p className="text-red-500 text-xs mt-1">{formErrors.description}</p>}
                     </div>
-                    
+
                     <div className="flex justify-end gap-3">
                         <Button
                             variant="outline"
@@ -501,10 +501,10 @@ export default function TeamPage() {
                     <div>
                         <h3 className="text-text-secondary text-sm font-medium mb-1">Date & Time</h3>
                         <p className="text-white">
-                            {selectedMeeting && new Date(selectedMeeting.meeting_date).toLocaleDateString('en-US', { 
-                                year: 'numeric', 
-                                month: 'long', 
-                                day: 'numeric' 
+                            {selectedMeeting && new Date(selectedMeeting.meeting_date).toLocaleDateString('en-US', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
                             })}
                             {selectedMeeting && ' at '}
                             {selectedMeeting && new Date(selectedMeeting.meeting_date).toLocaleTimeString('en-US', {
@@ -535,7 +535,7 @@ export default function TeamPage() {
                             onClick={handleBeginMeeting}
                             className="bg-gradient-to-r from-primary to-accent"
                         >
-                            Begin Meeting
+                            Next
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
                                 <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
                             </svg>
