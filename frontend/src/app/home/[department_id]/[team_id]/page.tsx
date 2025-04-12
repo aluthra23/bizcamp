@@ -1,8 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import Modal from '@/components/ui/Modal';
+import Button from '@/components/ui/Button';
 
 // Define types
 interface Meeting {
@@ -20,21 +26,44 @@ interface Team {
     departmentId: string;
 }
 
+interface CalendarEvent {
+    id: string;
+    title: string;
+    start: string; // ISO date string with time
+    end: string; // ISO date string with time (60 min later)
+    extendedProps: {
+        description: string;
+        teamId: string;
+        _id: string;
+    };
+}
+
 export default function TeamPage() {
     const router = useRouter();
     const params = useParams();
     const departmentId = params.department_id as string;
     const teamId = params.team_id as string;
+    const calendarRef = useRef<any>(null);
 
     const [team, setTeam] = useState<Team | null>(null);
     const [meetings, setMeetings] = useState<Meeting[]>([]);
+    const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [showAddMeetingModal, setShowAddMeetingModal] = useState(false);
+    const [showMeetingDetailModal, setShowMeetingDetailModal] = useState(false);
+    const [selectedMeeting, setSelectedMeeting] = useState<Meeting | null>(null);
     const [newMeeting, setNewMeeting] = useState({ 
         title: '', 
         description: '', 
-        meeting_date: new Date().toISOString().split('T')[0]
+        meeting_date: new Date().toISOString().split('T')[0],
+        meeting_time: '09:00'
+    });
+    const [formErrors, setFormErrors] = useState({
+        title: '',
+        description: '',
+        meeting_date: '',
+        meeting_time: ''
     });
 
     useEffect(() => {
@@ -76,25 +105,86 @@ export default function TeamPage() {
             
             const meetingsData = await response.json();
             setMeetings(meetingsData);
+
+            // Transform meetings into calendar events with proper date/time handling
+            const events = meetingsData.map((meeting: Meeting) => {
+                // Create start date from the meeting_date ISO string
+                const startDate = new Date(meeting.meeting_date);
+                
+                // Create end date (60 minutes after start time)
+                const endDate = new Date(startDate);
+                endDate.setMinutes(endDate.getMinutes() + 60);
+                
+                return {
+                    id: meeting._id,
+                    title: meeting.title,
+                    start: startDate.toISOString(),
+                    end: endDate.toISOString(),
+                    extendedProps: {
+                        description: meeting.description,
+                        teamId: meeting.teamId,
+                        _id: meeting._id
+                    }
+                };
+            });
+            setCalendarEvents(events);
         } catch (err) {
             console.error('Error fetching meetings:', err);
             setError('Failed to load meetings');
         }
     };
+
+    const validateForm = () => {
+        const errors = {
+            title: '',
+            description: '',
+            meeting_date: '',
+            meeting_time: ''
+        };
+        let isValid = true;
+
+        if (!newMeeting.title.trim()) {
+            errors.title = 'Meeting title is required';
+            isValid = false;
+        }
+
+        if (!newMeeting.description.trim()) {
+            errors.description = 'Description is required';
+            isValid = false;
+        }
+
+        if (!newMeeting.meeting_date) {
+            errors.meeting_date = 'Date is required';
+            isValid = false;
+        }
+
+        if (!newMeeting.meeting_time) {
+            errors.meeting_time = 'Time is required';
+            isValid = false;
+        }
+
+        setFormErrors(errors);
+        return isValid;
+    };
     
     const handleAddMeeting = async (e: React.FormEvent) => {
         e.preventDefault();
         
-        if (!newMeeting.title.trim()) return;
+        if (!validateForm()) return;
         
         try {
+            // Combine date and time into a single ISO string
+            const combinedDateTime = `${newMeeting.meeting_date}T${newMeeting.meeting_time}:00`;
+            
             const response = await fetch(`/api/backend/teams/${teamId}/meetings`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    ...newMeeting,
+                    title: newMeeting.title,
+                    description: newMeeting.description,
+                    meeting_date: combinedDateTime,
                     teamId: teamId
                 }),
             });
@@ -110,13 +200,49 @@ export default function TeamPage() {
             setNewMeeting({ 
                 title: '', 
                 description: '', 
-                meeting_date: new Date().toISOString().split('T')[0]
+                meeting_date: new Date().toISOString().split('T')[0],
+                meeting_time: '09:00'
             });
             setShowAddMeetingModal(false);
         } catch (err) {
             console.error('Error adding meeting:', err);
             alert('Failed to add meeting. Please try again.');
         }
+    };
+
+    const handleEventClick = (info: any) => {
+        const eventId = info.event.id;
+        const meeting = meetings.find(m => m._id === eventId);
+        if (meeting) {
+            setSelectedMeeting(meeting);
+            setShowMeetingDetailModal(true);
+        }
+    };
+
+    const handleDeleteMeeting = async () => {
+        if (!selectedMeeting) return;
+
+        try {
+            const response = await fetch(`/api/backend/meetings/${selectedMeeting._id}`, {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to delete meeting');
+            }
+
+            // Refresh meetings after deletion
+            await fetchMeetings(teamId);
+            setShowMeetingDetailModal(false);
+        } catch (err) {
+            console.error('Error deleting meeting:', err);
+            alert('Failed to delete meeting. Please try again.');
+        }
+    };
+
+    const handleBeginMeeting = () => {
+        if (!selectedMeeting) return;
+        router.push(`/home/${departmentId}/${teamId}/${selectedMeeting._id}`);
     };
 
     if (isLoading) {
@@ -126,8 +252,6 @@ export default function TeamPage() {
             </div>
         );
     }
-
-    console.log(error)
 
     if (error || !team) {
         return (
@@ -167,139 +291,231 @@ export default function TeamPage() {
                             <h1 className="text-2xl font-bold text-white">{team.name}</h1>
                             <p className="text-text-secondary mt-1">{team.description}</p>
                         </div>
-                        <button 
+                        <Button 
                             onClick={() => setShowAddMeetingModal(true)} 
-                            className="bg-gradient-to-r from-primary to-accent text-white px-4 py-2 rounded-full font-medium"
+                            className="bg-gradient-to-r from-primary to-accent"
                         >
                             + Schedule Meeting
-                        </button>
+                        </Button>
                     </div>
                 </div>
 
-                <h2 className="text-xl font-semibold text-white mb-4">Meetings</h2>
-
-                {meetings.length === 0 ? (
-                    <div className="glass-effect rounded-xl p-8 border border-white/10 text-center">
-                        <p className="text-text-secondary mb-4">No meetings found for this team.</p>
-                        <button
-                            onClick={() => setShowAddMeetingModal(true)}
-                            className="bg-gradient-to-r from-primary to-accent text-white px-4 py-2 rounded-full font-medium"
-                        >
-                            Schedule your first meeting
-                        </button>
+                <div className="glass-effect rounded-xl border border-white/10 p-6 mb-8">
+                    <style jsx global>{`
+                        .fc-theme-standard {
+                            font-family: var(--font-sans, sans-serif);
+                        }
+                        .fc-theme-standard .fc-scrollgrid {
+                            border-color: rgba(255, 255, 255, 0.1);
+                        }
+                        .fc-theme-standard td, .fc-theme-standard th {
+                            border-color: rgba(255, 255, 255, 0.1);
+                        }
+                        .fc-theme-standard .fc-toolbar-title {
+                            color: white;
+                            font-weight: bold;
+                        }
+                        .fc-theme-standard .fc-col-header-cell-cushion {
+                            color: rgba(255, 255, 255, 0.7);
+                            font-weight: 500;
+                        }
+                        .fc-theme-standard .fc-daygrid-day-number {
+                            color: rgba(255, 255, 255, 0.7);
+                        }
+                        .fc .fc-button-primary {
+                            background-color: #1f1f1f;
+                            border-color: rgba(255, 255, 255, 0.1);
+                            color: white;
+                        }
+                        .fc .fc-button-primary:hover {
+                            background-color: #2d2d2d;
+                        }
+                        .fc .fc-button-primary:disabled {
+                            background-color: #1f1f1f;
+                            opacity: 0.5;
+                        }
+                        .fc .fc-event {
+                            background: linear-gradient(135deg, #9333ea, #d946ef);
+                            border: none;
+                            border-radius: 4px;
+                            cursor: pointer;
+                        }
+                        .fc .fc-daygrid-day.fc-day-today {
+                            background-color: rgba(147, 51, 234, 0.1);
+                        }
+                        .fc-view-harness {
+                            background-color: rgba(31, 31, 31, 0.3);
+                            border-radius: 8px;
+                        }
+                    `}</style>
+                    <div className="calendar-container">
+                        <FullCalendar
+                            ref={calendarRef}
+                            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                            initialView="dayGridMonth"
+                            headerToolbar={{
+                                left: 'prev,next today',
+                                center: 'title',
+                                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                            }}
+                            events={calendarEvents}
+                            eventClick={handleEventClick}
+                            height="auto"
+                            aspectRatio={1.8}
+                            slotDuration="00:30:00"
+                            slotLabelInterval="01:00"
+                            slotLabelFormat={{
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                hour12: true
+                            }}
+                            eventTimeFormat={{
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                hour12: true
+                            }}
+                            allDaySlot={false}
+                            nowIndicator={true}
+                        />
                     </div>
-                ) : (
-                    <div className="glass-effect rounded-xl border border-white/10 overflow-hidden">
-                        <div className="overflow-x-auto">
-                            <table className="w-full">
-                                <thead>
-                                    <tr className="border-b border-white/10">
-                                        <th className="py-3 px-4 text-left text-white/70 font-medium">Meeting</th>
-                                        <th className="py-3 px-4 text-left text-white/70 font-medium">Date</th>
-                                        <th className="py-3 px-4 text-left text-white/70 font-medium">Description</th>
-                                        <th className="py-3 px-4 text-left text-white/70 font-medium">Transcription</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {meetings.map((meeting) => (
-                                        <tr key={meeting._id} className="border-b border-white/5 hover:bg-white/5 transition-all">
-                                            <td className="py-3 px-4">
-                                                <Link href={`/home/${departmentId}/${teamId}/${meeting._id}`} className="text-white hover:text-primary-light transition">
-                                                    {meeting.title}
-                                                </Link>
-                                            </td>
-                                            <td className="py-3 px-4 text-text-secondary">
-                                                {new Date(meeting.meeting_date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
-                                            </td>
-                                            <td className="py-3 px-4 text-text-secondary">
-                                                {meeting.description}
-                                            </td>
-                                            <td className="py-3 px-4">
-                                                <Link
-                                                    href={`/home/${departmentId}/${teamId}/${meeting._id}/transcription`}
-                                                    className="text-primary-light hover:underline flex items-center gap-1"
-                                                >
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                                                        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-                                                        <path d="M19.07 5.93a10 10 0 0 1 0 12.14"></path>
-                                                    </svg>
-                                                    View
-                                                </Link>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                )}
+                </div>
             </main>
             
             {/* Add Meeting Modal */}
-            {showAddMeetingModal && (
-                <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-                    <div className="glass-effect rounded-xl border border-white/10 p-6 w-full max-w-md mx-auto">
-                        <h2 className="text-xl font-semibold text-white mb-4">Schedule Meeting</h2>
+            <Modal
+                isOpen={showAddMeetingModal}
+                onClose={() => setShowAddMeetingModal(false)}
+                title="Schedule Meeting"
+            >
+                <form onSubmit={handleAddMeeting} className="space-y-4">
+                    <div className="mb-4">
+                        <label className="block text-text-secondary text-sm font-medium mb-2">
+                            Meeting Title *
+                        </label>
+                        <input
+                            type="text"
+                            value={newMeeting.title}
+                            onChange={(e) => setNewMeeting({...newMeeting, title: e.target.value})}
+                            className={`w-full bg-surface border ${formErrors.title ? 'border-red-500' : 'border-white/10'} rounded-lg p-2 text-white focus:outline-none focus:ring-2 focus:ring-primary`}
+                            required
+                        />
+                        {formErrors.title && <p className="text-red-500 text-xs mt-1">{formErrors.title}</p>}
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label className="block text-text-secondary text-sm font-medium mb-2">
+                                Date *
+                            </label>
+                            <input
+                                type="date"
+                                value={newMeeting.meeting_date}
+                                onChange={(e) => setNewMeeting({...newMeeting, meeting_date: e.target.value})}
+                                className={`w-full bg-surface border ${formErrors.meeting_date ? 'border-red-500' : 'border-white/10'} rounded-lg p-2 text-white focus:outline-none focus:ring-2 focus:ring-primary`}
+                                required
+                            />
+                            {formErrors.meeting_date && <p className="text-red-500 text-xs mt-1">{formErrors.meeting_date}</p>}
+                        </div>
                         
-                        <form onSubmit={handleAddMeeting}>
-                            <div className="mb-4">
-                                <label className="block text-text-secondary text-sm font-medium mb-2">
-                                    Meeting Title
-                                </label>
-                                <input
-                                    type="text"
-                                    value={newMeeting.title}
-                                    onChange={(e) => setNewMeeting({...newMeeting, title: e.target.value})}
-                                    className="w-full bg-surface border border-white/10 rounded-lg p-2 text-white focus:outline-none focus:ring-2 focus:ring-primary"
-                                    required
-                                />
-                            </div>
-                            
-                            <div className="mb-4">
-                                <label className="block text-text-secondary text-sm font-medium mb-2">
-                                    Date
-                                </label>
-                                <input
-                                    type="date"
-                                    value={newMeeting.meeting_date}
-                                    onChange={(e) => setNewMeeting({...newMeeting, meeting_date: e.target.value})}
-                                    className="w-full bg-surface border border-white/10 rounded-lg p-2 text-white focus:outline-none focus:ring-2 focus:ring-primary"
-                                    required
-                                />
-                            </div>
-                            
-                            <div className="mb-6">
-                                <label className="block text-text-secondary text-sm font-medium mb-2">
-                                    Description
-                                </label>
-                                <textarea
-                                    value={newMeeting.description}
-                                    onChange={(e) => setNewMeeting({...newMeeting, description: e.target.value})}
-                                    className="w-full bg-surface border border-white/10 rounded-lg p-2 text-white focus:outline-none focus:ring-2 focus:ring-primary"
-                                    rows={3}
-                                />
-                            </div>
-                            
-                            <div className="flex justify-end gap-3">
-                                <button
-                                    type="button"
-                                    onClick={() => setShowAddMeetingModal(false)}
-                                    className="px-4 py-2 border border-white/10 rounded-full text-white hover:bg-surface-light"
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="px-4 py-2 bg-gradient-to-r from-primary to-accent text-white rounded-full"
-                                >
-                                    Schedule
-                                </button>
-                            </div>
-                        </form>
+                        <div>
+                            <label className="block text-text-secondary text-sm font-medium mb-2">
+                                Time *
+                            </label>
+                            <input
+                                type="time"
+                                value={newMeeting.meeting_time}
+                                onChange={(e) => setNewMeeting({...newMeeting, meeting_time: e.target.value})}
+                                className={`w-full bg-surface border ${formErrors.meeting_time ? 'border-red-500' : 'border-white/10'} rounded-lg p-2 text-white focus:outline-none focus:ring-2 focus:ring-primary`}
+                                required
+                            />
+                            {formErrors.meeting_time && <p className="text-red-500 text-xs mt-1">{formErrors.meeting_time}</p>}
+                        </div>
+                    </div>
+                    
+                    <div className="mb-6">
+                        <label className="block text-text-secondary text-sm font-medium mb-2">
+                            Description *
+                        </label>
+                        <textarea
+                            value={newMeeting.description}
+                            onChange={(e) => setNewMeeting({...newMeeting, description: e.target.value})}
+                            className={`w-full bg-surface border ${formErrors.description ? 'border-red-500' : 'border-white/10'} rounded-lg p-2 text-white focus:outline-none focus:ring-2 focus:ring-primary`}
+                            rows={3}
+                            required
+                        />
+                        {formErrors.description && <p className="text-red-500 text-xs mt-1">{formErrors.description}</p>}
+                    </div>
+                    
+                    <div className="flex justify-end gap-3">
+                        <Button
+                            variant="outline"
+                            type="button"
+                            onClick={() => setShowAddMeetingModal(false)}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            type="submit"
+                            className="bg-gradient-to-r from-primary to-accent"
+                        >
+                            Create Meeting
+                        </Button>
+                    </div>
+                </form>
+            </Modal>
+
+            {/* Meeting Detail Modal */}
+            <Modal
+                isOpen={showMeetingDetailModal}
+                onClose={() => setShowMeetingDetailModal(false)}
+                title={selectedMeeting?.title || 'Meeting Details'}
+            >
+                <div className="space-y-4">
+                    <div>
+                        <h3 className="text-text-secondary text-sm font-medium mb-1">Date & Time</h3>
+                        <p className="text-white">
+                            {selectedMeeting && new Date(selectedMeeting.meeting_date).toLocaleDateString('en-US', { 
+                                year: 'numeric', 
+                                month: 'long', 
+                                day: 'numeric' 
+                            })}
+                            {selectedMeeting && ' at '}
+                            {selectedMeeting && new Date(selectedMeeting.meeting_date).toLocaleTimeString('en-US', {
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            })}
+                        </p>
+                        <p className="text-text-secondary text-xs mt-1">60 minute duration</p>
+                    </div>
+
+                    <div>
+                        <h3 className="text-text-secondary text-sm font-medium mb-1">Description</h3>
+                        <p className="text-white">{selectedMeeting?.description}</p>
+                    </div>
+
+                    <div className="flex justify-between items-center pt-4 mt-6 border-t border-white/10">
+                        <Button
+                            variant="outline"
+                            onClick={handleDeleteMeeting}
+                            className="text-red-400 border-red-400/30 hover:bg-red-400/10"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                            </svg>
+                            Delete
+                        </Button>
+                        <Button
+                            onClick={handleBeginMeeting}
+                            className="bg-gradient-to-r from-primary to-accent"
+                        >
+                            Begin Meeting
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                            </svg>
+                        </Button>
                     </div>
                 </div>
-            )}
+            </Modal>
         </div>
     );
 }

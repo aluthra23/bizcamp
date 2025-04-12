@@ -97,11 +97,27 @@ async def get_meetings_by_team(team_id: str):
 async def add_meeting(team_id: str, request: Request):
     try:
         data = await request.json()
+        # Ensure the meeting_date is stored as ISO format string
+        # The frontend will send meeting_date as an ISO string that includes both date and time
+        # Each meeting will have a default duration of 60 minutes (not stored explicitly)
         data["teamId"] = team_id
         result = db["meetings"].insert_one(data)
         return {"inserted_id": str(result.inserted_id)}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.delete("/meetings/{meeting_id}")
+async def delete_meeting(meeting_id: str):
+    try:
+        # Convert string ID to ObjectId
+        result = db["meetings"].delete_one({"_id": ObjectId(meeting_id)})
+        
+        if result.deleted_count == 0:
+            raise HTTPException(status_code=404, detail="Meeting not found")
+            
+        return {"success": True, "message": "Meeting deleted successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Error deleting meeting: {str(e)}")
 
 @app.get("/meetings/{meeting_id}")
 async def get_meeting_by_id(meeting_id: str):
@@ -138,3 +154,21 @@ async def get_team_by_id(team_id: str):
         raise HTTPException(status_code=400, detail="Invalid team ID format")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error retrieving team: {str(e)}")
+
+@app.post("/meetings/{meeting_id}/transcription")
+async def update_meeting_transcription_status(meeting_id: str, request: Request):
+    try:
+        data = await request.json()
+        
+        # Update the meeting with transcription status
+        result = db["meetings"].update_one(
+            {"_id": ObjectId(meeting_id)},
+            {"$set": {"hasTranscription": data.get("hasTranscription", True)}}
+        )
+        
+        if result.matched_count == 0:
+            raise HTTPException(status_code=404, detail="Meeting not found")
+            
+        return {"success": True, "message": "Meeting transcription status updated"}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Error updating meeting transcription status: {str(e)}")
