@@ -43,24 +43,18 @@ export default function TeamPage() {
             setError(null);
             
             try {
-                // First, fetch the teams for this department
-                const teamsResponse = await fetch(`/api/backend/departments/${departmentId}/teams`);
+                // Fetch the specific team directly by its ID
+                const teamResponse = await fetch(`/api/backend/teams/${teamId}`);
                 
-                if (!teamsResponse.ok) {
-                    throw new Error('Failed to fetch teams');
+                if (!teamResponse.ok) {
+                    throw new Error('Failed to fetch team');
                 }
                 
-                const teamsData = await teamsResponse.json();
-                const currentTeam = teamsData.find((t: Team) => t._id === teamId);
+                const teamData = await teamResponse.json();
+                setTeam(teamData);
                 
-                if (currentTeam) {
-                    setTeam(currentTeam);
-                    
-                    // Now fetch meetings for this team
-                    await fetchMeetings(teamId);
-                } else {
-                    setError('Team not found');
-                }
+                // Now fetch meetings for this team
+                await fetchMeetings(teamId);
             } catch (err) {
                 console.error('Error fetching team data:', err);
                 setError('Failed to load team data');

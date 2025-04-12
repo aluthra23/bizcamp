@@ -86,6 +86,9 @@ async def get_meetings_by_team(team_id: str):
     try:
         meetings = list(db["meetings"].find({"teamId": team_id}))
         print(meetings)
+        # Convert ObjectId to string
+        for meeting in meetings:
+            meeting["_id"] = str(meeting["_id"])
         return meetings
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -99,4 +102,56 @@ async def add_meeting(team_id: str, request: Request):
         return {"inserted_id": str(result.inserted_id)}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/meetings/{meeting_id}")
+async def get_meeting_by_id(meeting_id: str):
+    try:
+        # Convert string ID to ObjectId
+        meeting = db["meetings"].find_one({"_id": ObjectId(meeting_id)})
+        
+        if not meeting:
+            raise HTTPException(status_code=404, detail="Meeting not found")
+        
+        # Convert ObjectId to string
+        meeting["_id"] = str(meeting["_id"])
+        
+        return meeting
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid meeting ID format")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error retrieving meeting: {str(e)}")
+
+@app.get("/teams/{team_id}")
+async def get_team_by_id(team_id: str):
+    try:
+        # Convert string ID to ObjectId
+        team = db["teams"].find_one({"_id": ObjectId(team_id)})
+        
+        if not team:
+            raise HTTPException(status_code=404, detail="Team not found")
+        
+        # Convert ObjectId to string
+        team["_id"] = str(team["_id"])
+        
+        return team
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid team ID format")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error retrieving team: {str(e)}")
+
+@app.post("/meetings/{meeting_id}/transcription")
+async def update_meeting_transcription(meeting_id: str, request: Request):
+    try:
+        data = await request.json()
+        result = db["meetings"].update_one(
+            {"_id": ObjectId(meeting_id)},
+            {"$set": {"hasTranscription": data.get("hasTranscription", False)}}
+        )
+        
+        if result.matched_count == 0:
+            raise HTTPException(status_code=404, detail="Meeting not found")
+            
+        return {"success": True, "message": "Meeting transcription status updated"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error updating meeting: {str(e)}")
 
