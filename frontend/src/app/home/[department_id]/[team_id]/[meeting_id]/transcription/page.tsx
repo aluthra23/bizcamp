@@ -33,6 +33,14 @@ interface TranscriptData {
     actionItems: string[];
 }
 
+interface MeetingDetails {
+    _id: string;
+    teamId: string;
+    title: string;
+    description: string;
+    meeting_date: string;
+}
+
 // Sample transcript data
 const transcriptData: Record<string, TranscriptData> = {
     'sprint-1': {
@@ -83,7 +91,7 @@ const transcriptData: Record<string, TranscriptData> = {
         meetingId: '_default',
         meetingName: 'Meeting',
         date: '2023-05-20',
-        duration: '00:45:00',
+        duration: '01:00:00',
         speakers: [
             { id: 'user1', name: 'Jane Doe', role: 'Manager', avatarColor: 'bg-gradient-to-br from-purple-500 to-indigo-500' },
             { id: 'user2', name: 'John Smith', role: 'Developer', avatarColor: 'bg-gradient-to-br from-blue-500 to-cyan-500' },
@@ -116,6 +124,10 @@ export default function TranscriptionPage() {
     const teamId = params.team_id as string;
     const meetingId = params.meeting_id as string;
 
+    // State for meeting data
+    const [meeting, setMeeting] = useState<MeetingDetails | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+
     // Try to get the transcript data, or use default if not found
     const [transcript, setTranscript] = useState<TranscriptData | null>(
         transcriptData[meetingId] || transcriptData['_default'] || null
@@ -126,6 +138,41 @@ export default function TranscriptionPage() {
 
     // State for speaker filter
     const [selectedSpeakers, setSelectedSpeakers] = useState<string[]>([]);
+
+    useEffect(() => {
+        const fetchMeeting = async () => {
+            setIsLoading(true);
+            try {
+                const response = await fetch(`/api/backend/meetings/${meetingId}`);
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch meeting');
+                }
+                
+                const meetingData = await response.json();
+                setMeeting(meetingData);
+                
+                // Update transcript with actual meeting data
+                if (transcript) {
+                    // Format the date from ISO string to locale date string
+                    const meetingDate = new Date(meetingData.meeting_date);
+                    
+                    setTranscript({
+                        ...transcript,
+                        meetingName: meetingData.title,
+                        date: meetingData.meeting_date,
+                    });
+                }
+                
+            } catch (err) {
+                console.error('Error fetching meeting:', err);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        
+        fetchMeeting();
+    }, [meetingId]);
 
     // Filter segments by selected speakers or show all if none selected
     const filteredSegments = transcript?.segments.filter(segment =>
@@ -146,7 +193,15 @@ export default function TranscriptionPage() {
         return transcript?.speakers.find(speaker => speaker.id === speakerId);
     };
 
-    if (!transcript) {
+    if (isLoading) {
+        return (
+            <div className="min-h-screen bg-background flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+            </div>
+        );
+    }
+
+    if (!transcript || !meeting) {
         return (
             <div className="min-h-screen bg-background flex items-center justify-center">
                 <div className="text-center p-8">
@@ -181,7 +236,7 @@ export default function TranscriptionPage() {
                     </Link>
                     <span className="text-white/40">→</span>
                     <Link href={`/home/${departmentId}/${teamId}/${meetingId}`} className="text-white/60 hover:text-white transition">
-                        {transcript.meetingName}
+                        {meeting.title}
                     </Link>
                     <span className="text-white/40">→</span>
                     <span className="text-white">Transcription</span>
@@ -191,9 +246,9 @@ export default function TranscriptionPage() {
                 <div className="glass-effect rounded-xl p-6 border border-white/10 mb-8">
                     <div className="flex justify-between items-start">
                         <div>
-                            <h1 className="text-2xl font-bold text-white">{transcript.meetingName} - Transcription</h1>
+                            <h1 className="text-2xl font-bold text-white">{meeting.title} - Transcription</h1>
                             <p className="text-text-secondary mt-1">
-                                {new Date(transcript.date).toLocaleDateString('en-US', {
+                                {new Date(meeting.meeting_date).toLocaleDateString('en-US', {
                                     weekday: 'long',
                                     year: 'numeric',
                                     month: 'long',
@@ -263,34 +318,34 @@ export default function TranscriptionPage() {
                         </div>
                     </div>
 
-                    {/* Main content - transcript or summary */}
+                    {/* Main content area */}
                     <div className="lg:col-span-3">
                         {activeTab === 'transcript' ? (
                             <div className="space-y-6">
                                 {filteredSegments.map((segment) => {
                                     const speaker = getSpeaker(segment.speakerId);
+                                    if (!speaker) return null;
+
                                     return (
-                                        <div
-                                            key={segment.id}
-                                            className={`flex gap-4 ${segment.isHighlighted ? 'bg-primary/10 p-4 rounded-lg border border-primary/20' : ''}`}
+                                        <div 
+                                            key={segment.id} 
+                                            className={`flex gap-4 p-4 rounded-lg transition ${segment.isHighlighted ? 'bg-primary/10 border border-primary/20' : 'hover:bg-white/5'}`}
                                         >
-                                            <div className="flex-shrink-0 mt-1">
-                                                <div className={`w-8 h-8 rounded-full ${speaker?.avatarColor} flex items-center justify-center text-white font-medium`}>
-                                                    {speaker?.name.charAt(0)}
-                                                </div>
+                                            <div className={`w-10 h-10 rounded-full ${speaker.avatarColor} flex-shrink-0 flex items-center justify-center text-white font-medium mt-1`}>
+                                                {speaker.name.charAt(0)}
                                             </div>
-
                                             <div className="flex-grow">
-                                                <div className="flex justify-between mb-1">
-                                                    <p className="text-white font-medium">{speaker?.name}</p>
-                                                    <p className="text-white/60 text-sm">{segment.timestamp}</p>
+                                                <div className="flex items-center gap-2 mb-1">
+                                                    <p className="font-medium text-white">{speaker.name}</p>
+                                                    <span className="text-xs text-text-secondary">{segment.timestamp}</span>
+                                                    {segment.sentiment === 'positive' && (
+                                                        <span className="text-xs text-green-400 bg-green-400/10 px-2 py-0.5 rounded-full">Positive</span>
+                                                    )}
+                                                    {segment.sentiment === 'negative' && (
+                                                        <span className="text-xs text-red-400 bg-red-400/10 px-2 py-0.5 rounded-full">Negative</span>
+                                                    )}
                                                 </div>
-
-                                                <p className={`text-white/90 ${segment.sentiment === 'positive' ? 'border-l-2 border-green-500 pl-3' :
-                                                    segment.sentiment === 'negative' ? 'border-l-2 border-red-500 pl-3' : ''
-                                                    }`}>
-                                                    {segment.text}
-                                                </p>
+                                                <p className="text-text-primary">{segment.text}</p>
                                             </div>
                                         </div>
                                     );
@@ -299,31 +354,37 @@ export default function TranscriptionPage() {
                         ) : (
                             <div className="glass-effect rounded-xl border border-white/10 p-6">
                                 <div className="mb-6">
-                                    <h3 className="text-lg font-semibold text-white mb-2">AI-Generated Summary</h3>
-                                    <p className="text-white/90">{transcript.summary}</p>
+                                    <h3 className="text-lg font-semibold text-white mb-3">Meeting Summary</h3>
+                                    <p className="text-text-primary">{transcript.summary}</p>
                                 </div>
 
                                 <div className="mb-6">
-                                    <h3 className="text-lg font-semibold text-white mb-2">Key Points</h3>
-                                    <ul className="list-disc pl-5 space-y-1">
+                                    <h3 className="text-lg font-semibold text-white mb-3">Key Points</h3>
+                                    <ul className="space-y-2">
                                         {transcript.keyPoints.map((point, index) => (
-                                            <li key={index} className="text-white/90">{point}</li>
+                                            <li key={index} className="flex items-start gap-2">
+                                                <div className="w-5 h-5 rounded-full bg-primary/20 text-primary-light flex items-center justify-center flex-shrink-0 mt-0.5">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                                    </svg>
+                                                </div>
+                                                <span className="text-text-primary">{point}</span>
+                                            </li>
                                         ))}
                                     </ul>
                                 </div>
 
                                 <div>
-                                    <h3 className="text-lg font-semibold text-white mb-2">Action Items</h3>
+                                    <h3 className="text-lg font-semibold text-white mb-3">Action Items</h3>
                                     <ul className="space-y-2">
                                         {transcript.actionItems.map((item, index) => (
                                             <li key={index} className="flex items-start gap-2">
-                                                <div className="bg-primary/20 text-primary-light rounded-full w-5 h-5 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                                <div className="w-5 h-5 rounded-full bg-accent/20 text-accent-light flex items-center justify-center flex-shrink-0 mt-0.5">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                        <polyline points="9 11 12 14 22 4"></polyline>
-                                                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                                                        <path d="M3 10h18M7 15h10M12 3v6M14.5 13.5l-5-3M9.5 13.5l5-3"/>
                                                     </svg>
                                                 </div>
-                                                <span className="text-white/90">{item}</span>
+                                                <span className="text-text-primary">{item}</span>
                                             </li>
                                         ))}
                                     </ul>
