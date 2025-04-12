@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Button from '../ui/Button';
 import Input from '../ui/Input';
 
@@ -10,6 +11,8 @@ interface SignUpFormProps {
 }
 
 export default function SignUpForm({ onSuccess, onSignInClick }: SignUpFormProps) {
+  const router = useRouter();
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -19,18 +22,21 @@ export default function SignUpForm({ onSuccess, onSignInClick }: SignUpFormProps
     e.preventDefault();
     setError('');
     setIsLoading(true);
-    
+
     try {
-      // Here you would add your registration logic
-      console.log('Signing up with:', { email, password });
-      
+      // Here you would add your user creation logic
+      console.log('Creating account with:', { name, email, password });
+
       // Simulate API call
       await new Promise(r => setTimeout(r, 1000));
-      
+
       // On success
       if (onSuccess) onSuccess();
+
+      // Redirect to app dashboard
+      router.push('/home');
     } catch (err) {
-      setError('Something went wrong. Please try again.');
+      setError('Could not create account. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -41,14 +47,28 @@ export default function SignUpForm({ onSuccess, onSignInClick }: SignUpFormProps
       <p className="text-text-secondary text-sm mb-6">
         Access to 120+ hours of courses, tutorials and livestreams
       </p>
-      
+
       {error && (
         <div className="bg-red-900/20 border border-red-500/50 text-red-100 p-3 rounded-lg mb-4 text-sm">
           {error}
         </div>
       )}
-      
+
       <form onSubmit={handleSubmit} className="space-y-4">
+        <Input
+          type="text"
+          placeholder="Full name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+          icon={
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          }
+        />
+
         <Input
           type="email"
           placeholder="Email address"
@@ -62,7 +82,7 @@ export default function SignUpForm({ onSuccess, onSignInClick }: SignUpFormProps
             </svg>
           }
         />
-        
+
         <Input
           type="password"
           placeholder="Password"
@@ -76,15 +96,15 @@ export default function SignUpForm({ onSuccess, onSignInClick }: SignUpFormProps
             </svg>
           }
         />
-        
+
         <Button type="submit" fullWidth disabled={isLoading}>
-          {isLoading ? 'Creating account...' : 'Create account'}
+          {isLoading ? 'Creating your account...' : 'Sign Up'}
         </Button>
-        
+
         <p className="text-xs text-gray-400 mt-4">
           By clicking on Sign up, you agree to our Terms of service and Privacy policy.
         </p>
-        
+
         <div className="text-center mt-4">
           <p className="text-gray-400 text-sm">
             Already have an account?{' '}

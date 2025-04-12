@@ -28,12 +28,15 @@ export default function Navbar() {
           <Link href="#about" className="text-white/80 hover:text-white transition">
             About
           </Link>
+          <Link href="/home" className="text-primary-light hover:text-white transition">
+            Demo App
+          </Link>
         </div>
 
         <div className="flex items-center space-x-4">
-          <Button 
-            variant="outline" 
-            size="sm" 
+          <Button
+            variant="outline"
+            size="sm"
             onClick={() => {
               setIsSignInModalOpen(true);
               setIsSignUpModalOpen(false);
@@ -41,9 +44,9 @@ export default function Navbar() {
           >
             Sign In
           </Button>
-          <Button 
-            variant="primary" 
-            size="sm" 
+          <Button
+            variant="primary"
+            size="sm"
             onClick={() => {
               setIsSignUpModalOpen(true);
               setIsSignInModalOpen(false);
@@ -54,12 +57,12 @@ export default function Navbar() {
         </div>
       </div>
 
-      <Modal 
-        isOpen={isSignInModalOpen} 
+      <Modal
+        isOpen={isSignInModalOpen}
         onClose={() => setIsSignInModalOpen(false)}
         title="Sign In"
       >
-        <SignInForm 
+        <SignInForm
           onSuccess={() => setIsSignInModalOpen(false)}
           onSignUpClick={() => {
             setIsSignInModalOpen(false);
@@ -68,12 +71,12 @@ export default function Navbar() {
         />
       </Modal>
 
-      <Modal 
-        isOpen={isSignUpModalOpen} 
+      <Modal
+        isOpen={isSignUpModalOpen}
         onClose={() => setIsSignUpModalOpen(false)}
         title="Sign Up"
       >
-        <SignUpForm 
+        <SignUpForm
           onSuccess={() => setIsSignUpModalOpen(false)}
           onSignInClick={() => {
             setIsSignUpModalOpen(false);

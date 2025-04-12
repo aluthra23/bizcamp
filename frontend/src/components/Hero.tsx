@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Button from './ui/Button';
 import Modal from './ui/Modal';
 import SignUpForm from './auth/SignUpForm';
+import Link from 'next/link';
 
 export default function Hero() {
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
@@ -13,11 +14,11 @@ export default function Hero() {
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-black via-purple-900/40 to-black z-0" />
-      
+
       {/* Circular purple gradients */}
       <div className="absolute top-20 right-[10%] w-96 h-96 rounded-full bg-purple-600/30 filter blur-[80px] z-0" />
       <div className="absolute bottom-20 left-[10%] w-72 h-72 rounded-full bg-fuchsia-600/20 filter blur-[60px] z-0" />
-      
+
       <div className="container mx-auto px-4 relative z-10">
         <div className="flex flex-col lg:flex-row items-center gap-12">
           {/* Left side content */}
@@ -27,18 +28,20 @@ export default function Hero() {
               <br />
               <span className="text-white">with BizCamp</span>
             </h1>
-            
+
             <p className="text-lg text-text-secondary max-w-xl mx-auto lg:mx-0">
               Join our community of entrepreneurs and learn how to scale your business with our expert-led courses and resources.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <Button size="lg" onClick={() => setIsSignUpModalOpen(true)}>
                 Get Started Free
               </Button>
-              <Button variant="outline" size="lg">
-                Learn More
-              </Button>
+              <Link href="/home">
+                <Button variant="outline" size="lg">
+                  Demo App
+                </Button>
+              </Link>
             </div>
 
             <div className="flex items-center justify-center lg:justify-start space-x-4 pt-4">
@@ -54,7 +57,7 @@ export default function Hero() {
               </p>
             </div>
           </div>
-          
+
           {/* Right side image */}
           <div className="lg:w-1/2 relative">
             <div className="relative w-full max-w-md mx-auto h-[500px]">
@@ -91,12 +94,12 @@ export default function Hero() {
         </div>
       </div>
 
-      <Modal 
-        isOpen={isSignUpModalOpen} 
+      <Modal
+        isOpen={isSignUpModalOpen}
         onClose={() => setIsSignUpModalOpen(false)}
         title="Sign Up"
       >
-        <SignUpForm 
+        <SignUpForm
           onSuccess={() => setIsSignUpModalOpen(false)}
         />
       </Modal>

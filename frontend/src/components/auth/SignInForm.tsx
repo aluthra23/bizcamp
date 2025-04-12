@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Button from '../ui/Button';
 import Input from '../ui/Input';
 
@@ -10,6 +11,7 @@ interface SignInFormProps {
 }
 
 export default function SignInForm({ onSuccess, onSignUpClick }: SignInFormProps) {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -19,16 +21,19 @@ export default function SignInForm({ onSuccess, onSignUpClick }: SignInFormProps
     e.preventDefault();
     setError('');
     setIsLoading(true);
-    
+
     try {
       // Here you would add your authentication logic
       console.log('Signing in with:', { email, password });
-      
+
       // Simulate API call
       await new Promise(r => setTimeout(r, 1000));
-      
+
       // On success
       if (onSuccess) onSuccess();
+
+      // Redirect to app dashboard
+      router.push('/home');
     } catch (err) {
       setError('Invalid email or password');
     } finally {
@@ -43,7 +48,7 @@ export default function SignInForm({ onSuccess, onSignUpClick }: SignInFormProps
           {error}
         </div>
       )}
-      
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <Input
           type="email"
@@ -58,7 +63,7 @@ export default function SignInForm({ onSuccess, onSignUpClick }: SignInFormProps
             </svg>
           }
         />
-        
+
         <Input
           type="password"
           placeholder="Password"
@@ -72,17 +77,17 @@ export default function SignInForm({ onSuccess, onSignUpClick }: SignInFormProps
             </svg>
           }
         />
-        
+
         <div className="flex justify-end">
           <button type="button" className="text-primary-light text-sm hover:underline">
             Forgot password?
           </button>
         </div>
-        
+
         <Button type="submit" fullWidth disabled={isLoading}>
           {isLoading ? 'Signing in...' : 'Sign In'}
         </Button>
-        
+
         <div className="text-center mt-4">
           <p className="text-gray-400 text-sm">
             Don't have an account?{' '}
