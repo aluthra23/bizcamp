@@ -1,0 +1,1802 @@
+[
+    {
+        "text": "Has the team reviewed the SIEM configurations for false positives this week. We need to the firewall rule changes pushed to production last night.",
+        "start_time": 0,
+        "end_time": 10
+    },
+    {
+        "text": "We should prioritize the firewall rule changes pushed to production last night. We should prioritize the firewall rule changes pushed to production last night.",
+        "start_time": 10,
+        "end_time": 20
+    },
+    {
+        "text": "Let\u2019s check on the firewall rule changes pushed to production last night. We\u2019re seeing alerts from anomaly spikes in outbound traffic from the dev subnet.",
+        "start_time": 20,
+        "end_time": 30
+    },
+    {
+        "text": "Our logs indicate privilege escalation attempts reported over the weekend. Do we have updates on privilege escalation attempts reported over the weekend.",
+        "start_time": 30,
+        "end_time": 40
+    },
+    {
+        "text": "There\u2019s a concern about the firewall rule changes pushed to production last night. We should prioritize the new MFA policy adoption across departments. Did anyone follow up with privilege escalation attempts reported over the weekend.",
+        "start_time": 40,
+        "end_time": 50
+    },
+    {
+        "text": "Has anyone tested threat intelligence updates from our external feeds. Has the team reviewed anomaly spikes in outbound traffic from the dev subnet.",
+        "start_time": 50,
+        "end_time": 60
+    },
+    {
+        "text": "We need to DNS requests hitting known malicious domains. We discovered that risk scoring logic for internal assets. Let\u2019s check on DNS requests hitting known malicious domains.",
+        "start_time": 60,
+        "end_time": 70
+    },
+    {
+        "text": "Following yesterday\u2019s audit privilege escalation attempts reported over the weekend. Has anyone tested segmentation of legacy systems from internet-facing services. I think we should access logs for the restricted data warehouse.",
+        "start_time": 70,
+        "end_time": 80
+    },
+    {
+        "text": "Has the team reviewed a patch management strategy before the next compliance audit. Did anyone follow up with segmentation of legacy systems from internet-facing services.",
+        "start_time": 80,
+        "end_time": 90
+    },
+    {
+        "text": "We need to anomaly spikes in outbound traffic from the dev subnet. Can someone validate threat intelligence updates from our external feeds.",
+        "start_time": 90,
+        "end_time": 100
+    },
+    {
+        "text": "There\u2019s a concern about a patch management strategy before the next compliance audit. It looks like segmentation of legacy systems from internet-facing services.",
+        "start_time": 100,
+        "end_time": 110
+    },
+    {
+        "text": "Has anyone tested credential reuse flags triggered during yesterday\u2019s scan. Our logs indicate the SIEM configurations for false positives this week.",
+        "start_time": 110,
+        "end_time": 120
+    },
+    {
+        "text": "We\u2019re seeing alerts from privilege escalation attempts reported over the weekend. It looks like the incident response playbook for ransomware. Has the team reviewed access logs for the restricted data warehouse.",
+        "start_time": 120,
+        "end_time": 130
+    },
+    {
+        "text": "It looks like endpoint protection logs from remote employees. Let\u2019s check on segmentation of legacy systems from internet-facing services.",
+        "start_time": 130,
+        "end_time": 140
+    },
+    {
+        "text": "We\u2019re seeing alerts from access logs for the restricted data warehouse. We\u2019re seeing alerts from the firewall rule changes pushed to production last night.",
+        "start_time": 140,
+        "end_time": 150
+    },
+    {
+        "text": "There\u2019s a concern about the pen test findings shared by the external vendor. Do we have updates on risk scoring logic for internal assets.",
+        "start_time": 150,
+        "end_time": 160
+    },
+    {
+        "text": "We need to endpoint protection logs from remote employees. Our logs indicate risk scoring logic for internal assets. I think we should endpoint protection logs from remote employees.",
+        "start_time": 160,
+        "end_time": 170
+    },
+    {
+        "text": "Our logs indicate credential reuse flags triggered during yesterday\u2019s scan. Did anyone follow up with the SIEM configurations for false positives this week.",
+        "start_time": 170,
+        "end_time": 180
+    },
+    {
+        "text": "Has the team reviewed the SIEM configurations for false positives this week. I think we should the incident response playbook for ransomware.",
+        "start_time": 180,
+        "end_time": 190
+    },
+    {
+        "text": "It looks like the SIEM configurations for false positives this week. Has anyone tested DNS requests hitting known malicious domains. Can someone validate the SIEM configurations for false positives this week.",
+        "start_time": 190,
+        "end_time": 200
+    },
+    {
+        "text": "Let\u2019s check on a patch management strategy before the next compliance audit. Do we have updates on the new MFA policy adoption across departments.",
+        "start_time": 200,
+        "end_time": 210
+    },
+    {
+        "text": "Let\u2019s check on credential reuse flags triggered during yesterday\u2019s scan. We should prioritize privilege escalation attempts reported over the weekend. We need to a patch management strategy before the next compliance audit.",
+        "start_time": 210,
+        "end_time": 220
+    },
+    {
+        "text": "Our logs indicate risk scoring logic for internal assets. We need to the firewall rule changes pushed to production last night.",
+        "start_time": 220,
+        "end_time": 230
+    },
+    {
+        "text": "Let\u2019s check on DNS requests hitting known malicious domains. Our logs indicate DNS requests hitting known malicious domains. Has the team reviewed threat intelligence updates from our external feeds.",
+        "start_time": 230,
+        "end_time": 240
+    },
+    {
+        "text": "Has the team reviewed the incident response playbook for ransomware. Did anyone follow up with the firewall rule changes pushed to production last night.",
+        "start_time": 240,
+        "end_time": 250
+    },
+    {
+        "text": "I think we should DNS requests hitting known malicious domains. Has anyone tested the SIEM configurations for false positives this week.",
+        "start_time": 250,
+        "end_time": 260
+    },
+    {
+        "text": "Our logs indicate credential reuse flags triggered during yesterday\u2019s scan. It looks like privilege escalation attempts reported over the weekend. Let\u2019s check on the pen test findings shared by the external vendor.",
+        "start_time": 260,
+        "end_time": 270
+    },
+    {
+        "text": "Following yesterday\u2019s audit the pen test findings shared by the external vendor. Can someone validate the pen test findings shared by the external vendor.",
+        "start_time": 270,
+        "end_time": 280
+    },
+    {
+        "text": "Did anyone follow up with the firewall rule changes pushed to production last night. We discovered that access logs for the restricted data warehouse.",
+        "start_time": 280,
+        "end_time": 290
+    },
+    {
+        "text": "We\u2019re seeing alerts from DNS requests hitting known malicious domains. We discovered that a patch management strategy before the next compliance audit.",
+        "start_time": 290,
+        "end_time": 300
+    },
+    {
+        "text": "Following yesterday\u2019s audit privilege escalation attempts reported over the weekend. Following yesterday\u2019s audit credential reuse flags triggered during yesterday\u2019s scan. Do we have updates on threat intelligence updates from our external feeds.",
+        "start_time": 300,
+        "end_time": 310
+    },
+    {
+        "text": "It looks like privilege escalation attempts reported over the weekend. Can someone validate a patch management strategy before the next compliance audit.",
+        "start_time": 310,
+        "end_time": 320
+    },
+    {
+        "text": "We should prioritize segmentation of legacy systems from internet-facing services. Has anyone tested credential reuse flags triggered during yesterday\u2019s scan. There\u2019s a concern about DNS requests hitting known malicious domains.",
+        "start_time": 320,
+        "end_time": 330
+    },
+    {
+        "text": "Can someone validate the pen test findings shared by the external vendor. Did anyone follow up with DNS requests hitting known malicious domains.",
+        "start_time": 330,
+        "end_time": 340
+    },
+    {
+        "text": "Following yesterday\u2019s audit DNS requests hitting known malicious domains. It looks like access logs for the restricted data warehouse. I think we should the pen test findings shared by the external vendor.",
+        "start_time": 340,
+        "end_time": 350
+    },
+    {
+        "text": "Has anyone tested endpoint protection logs from remote employees. It looks like DNS requests hitting known malicious domains.",
+        "start_time": 350,
+        "end_time": 360
+    },
+    {
+        "text": "I think we should DNS requests hitting known malicious domains. Following yesterday\u2019s audit segmentation of legacy systems from internet-facing services.",
+        "start_time": 360,
+        "end_time": 370
+    },
+    {
+        "text": "We need to access logs for the restricted data warehouse. Let\u2019s check on the SIEM configurations for false positives this week.",
+        "start_time": 370,
+        "end_time": 380
+    },
+    {
+        "text": "Our logs indicate risk scoring logic for internal assets. We need to the firewall rule changes pushed to production last night.",
+        "start_time": 380,
+        "end_time": 390
+    },
+    {
+        "text": "Did anyone follow up with the pen test findings shared by the external vendor. Can someone validate privilege escalation attempts reported over the weekend.",
+        "start_time": 390,
+        "end_time": 400
+    },
+    {
+        "text": "I think we should access logs for the restricted data warehouse. It looks like the incident response playbook for ransomware. Let\u2019s check on the firewall rule changes pushed to production last night.",
+        "start_time": 400,
+        "end_time": 410
+    },
+    {
+        "text": "Following yesterday\u2019s audit segmentation of legacy systems from internet-facing services. Our logs indicate the SIEM configurations for false positives this week. Has the team reviewed endpoint protection logs from remote employees.",
+        "start_time": 410,
+        "end_time": 420
+    },
+    {
+        "text": "Do we have updates on the incident response playbook for ransomware. We need to access logs for the restricted data warehouse.",
+        "start_time": 420,
+        "end_time": 430
+    },
+    {
+        "text": "I think we should the new MFA policy adoption across departments. Our logs indicate segmentation of legacy systems from internet-facing services. Did anyone follow up with credential reuse flags triggered during yesterday\u2019s scan.",
+        "start_time": 430,
+        "end_time": 440
+    },
+    {
+        "text": "There\u2019s a concern about risk scoring logic for internal assets. There\u2019s a concern about access logs for the restricted data warehouse.",
+        "start_time": 440,
+        "end_time": 450
+    },
+    {
+        "text": "We should prioritize anomaly spikes in outbound traffic from the dev subnet. Has the team reviewed a patch management strategy before the next compliance audit.",
+        "start_time": 450,
+        "end_time": 460
+    },
+    {
+        "text": "We need to the pen test findings shared by the external vendor. We should prioritize credential reuse flags triggered during yesterday\u2019s scan. We discovered that the incident response playbook for ransomware.",
+        "start_time": 460,
+        "end_time": 470
+    },
+    {
+        "text": "Has the team reviewed DNS requests hitting known malicious domains. Our logs indicate the pen test findings shared by the external vendor. Can someone validate credential reuse flags triggered during yesterday\u2019s scan.",
+        "start_time": 470,
+        "end_time": 480
+    },
+    {
+        "text": "Can someone validate the incident response playbook for ransomware. Do we have updates on the incident response playbook for ransomware. I think we should endpoint protection logs from remote employees.",
+        "start_time": 480,
+        "end_time": 490
+    },
+    {
+        "text": "Can someone validate anomaly spikes in outbound traffic from the dev subnet. We discovered that credential reuse flags triggered during yesterday\u2019s scan. We\u2019re seeing alerts from the pen test findings shared by the external vendor.",
+        "start_time": 490,
+        "end_time": 500
+    },
+    {
+        "text": "There\u2019s a concern about anomaly spikes in outbound traffic from the dev subnet. Has anyone tested privilege escalation attempts reported over the weekend. We discovered that access logs for the restricted data warehouse.",
+        "start_time": 500,
+        "end_time": 510
+    },
+    {
+        "text": "Following yesterday\u2019s audit credential reuse flags triggered during yesterday\u2019s scan. Do we have updates on privilege escalation attempts reported over the weekend.",
+        "start_time": 510,
+        "end_time": 520
+    },
+    {
+        "text": "We need to a patch management strategy before the next compliance audit. We discovered that threat intelligence updates from our external feeds.",
+        "start_time": 520,
+        "end_time": 530
+    },
+    {
+        "text": "Can someone validate a patch management strategy before the next compliance audit. We need to a patch management strategy before the next compliance audit.",
+        "start_time": 530,
+        "end_time": 540
+    },
+    {
+        "text": "I think we should segmentation of legacy systems from internet-facing services. Has the team reviewed segmentation of legacy systems from internet-facing services. We\u2019re seeing alerts from threat intelligence updates from our external feeds.",
+        "start_time": 540,
+        "end_time": 550
+    },
+    {
+        "text": "It looks like segmentation of legacy systems from internet-facing services. Has anyone tested DNS requests hitting known malicious domains. I think we should a patch management strategy before the next compliance audit.",
+        "start_time": 550,
+        "end_time": 560
+    },
+    {
+        "text": "Has the team reviewed segmentation of legacy systems from internet-facing services. Following yesterday\u2019s audit the SIEM configurations for false positives this week.",
+        "start_time": 560,
+        "end_time": 570
+    },
+    {
+        "text": "Let\u2019s check on access logs for the restricted data warehouse. Our logs indicate privilege escalation attempts reported over the weekend.",
+        "start_time": 570,
+        "end_time": 580
+    },
+    {
+        "text": "Let\u2019s check on DNS requests hitting known malicious domains. There\u2019s a concern about privilege escalation attempts reported over the weekend.",
+        "start_time": 580,
+        "end_time": 590
+    },
+    {
+        "text": "Do we have updates on threat intelligence updates from our external feeds. I think we should segmentation of legacy systems from internet-facing services.",
+        "start_time": 590,
+        "end_time": 600
+    },
+    {
+        "text": "Do we have updates on risk scoring logic for internal assets. Following yesterday\u2019s audit anomaly spikes in outbound traffic from the dev subnet.",
+        "start_time": 600,
+        "end_time": 610
+    },
+    {
+        "text": "I think we should the firewall rule changes pushed to production last night. I think we should access logs for the restricted data warehouse.",
+        "start_time": 610,
+        "end_time": 620
+    },
+    {
+        "text": "Our logs indicate the new MFA policy adoption across departments. Our logs indicate a patch management strategy before the next compliance audit.",
+        "start_time": 620,
+        "end_time": 630
+    },
+    {
+        "text": "I think we should DNS requests hitting known malicious domains. There\u2019s a concern about credential reuse flags triggered during yesterday\u2019s scan.",
+        "start_time": 630,
+        "end_time": 640
+    },
+    {
+        "text": "It looks like credential reuse flags triggered during yesterday\u2019s scan. We need to endpoint protection logs from remote employees.",
+        "start_time": 640,
+        "end_time": 650
+    },
+    {
+        "text": "It looks like access logs for the restricted data warehouse. We should prioritize segmentation of legacy systems from internet-facing services.",
+        "start_time": 650,
+        "end_time": 660
+    },
+    {
+        "text": "Has the team reviewed the pen test findings shared by the external vendor. Can someone validate the firewall rule changes pushed to production last night.",
+        "start_time": 660,
+        "end_time": 670
+    },
+    {
+        "text": "Our logs indicate a patch management strategy before the next compliance audit. There\u2019s a concern about threat intelligence updates from our external feeds.",
+        "start_time": 670,
+        "end_time": 680
+    },
+    {
+        "text": "We need to the pen test findings shared by the external vendor. Has the team reviewed the pen test findings shared by the external vendor.",
+        "start_time": 680,
+        "end_time": 690
+    },
+    {
+        "text": "Did anyone follow up with threat intelligence updates from our external feeds. I think we should the incident response playbook for ransomware. Following yesterday\u2019s audit privilege escalation attempts reported over the weekend.",
+        "start_time": 690,
+        "end_time": 700
+    },
+    {
+        "text": "We\u2019re seeing alerts from the incident response playbook for ransomware. Let\u2019s check on credential reuse flags triggered during yesterday\u2019s scan.",
+        "start_time": 700,
+        "end_time": 710
+    },
+    {
+        "text": "Our logs indicate the pen test findings shared by the external vendor. Did anyone follow up with the SIEM configurations for false positives this week.",
+        "start_time": 710,
+        "end_time": 720
+    },
+    {
+        "text": "Can someone validate segmentation of legacy systems from internet-facing services. Did anyone follow up with segmentation of legacy systems from internet-facing services.",
+        "start_time": 720,
+        "end_time": 730
+    },
+    {
+        "text": "We discovered that the SIEM configurations for false positives this week. We should prioritize the incident response playbook for ransomware. I think we should endpoint protection logs from remote employees.",
+        "start_time": 730,
+        "end_time": 740
+    },
+    {
+        "text": "We should prioritize anomaly spikes in outbound traffic from the dev subnet. Let\u2019s check on segmentation of legacy systems from internet-facing services. Let\u2019s check on the pen test findings shared by the external vendor.",
+        "start_time": 740,
+        "end_time": 750
+    },
+    {
+        "text": "It looks like access logs for the restricted data warehouse. Has anyone tested risk scoring logic for internal assets. We discovered that access logs for the restricted data warehouse.",
+        "start_time": 750,
+        "end_time": 760
+    },
+    {
+        "text": "We\u2019re seeing alerts from credential reuse flags triggered during yesterday\u2019s scan. We need to segmentation of legacy systems from internet-facing services. Did anyone follow up with DNS requests hitting known malicious domains.",
+        "start_time": 760,
+        "end_time": 770
+    },
+    {
+        "text": "Can someone validate anomaly spikes in outbound traffic from the dev subnet. We should prioritize endpoint protection logs from remote employees.",
+        "start_time": 770,
+        "end_time": 780
+    },
+    {
+        "text": "We\u2019re seeing alerts from the pen test findings shared by the external vendor. Can someone validate DNS requests hitting known malicious domains.",
+        "start_time": 780,
+        "end_time": 790
+    },
+    {
+        "text": "We\u2019re seeing alerts from the firewall rule changes pushed to production last night. Our logs indicate endpoint protection logs from remote employees. We\u2019re seeing alerts from segmentation of legacy systems from internet-facing services.",
+        "start_time": 790,
+        "end_time": 800
+    },
+    {
+        "text": "We discovered that endpoint protection logs from remote employees. It looks like access logs for the restricted data warehouse. We should prioritize the incident response playbook for ransomware.",
+        "start_time": 800,
+        "end_time": 810
+    },
+    {
+        "text": "Do we have updates on a patch management strategy before the next compliance audit. Has anyone tested segmentation of legacy systems from internet-facing services.",
+        "start_time": 810,
+        "end_time": 820
+    },
+    {
+        "text": "Can someone validate risk scoring logic for internal assets. It looks like endpoint protection logs from remote employees. Has anyone tested segmentation of legacy systems from internet-facing services.",
+        "start_time": 820,
+        "end_time": 830
+    },
+    {
+        "text": "Has the team reviewed anomaly spikes in outbound traffic from the dev subnet. Our logs indicate the SIEM configurations for false positives this week.",
+        "start_time": 830,
+        "end_time": 840
+    },
+    {
+        "text": "Did anyone follow up with endpoint protection logs from remote employees. Can someone validate the SIEM configurations for false positives this week. Has the team reviewed a patch management strategy before the next compliance audit.",
+        "start_time": 840,
+        "end_time": 850
+    },
+    {
+        "text": "Can someone validate access logs for the restricted data warehouse. We should prioritize the firewall rule changes pushed to production last night.",
+        "start_time": 850,
+        "end_time": 860
+    },
+    {
+        "text": "Do we have updates on DNS requests hitting known malicious domains. I think we should the incident response playbook for ransomware. There\u2019s a concern about threat intelligence updates from our external feeds.",
+        "start_time": 860,
+        "end_time": 870
+    },
+    {
+        "text": "Following yesterday\u2019s audit credential reuse flags triggered during yesterday\u2019s scan. Let\u2019s check on the firewall rule changes pushed to production last night. We should prioritize threat intelligence updates from our external feeds.",
+        "start_time": 870,
+        "end_time": 880
+    },
+    {
+        "text": "Can someone validate segmentation of legacy systems from internet-facing services. It looks like endpoint protection logs from remote employees.",
+        "start_time": 880,
+        "end_time": 890
+    },
+    {
+        "text": "We should prioritize risk scoring logic for internal assets. We\u2019re seeing alerts from threat intelligence updates from our external feeds. We should prioritize anomaly spikes in outbound traffic from the dev subnet.",
+        "start_time": 890,
+        "end_time": 900
+    },
+    {
+        "text": "It looks like credential reuse flags triggered during yesterday\u2019s scan. We\u2019re seeing alerts from risk scoring logic for internal assets.",
+        "start_time": 900,
+        "end_time": 910
+    },
+    {
+        "text": "We\u2019re seeing alerts from risk scoring logic for internal assets. Our logs indicate a patch management strategy before the next compliance audit.",
+        "start_time": 910,
+        "end_time": 920
+    },
+    {
+        "text": "We\u2019re seeing alerts from credential reuse flags triggered during yesterday\u2019s scan. We discovered that anomaly spikes in outbound traffic from the dev subnet.",
+        "start_time": 920,
+        "end_time": 930
+    },
+    {
+        "text": "We need to segmentation of legacy systems from internet-facing services. Let\u2019s check on the SIEM configurations for false positives this week. Do we have updates on segmentation of legacy systems from internet-facing services.",
+        "start_time": 930,
+        "end_time": 940
+    },
+    {
+        "text": "It looks like endpoint protection logs from remote employees. Following yesterday\u2019s audit a patch management strategy before the next compliance audit.",
+        "start_time": 940,
+        "end_time": 950
+    },
+    {
+        "text": "We discovered that credential reuse flags triggered during yesterday\u2019s scan. Has anyone tested the firewall rule changes pushed to production last night.",
+        "start_time": 950,
+        "end_time": 960
+    },
+    {
+        "text": "Did anyone follow up with the firewall rule changes pushed to production last night. Has anyone tested credential reuse flags triggered during yesterday\u2019s scan.",
+        "start_time": 960,
+        "end_time": 970
+    },
+    {
+        "text": "Do we have updates on the new MFA policy adoption across departments. We need to a patch management strategy before the next compliance audit.",
+        "start_time": 970,
+        "end_time": 980
+    },
+    {
+        "text": "Our logs indicate access logs for the restricted data warehouse. We\u2019re seeing alerts from access logs for the restricted data warehouse.",
+        "start_time": 980,
+        "end_time": 990
+    },
+    {
+        "text": "We need to the incident response playbook for ransomware. We should prioritize credential reuse flags triggered during yesterday\u2019s scan.",
+        "start_time": 990,
+        "end_time": 1000
+    },
+    {
+        "text": "Do we have updates on privilege escalation attempts reported over the weekend. We discovered that the SIEM configurations for false positives this week. Let\u2019s check on credential reuse flags triggered during yesterday\u2019s scan.",
+        "start_time": 1000,
+        "end_time": 1010
+    },
+    {
+        "text": "Our logs indicate segmentation of legacy systems from internet-facing services. Our logs indicate DNS requests hitting known malicious domains. Do we have updates on privilege escalation attempts reported over the weekend.",
+        "start_time": 1010,
+        "end_time": 1020
+    },
+    {
+        "text": "Following yesterday\u2019s audit the firewall rule changes pushed to production last night. Can someone validate credential reuse flags triggered during yesterday\u2019s scan.",
+        "start_time": 1020,
+        "end_time": 1030
+    },
+    {
+        "text": "We should prioritize the pen test findings shared by the external vendor. Has the team reviewed the pen test findings shared by the external vendor.",
+        "start_time": 1030,
+        "end_time": 1040
+    },
+    {
+        "text": "Following yesterday\u2019s audit credential reuse flags triggered during yesterday\u2019s scan. We discovered that DNS requests hitting known malicious domains.",
+        "start_time": 1040,
+        "end_time": 1050
+    },
+    {
+        "text": "Can someone validate risk scoring logic for internal assets. Our logs indicate DNS requests hitting known malicious domains.",
+        "start_time": 1050,
+        "end_time": 1060
+    },
+    {
+        "text": "Did anyone follow up with segmentation of legacy systems from internet-facing services. It looks like DNS requests hitting known malicious domains.",
+        "start_time": 1060,
+        "end_time": 1070
+    },
+    {
+        "text": "Let\u2019s check on privilege escalation attempts reported over the weekend. Following yesterday\u2019s audit DNS requests hitting known malicious domains.",
+        "start_time": 1070,
+        "end_time": 1080
+    },
+    {
+        "text": "We need to endpoint protection logs from remote employees. Do we have updates on the pen test findings shared by the external vendor.",
+        "start_time": 1080,
+        "end_time": 1090
+    },
+    {
+        "text": "Did anyone follow up with DNS requests hitting known malicious domains. We\u2019re seeing alerts from risk scoring logic for internal assets. Has the team reviewed segmentation of legacy systems from internet-facing services.",
+        "start_time": 1090,
+        "end_time": 1100
+    },
+    {
+        "text": "Did anyone follow up with DNS requests hitting known malicious domains. We need to anomaly spikes in outbound traffic from the dev subnet.",
+        "start_time": 1100,
+        "end_time": 1110
+    },
+    {
+        "text": "We\u2019re seeing alerts from access logs for the restricted data warehouse. Following yesterday\u2019s audit DNS requests hitting known malicious domains.",
+        "start_time": 1110,
+        "end_time": 1120
+    },
+    {
+        "text": "Has anyone tested credential reuse flags triggered during yesterday\u2019s scan. Let\u2019s check on the incident response playbook for ransomware.",
+        "start_time": 1120,
+        "end_time": 1130
+    },
+    {
+        "text": "There\u2019s a concern about segmentation of legacy systems from internet-facing services. We\u2019re seeing alerts from anomaly spikes in outbound traffic from the dev subnet.",
+        "start_time": 1130,
+        "end_time": 1140
+    },
+    {
+        "text": "We\u2019re seeing alerts from the firewall rule changes pushed to production last night. Has anyone tested the firewall rule changes pushed to production last night.",
+        "start_time": 1140,
+        "end_time": 1150
+    },
+    {
+        "text": "Has anyone tested access logs for the restricted data warehouse. Can someone validate access logs for the restricted data warehouse. It looks like endpoint protection logs from remote employees.",
+        "start_time": 1150,
+        "end_time": 1160
+    },
+    {
+        "text": "Has the team reviewed risk scoring logic for internal assets. Did anyone follow up with anomaly spikes in outbound traffic from the dev subnet.",
+        "start_time": 1160,
+        "end_time": 1170
+    },
+    {
+        "text": "We\u2019re seeing alerts from the pen test findings shared by the external vendor. We should prioritize anomaly spikes in outbound traffic from the dev subnet.",
+        "start_time": 1170,
+        "end_time": 1180
+    },
+    {
+        "text": "Has anyone tested access logs for the restricted data warehouse. It looks like the pen test findings shared by the external vendor.",
+        "start_time": 1180,
+        "end_time": 1190
+    },
+    {
+        "text": "Do we have updates on the pen test findings shared by the external vendor. We need to credential reuse flags triggered during yesterday\u2019s scan.",
+        "start_time": 1190,
+        "end_time": 1200
+    },
+    {
+        "text": "I think we should the new MFA policy adoption across departments. We\u2019re seeing alerts from access logs for the restricted data warehouse. Let\u2019s check on access logs for the restricted data warehouse.",
+        "start_time": 1200,
+        "end_time": 1210
+    },
+    {
+        "text": "Has anyone tested access logs for the restricted data warehouse. We need to credential reuse flags triggered during yesterday\u2019s scan.",
+        "start_time": 1210,
+        "end_time": 1220
+    },
+    {
+        "text": "Has anyone tested DNS requests hitting known malicious domains. Did anyone follow up with the pen test findings shared by the external vendor.",
+        "start_time": 1220,
+        "end_time": 1230
+    },
+    {
+        "text": "Has anyone tested threat intelligence updates from our external feeds. Do we have updates on the incident response playbook for ransomware. There\u2019s a concern about access logs for the restricted data warehouse.",
+        "start_time": 1230,
+        "end_time": 1240
+    },
+    {
+        "text": "Has the team reviewed anomaly spikes in outbound traffic from the dev subnet. It looks like threat intelligence updates from our external feeds.",
+        "start_time": 1240,
+        "end_time": 1250
+    },
+    {
+        "text": "We should prioritize endpoint protection logs from remote employees. Has anyone tested the incident response playbook for ransomware. We should prioritize threat intelligence updates from our external feeds.",
+        "start_time": 1250,
+        "end_time": 1260
+    },
+    {
+        "text": "I think we should the incident response playbook for ransomware. Do we have updates on privilege escalation attempts reported over the weekend.",
+        "start_time": 1260,
+        "end_time": 1270
+    },
+    {
+        "text": "Did anyone follow up with anomaly spikes in outbound traffic from the dev subnet. We need to access logs for the restricted data warehouse.",
+        "start_time": 1270,
+        "end_time": 1280
+    },
+    {
+        "text": "There\u2019s a concern about anomaly spikes in outbound traffic from the dev subnet. Following yesterday\u2019s audit segmentation of legacy systems from internet-facing services.",
+        "start_time": 1280,
+        "end_time": 1290
+    },
+    {
+        "text": "Do we have updates on risk scoring logic for internal assets. We should prioritize privilege escalation attempts reported over the weekend. There\u2019s a concern about endpoint protection logs from remote employees.",
+        "start_time": 1290,
+        "end_time": 1300
+    },
+    {
+        "text": "It looks like endpoint protection logs from remote employees. Do we have updates on the incident response playbook for ransomware.",
+        "start_time": 1300,
+        "end_time": 1310
+    },
+    {
+        "text": "We\u2019re seeing alerts from the pen test findings shared by the external vendor. Let\u2019s check on the incident response playbook for ransomware.",
+        "start_time": 1310,
+        "end_time": 1320
+    },
+    {
+        "text": "Let\u2019s check on the SIEM configurations for false positives this week. Do we have updates on anomaly spikes in outbound traffic from the dev subnet.",
+        "start_time": 1320,
+        "end_time": 1330
+    },
+    {
+        "text": "Can someone validate a patch management strategy before the next compliance audit. There\u2019s a concern about the new MFA policy adoption across departments.",
+        "start_time": 1330,
+        "end_time": 1340
+    },
+    {
+        "text": "Has anyone tested credential reuse flags triggered during yesterday\u2019s scan. We discovered that the SIEM configurations for false positives this week.",
+        "start_time": 1340,
+        "end_time": 1350
+    },
+    {
+        "text": "Our logs indicate endpoint protection logs from remote employees. We need to the firewall rule changes pushed to production last night.",
+        "start_time": 1350,
+        "end_time": 1360
+    },
+    {
+        "text": "We discovered that segmentation of legacy systems from internet-facing services. Can someone validate a patch management strategy before the next compliance audit.",
+        "start_time": 1360,
+        "end_time": 1370
+    },
+    {
+        "text": "I think we should credential reuse flags triggered during yesterday\u2019s scan. Following yesterday\u2019s audit the firewall rule changes pushed to production last night. Following yesterday\u2019s audit privilege escalation attempts reported over the weekend.",
+        "start_time": 1370,
+        "end_time": 1380
+    },
+    {
+        "text": "We should prioritize the firewall rule changes pushed to production last night. Let\u2019s check on the incident response playbook for ransomware. Can someone validate threat intelligence updates from our external feeds.",
+        "start_time": 1380,
+        "end_time": 1390
+    },
+    {
+        "text": "It looks like endpoint protection logs from remote employees. Let\u2019s check on the new MFA policy adoption across departments.",
+        "start_time": 1390,
+        "end_time": 1400
+    },
+    {
+        "text": "Can someone validate the pen test findings shared by the external vendor. Has the team reviewed DNS requests hitting known malicious domains.",
+        "start_time": 1400,
+        "end_time": 1410
+    },
+    {
+        "text": "We\u2019re seeing alerts from anomaly spikes in outbound traffic from the dev subnet. Has anyone tested credential reuse flags triggered during yesterday\u2019s scan.",
+        "start_time": 1410,
+        "end_time": 1420
+    },
+    {
+        "text": "It looks like risk scoring logic for internal assets. Our logs indicate the incident response playbook for ransomware. We should prioritize the firewall rule changes pushed to production last night.",
+        "start_time": 1420,
+        "end_time": 1430
+    },
+    {
+        "text": "Has anyone tested privilege escalation attempts reported over the weekend. Has anyone tested DNS requests hitting known malicious domains.",
+        "start_time": 1430,
+        "end_time": 1440
+    },
+    {
+        "text": "We need to endpoint protection logs from remote employees. Do we have updates on the pen test findings shared by the external vendor.",
+        "start_time": 1440,
+        "end_time": 1450
+    },
+    {
+        "text": "Let\u2019s check on a patch management strategy before the next compliance audit. We discovered that risk scoring logic for internal assets.",
+        "start_time": 1450,
+        "end_time": 1460
+    },
+    {
+        "text": "Did anyone follow up with privilege escalation attempts reported over the weekend. Let\u2019s check on a patch management strategy before the next compliance audit.",
+        "start_time": 1460,
+        "end_time": 1470
+    },
+    {
+        "text": "We should prioritize endpoint protection logs from remote employees. Do we have updates on privilege escalation attempts reported over the weekend.",
+        "start_time": 1470,
+        "end_time": 1480
+    },
+    {
+        "text": "We discovered that credential reuse flags triggered during yesterday\u2019s scan. Let\u2019s check on the firewall rule changes pushed to production last night.",
+        "start_time": 1480,
+        "end_time": 1490
+    },
+    {
+        "text": "Can someone validate the SIEM configurations for false positives this week. Let\u2019s check on credential reuse flags triggered during yesterday\u2019s scan.",
+        "start_time": 1490,
+        "end_time": 1500
+    },
+    {
+        "text": "Has anyone tested access logs for the restricted data warehouse. Did anyone follow up with credential reuse flags triggered during yesterday\u2019s scan.",
+        "start_time": 1500,
+        "end_time": 1510
+    },
+    {
+        "text": "We\u2019re seeing alerts from a patch management strategy before the next compliance audit. Let\u2019s check on access logs for the restricted data warehouse.",
+        "start_time": 1510,
+        "end_time": 1520
+    },
+    {
+        "text": "Our logs indicate risk scoring logic for internal assets. Do we have updates on anomaly spikes in outbound traffic from the dev subnet.",
+        "start_time": 1520,
+        "end_time": 1530
+    },
+    {
+        "text": "Following yesterday\u2019s audit segmentation of legacy systems from internet-facing services. Let\u2019s check on the new MFA policy adoption across departments.",
+        "start_time": 1530,
+        "end_time": 1540
+    },
+    {
+        "text": "It looks like privilege escalation attempts reported over the weekend. Do we have updates on a patch management strategy before the next compliance audit.",
+        "start_time": 1540,
+        "end_time": 1550
+    },
+    {
+        "text": "Has anyone tested endpoint protection logs from remote employees. Following yesterday\u2019s audit segmentation of legacy systems from internet-facing services. Our logs indicate threat intelligence updates from our external feeds.",
+        "start_time": 1550,
+        "end_time": 1560
+    },
+    {
+        "text": "Do we have updates on privilege escalation attempts reported over the weekend. Has the team reviewed anomaly spikes in outbound traffic from the dev subnet.",
+        "start_time": 1560,
+        "end_time": 1570
+    },
+    {
+        "text": "Has the team reviewed the firewall rule changes pushed to production last night. There\u2019s a concern about the new MFA policy adoption across departments.",
+        "start_time": 1570,
+        "end_time": 1580
+    },
+    {
+        "text": "Our logs indicate privilege escalation attempts reported over the weekend. Following yesterday\u2019s audit risk scoring logic for internal assets. Has the team reviewed access logs for the restricted data warehouse.",
+        "start_time": 1580,
+        "end_time": 1590
+    },
+    {
+        "text": "Did anyone follow up with segmentation of legacy systems from internet-facing services. Has the team reviewed the SIEM configurations for false positives this week.",
+        "start_time": 1590,
+        "end_time": 1600
+    },
+    {
+        "text": "Do we have updates on the pen test findings shared by the external vendor. We discovered that the incident response playbook for ransomware.",
+        "start_time": 1600,
+        "end_time": 1610
+    },
+    {
+        "text": "Has anyone tested endpoint protection logs from remote employees. There\u2019s a concern about anomaly spikes in outbound traffic from the dev subnet. It looks like credential reuse flags triggered during yesterday\u2019s scan.",
+        "start_time": 1610,
+        "end_time": 1620
+    },
+    {
+        "text": "I think we should anomaly spikes in outbound traffic from the dev subnet. I think we should a patch management strategy before the next compliance audit.",
+        "start_time": 1620,
+        "end_time": 1630
+    },
+    {
+        "text": "We should prioritize access logs for the restricted data warehouse. We should prioritize DNS requests hitting known malicious domains. It looks like credential reuse flags triggered during yesterday\u2019s scan.",
+        "start_time": 1630,
+        "end_time": 1640
+    },
+    {
+        "text": "We discovered that the pen test findings shared by the external vendor. Let\u2019s check on privilege escalation attempts reported over the weekend.",
+        "start_time": 1640,
+        "end_time": 1650
+    },
+    {
+        "text": "Let\u2019s check on privilege escalation attempts reported over the weekend. There\u2019s a concern about threat intelligence updates from our external feeds.",
+        "start_time": 1650,
+        "end_time": 1660
+    },
+    {
+        "text": "Our logs indicate credential reuse flags triggered during yesterday\u2019s scan. Let\u2019s check on the firewall rule changes pushed to production last night.",
+        "start_time": 1660,
+        "end_time": 1670
+    },
+    {
+        "text": "Did anyone follow up with the new MFA policy adoption across departments. I think we should the incident response playbook for ransomware.",
+        "start_time": 1670,
+        "end_time": 1680
+    },
+    {
+        "text": "Do we have updates on risk scoring logic for internal assets. I think we should endpoint protection logs from remote employees. We need to risk scoring logic for internal assets.",
+        "start_time": 1680,
+        "end_time": 1690
+    },
+    {
+        "text": "Can someone validate the new MFA policy adoption across departments. We discovered that the new MFA policy adoption across departments. We need to access logs for the restricted data warehouse.",
+        "start_time": 1690,
+        "end_time": 1700
+    },
+    {
+        "text": "We should prioritize the pen test findings shared by the external vendor. There\u2019s a concern about endpoint protection logs from remote employees. Do we have updates on endpoint protection logs from remote employees.",
+        "start_time": 1700,
+        "end_time": 1710
+    },
+    {
+        "text": "Do we have updates on the pen test findings shared by the external vendor. I think we should a patch management strategy before the next compliance audit.",
+        "start_time": 1710,
+        "end_time": 1720
+    },
+    {
+        "text": "Do we have updates on access logs for the restricted data warehouse. Let\u2019s check on credential reuse flags triggered during yesterday\u2019s scan.",
+        "start_time": 1720,
+        "end_time": 1730
+    },
+    {
+        "text": "Following yesterday\u2019s audit the pen test findings shared by the external vendor. Has the team reviewed access logs for the restricted data warehouse.",
+        "start_time": 1730,
+        "end_time": 1740
+    },
+    {
+        "text": "We should prioritize the incident response playbook for ransomware. Do we have updates on a patch management strategy before the next compliance audit.",
+        "start_time": 1740,
+        "end_time": 1750
+    },
+    {
+        "text": "Do we have updates on the new MFA policy adoption across departments. Following yesterday\u2019s audit the incident response playbook for ransomware.",
+        "start_time": 1750,
+        "end_time": 1760
+    },
+    {
+        "text": "Has anyone tested the new MFA policy adoption across departments. Can someone validate the new MFA policy adoption across departments.",
+        "start_time": 1760,
+        "end_time": 1770
+    },
+    {
+        "text": "Following yesterday\u2019s audit risk scoring logic for internal assets. We need to the SIEM configurations for false positives this week.",
+        "start_time": 1770,
+        "end_time": 1780
+    },
+    {
+        "text": "Do we have updates on access logs for the restricted data warehouse. Our logs indicate privilege escalation attempts reported over the weekend.",
+        "start_time": 1780,
+        "end_time": 1790
+    },
+    {
+        "text": "Has anyone tested access logs for the restricted data warehouse. We need to the firewall rule changes pushed to production last night. We need to threat intelligence updates from our external feeds.",
+        "start_time": 1790,
+        "end_time": 1800
+    },
+    {
+        "text": "We should prioritize the pen test findings shared by the external vendor. We need to segmentation of legacy systems from internet-facing services. It looks like endpoint protection logs from remote employees.",
+        "start_time": 1800,
+        "end_time": 1810
+    },
+    {
+        "text": "Let\u2019s check on segmentation of legacy systems from internet-facing services. Has the team reviewed access logs for the restricted data warehouse. There\u2019s a concern about DNS requests hitting known malicious domains.",
+        "start_time": 1810,
+        "end_time": 1820
+    },
+    {
+        "text": "We should prioritize endpoint protection logs from remote employees. Has anyone tested anomaly spikes in outbound traffic from the dev subnet.",
+        "start_time": 1820,
+        "end_time": 1830
+    },
+    {
+        "text": "We discovered that endpoint protection logs from remote employees. I think we should segmentation of legacy systems from internet-facing services.",
+        "start_time": 1830,
+        "end_time": 1840
+    },
+    {
+        "text": "There\u2019s a concern about DNS requests hitting known malicious domains. We\u2019re seeing alerts from anomaly spikes in outbound traffic from the dev subnet.",
+        "start_time": 1840,
+        "end_time": 1850
+    },
+    {
+        "text": "There\u2019s a concern about the firewall rule changes pushed to production last night. Let\u2019s check on a patch management strategy before the next compliance audit.",
+        "start_time": 1850,
+        "end_time": 1860
+    },
+    {
+        "text": "Let\u2019s check on risk scoring logic for internal assets. We should prioritize segmentation of legacy systems from internet-facing services. Has anyone tested the firewall rule changes pushed to production last night.",
+        "start_time": 1860,
+        "end_time": 1870
+    },
+    {
+        "text": "Has anyone tested the incident response playbook for ransomware. Has anyone tested a patch management strategy before the next compliance audit. Has the team reviewed the SIEM configurations for false positives this week.",
+        "start_time": 1870,
+        "end_time": 1880
+    },
+    {
+        "text": "Our logs indicate the SIEM configurations for false positives this week. It looks like DNS requests hitting known malicious domains.",
+        "start_time": 1880,
+        "end_time": 1890
+    },
+    {
+        "text": "It looks like endpoint protection logs from remote employees. Can someone validate privilege escalation attempts reported over the weekend. I think we should DNS requests hitting known malicious domains.",
+        "start_time": 1890,
+        "end_time": 1900
+    },
+    {
+        "text": "There\u2019s a concern about segmentation of legacy systems from internet-facing services. We need to credential reuse flags triggered during yesterday\u2019s scan. We discovered that the firewall rule changes pushed to production last night.",
+        "start_time": 1900,
+        "end_time": 1910
+    },
+    {
+        "text": "Our logs indicate segmentation of legacy systems from internet-facing services. Has anyone tested endpoint protection logs from remote employees. There\u2019s a concern about access logs for the restricted data warehouse.",
+        "start_time": 1910,
+        "end_time": 1920
+    },
+    {
+        "text": "Following yesterday\u2019s audit threat intelligence updates from our external feeds. We\u2019re seeing alerts from the incident response playbook for ransomware.",
+        "start_time": 1920,
+        "end_time": 1930
+    },
+    {
+        "text": "I think we should threat intelligence updates from our external feeds. Has anyone tested the new MFA policy adoption across departments. I think we should anomaly spikes in outbound traffic from the dev subnet.",
+        "start_time": 1930,
+        "end_time": 1940
+    },
+    {
+        "text": "Can someone validate the pen test findings shared by the external vendor. Did anyone follow up with privilege escalation attempts reported over the weekend.",
+        "start_time": 1940,
+        "end_time": 1950
+    },
+    {
+        "text": "Let\u2019s check on a patch management strategy before the next compliance audit. Has anyone tested anomaly spikes in outbound traffic from the dev subnet.",
+        "start_time": 1950,
+        "end_time": 1960
+    },
+    {
+        "text": "Has anyone tested a patch management strategy before the next compliance audit. Has the team reviewed a patch management strategy before the next compliance audit.",
+        "start_time": 1960,
+        "end_time": 1970
+    },
+    {
+        "text": "Do we have updates on the firewall rule changes pushed to production last night. Do we have updates on anomaly spikes in outbound traffic from the dev subnet.",
+        "start_time": 1970,
+        "end_time": 1980
+    },
+    {
+        "text": "Has anyone tested the firewall rule changes pushed to production last night. We discovered that segmentation of legacy systems from internet-facing services. Following yesterday\u2019s audit the SIEM configurations for false positives this week.",
+        "start_time": 1980,
+        "end_time": 1990
+    },
+    {
+        "text": "Do we have updates on endpoint protection logs from remote employees. We\u2019re seeing alerts from credential reuse flags triggered during yesterday\u2019s scan.",
+        "start_time": 1990,
+        "end_time": 2000
+    },
+    {
+        "text": "We discovered that threat intelligence updates from our external feeds. Has anyone tested a patch management strategy before the next compliance audit. Has the team reviewed a patch management strategy before the next compliance audit.",
+        "start_time": 2000,
+        "end_time": 2010
+    },
+    {
+        "text": "Following yesterday\u2019s audit anomaly spikes in outbound traffic from the dev subnet. Can someone validate the incident response playbook for ransomware.",
+        "start_time": 2010,
+        "end_time": 2020
+    },
+    {
+        "text": "Following yesterday\u2019s audit risk scoring logic for internal assets. We need to anomaly spikes in outbound traffic from the dev subnet.",
+        "start_time": 2020,
+        "end_time": 2030
+    },
+    {
+        "text": "Has anyone tested endpoint protection logs from remote employees. Let\u2019s check on a patch management strategy before the next compliance audit.",
+        "start_time": 2030,
+        "end_time": 2040
+    },
+    {
+        "text": "Did anyone follow up with endpoint protection logs from remote employees. Has the team reviewed anomaly spikes in outbound traffic from the dev subnet.",
+        "start_time": 2040,
+        "end_time": 2050
+    },
+    {
+        "text": "Following yesterday\u2019s audit the firewall rule changes pushed to production last night. Do we have updates on risk scoring logic for internal assets.",
+        "start_time": 2050,
+        "end_time": 2060
+    },
+    {
+        "text": "Let\u2019s check on endpoint protection logs from remote employees. We should prioritize risk scoring logic for internal assets. Did anyone follow up with the pen test findings shared by the external vendor.",
+        "start_time": 2060,
+        "end_time": 2070
+    },
+    {
+        "text": "Has anyone tested risk scoring logic for internal assets. Did anyone follow up with endpoint protection logs from remote employees.",
+        "start_time": 2070,
+        "end_time": 2080
+    },
+    {
+        "text": "We should prioritize anomaly spikes in outbound traffic from the dev subnet. We discovered that anomaly spikes in outbound traffic from the dev subnet.",
+        "start_time": 2080,
+        "end_time": 2090
+    },
+    {
+        "text": "There\u2019s a concern about risk scoring logic for internal assets. Has anyone tested the SIEM configurations for false positives this week.",
+        "start_time": 2090,
+        "end_time": 2100
+    },
+    {
+        "text": "It looks like the pen test findings shared by the external vendor. We discovered that the firewall rule changes pushed to production last night.",
+        "start_time": 2100,
+        "end_time": 2110
+    },
+    {
+        "text": "Following yesterday\u2019s audit threat intelligence updates from our external feeds. We\u2019re seeing alerts from a patch management strategy before the next compliance audit.",
+        "start_time": 2110,
+        "end_time": 2120
+    },
+    {
+        "text": "Let\u2019s check on segmentation of legacy systems from internet-facing services. Do we have updates on a patch management strategy before the next compliance audit.",
+        "start_time": 2120,
+        "end_time": 2130
+    },
+    {
+        "text": "Following yesterday\u2019s audit anomaly spikes in outbound traffic from the dev subnet. We discovered that anomaly spikes in outbound traffic from the dev subnet.",
+        "start_time": 2130,
+        "end_time": 2140
+    },
+    {
+        "text": "Has the team reviewed a patch management strategy before the next compliance audit. Can someone validate the pen test findings shared by the external vendor.",
+        "start_time": 2140,
+        "end_time": 2150
+    },
+    {
+        "text": "Can someone validate DNS requests hitting known malicious domains. We need to the pen test findings shared by the external vendor.",
+        "start_time": 2150,
+        "end_time": 2160
+    },
+    {
+        "text": "Following yesterday\u2019s audit the incident response playbook for ransomware. Has the team reviewed privilege escalation attempts reported over the weekend. Our logs indicate endpoint protection logs from remote employees.",
+        "start_time": 2160,
+        "end_time": 2170
+    },
+    {
+        "text": "I think we should access logs for the restricted data warehouse. Do we have updates on privilege escalation attempts reported over the weekend. Do we have updates on segmentation of legacy systems from internet-facing services.",
+        "start_time": 2170,
+        "end_time": 2180
+    },
+    {
+        "text": "We need to privilege escalation attempts reported over the weekend. Let\u2019s check on segmentation of legacy systems from internet-facing services.",
+        "start_time": 2180,
+        "end_time": 2190
+    },
+    {
+        "text": "Has anyone tested the new MFA policy adoption across departments. Do we have updates on DNS requests hitting known malicious domains.",
+        "start_time": 2190,
+        "end_time": 2200
+    },
+    {
+        "text": "Do we have updates on a patch management strategy before the next compliance audit. Do we have updates on DNS requests hitting known malicious domains.",
+        "start_time": 2200,
+        "end_time": 2210
+    },
+    {
+        "text": "Do we have updates on the firewall rule changes pushed to production last night. Our logs indicate the incident response playbook for ransomware.",
+        "start_time": 2210,
+        "end_time": 2220
+    },
+    {
+        "text": "Following yesterday\u2019s audit the SIEM configurations for false positives this week. Following yesterday\u2019s audit DNS requests hitting known malicious domains.",
+        "start_time": 2220,
+        "end_time": 2230
+    },
+    {
+        "text": "Did anyone follow up with the new MFA policy adoption across departments. Do we have updates on the SIEM configurations for false positives this week.",
+        "start_time": 2230,
+        "end_time": 2240
+    },
+    {
+        "text": "We need to privilege escalation attempts reported over the weekend. We need to access logs for the restricted data warehouse. There\u2019s a concern about DNS requests hitting known malicious domains.",
+        "start_time": 2240,
+        "end_time": 2250
+    },
+    {
+        "text": "I think we should privilege escalation attempts reported over the weekend. Can someone validate risk scoring logic for internal assets. We\u2019re seeing alerts from credential reuse flags triggered during yesterday\u2019s scan.",
+        "start_time": 2250,
+        "end_time": 2260
+    },
+    {
+        "text": "Did anyone follow up with the incident response playbook for ransomware. It looks like the firewall rule changes pushed to production last night.",
+        "start_time": 2260,
+        "end_time": 2270
+    },
+    {
+        "text": "I think we should risk scoring logic for internal assets. We should prioritize endpoint protection logs from remote employees.",
+        "start_time": 2270,
+        "end_time": 2280
+    },
+    {
+        "text": "Following yesterday\u2019s audit threat intelligence updates from our external feeds. I think we should privilege escalation attempts reported over the weekend. Has anyone tested risk scoring logic for internal assets.",
+        "start_time": 2280,
+        "end_time": 2290
+    },
+    {
+        "text": "Following yesterday\u2019s audit the firewall rule changes pushed to production last night. Let\u2019s check on access logs for the restricted data warehouse.",
+        "start_time": 2290,
+        "end_time": 2300
+    },
+    {
+        "text": "There\u2019s a concern about a patch management strategy before the next compliance audit. Has anyone tested the incident response playbook for ransomware.",
+        "start_time": 2300,
+        "end_time": 2310
+    },
+    {
+        "text": "Has anyone tested DNS requests hitting known malicious domains. We should prioritize threat intelligence updates from our external feeds. Can someone validate access logs for the restricted data warehouse.",
+        "start_time": 2310,
+        "end_time": 2320
+    },
+    {
+        "text": "Can someone validate credential reuse flags triggered during yesterday\u2019s scan. It looks like DNS requests hitting known malicious domains. Following yesterday\u2019s audit threat intelligence updates from our external feeds.",
+        "start_time": 2320,
+        "end_time": 2330
+    },
+    {
+        "text": "Let\u2019s check on privilege escalation attempts reported over the weekend. Can someone validate risk scoring logic for internal assets. We need to the incident response playbook for ransomware.",
+        "start_time": 2330,
+        "end_time": 2340
+    },
+    {
+        "text": "We should prioritize the incident response playbook for ransomware. Following yesterday\u2019s audit the firewall rule changes pushed to production last night.",
+        "start_time": 2340,
+        "end_time": 2350
+    },
+    {
+        "text": "Can someone validate the SIEM configurations for false positives this week. Following yesterday\u2019s audit segmentation of legacy systems from internet-facing services. We discovered that the firewall rule changes pushed to production last night.",
+        "start_time": 2350,
+        "end_time": 2360
+    },
+    {
+        "text": "We should prioritize threat intelligence updates from our external feeds. Let\u2019s check on a patch management strategy before the next compliance audit.",
+        "start_time": 2360,
+        "end_time": 2370
+    },
+    {
+        "text": "There\u2019s a concern about privilege escalation attempts reported over the weekend. We need to credential reuse flags triggered during yesterday\u2019s scan. We discovered that risk scoring logic for internal assets.",
+        "start_time": 2370,
+        "end_time": 2380
+    },
+    {
+        "text": "Our logs indicate threat intelligence updates from our external feeds. We should prioritize privilege escalation attempts reported over the weekend.",
+        "start_time": 2380,
+        "end_time": 2390
+    },
+    {
+        "text": "Following yesterday\u2019s audit access logs for the restricted data warehouse. Has the team reviewed risk scoring logic for internal assets. We should prioritize segmentation of legacy systems from internet-facing services.",
+        "start_time": 2390,
+        "end_time": 2400
+    },
+    {
+        "text": "I think we should credential reuse flags triggered during yesterday\u2019s scan. Did anyone follow up with the new MFA policy adoption across departments. I think we should the pen test findings shared by the external vendor.",
+        "start_time": 2400,
+        "end_time": 2410
+    },
+    {
+        "text": "It looks like privilege escalation attempts reported over the weekend. Did anyone follow up with the new MFA policy adoption across departments. Let\u2019s check on the firewall rule changes pushed to production last night.",
+        "start_time": 2410,
+        "end_time": 2420
+    },
+    {
+        "text": "Do we have updates on privilege escalation attempts reported over the weekend. Has the team reviewed the firewall rule changes pushed to production last night.",
+        "start_time": 2420,
+        "end_time": 2430
+    },
+    {
+        "text": "We discovered that DNS requests hitting known malicious domains. Following yesterday\u2019s audit the pen test findings shared by the external vendor. I think we should risk scoring logic for internal assets.",
+        "start_time": 2430,
+        "end_time": 2440
+    },
+    {
+        "text": "We need to the SIEM configurations for false positives this week. Has the team reviewed the firewall rule changes pushed to production last night.",
+        "start_time": 2440,
+        "end_time": 2450
+    },
+    {
+        "text": "Can someone validate the pen test findings shared by the external vendor. Our logs indicate the SIEM configurations for false positives this week.",
+        "start_time": 2450,
+        "end_time": 2460
+    },
+    {
+        "text": "Has the team reviewed privilege escalation attempts reported over the weekend. We\u2019re seeing alerts from the new MFA policy adoption across departments. Did anyone follow up with DNS requests hitting known malicious domains.",
+        "start_time": 2460,
+        "end_time": 2470
+    },
+    {
+        "text": "Did anyone follow up with DNS requests hitting known malicious domains. Do we have updates on segmentation of legacy systems from internet-facing services.",
+        "start_time": 2470,
+        "end_time": 2480
+    },
+    {
+        "text": "Has anyone tested access logs for the restricted data warehouse. Did anyone follow up with the new MFA policy adoption across departments.",
+        "start_time": 2480,
+        "end_time": 2490
+    },
+    {
+        "text": "We discovered that the firewall rule changes pushed to production last night. I think we should DNS requests hitting known malicious domains.",
+        "start_time": 2490,
+        "end_time": 2500
+    },
+    {
+        "text": "We should prioritize the pen test findings shared by the external vendor. Did anyone follow up with endpoint protection logs from remote employees.",
+        "start_time": 2500,
+        "end_time": 2510
+    },
+    {
+        "text": "Our logs indicate credential reuse flags triggered during yesterday\u2019s scan. We should prioritize threat intelligence updates from our external feeds. Do we have updates on the SIEM configurations for false positives this week.",
+        "start_time": 2510,
+        "end_time": 2520
+    },
+    {
+        "text": "Do we have updates on anomaly spikes in outbound traffic from the dev subnet. Do we have updates on credential reuse flags triggered during yesterday\u2019s scan.",
+        "start_time": 2520,
+        "end_time": 2530
+    },
+    {
+        "text": "We\u2019re seeing alerts from credential reuse flags triggered during yesterday\u2019s scan. I think we should the pen test findings shared by the external vendor. We discovered that threat intelligence updates from our external feeds.",
+        "start_time": 2530,
+        "end_time": 2540
+    },
+    {
+        "text": "Has anyone tested privilege escalation attempts reported over the weekend. Can someone validate segmentation of legacy systems from internet-facing services. We should prioritize privilege escalation attempts reported over the weekend.",
+        "start_time": 2540,
+        "end_time": 2550
+    },
+    {
+        "text": "We discovered that anomaly spikes in outbound traffic from the dev subnet. Did anyone follow up with privilege escalation attempts reported over the weekend.",
+        "start_time": 2550,
+        "end_time": 2560
+    },
+    {
+        "text": "Has anyone tested the pen test findings shared by the external vendor. It looks like access logs for the restricted data warehouse. We need to anomaly spikes in outbound traffic from the dev subnet.",
+        "start_time": 2560,
+        "end_time": 2570
+    },
+    {
+        "text": "We should prioritize segmentation of legacy systems from internet-facing services. We\u2019re seeing alerts from segmentation of legacy systems from internet-facing services.",
+        "start_time": 2570,
+        "end_time": 2580
+    },
+    {
+        "text": "Can someone validate the new MFA policy adoption across departments. Has anyone tested anomaly spikes in outbound traffic from the dev subnet.",
+        "start_time": 2580,
+        "end_time": 2590
+    },
+    {
+        "text": "We should prioritize anomaly spikes in outbound traffic from the dev subnet. Has anyone tested segmentation of legacy systems from internet-facing services.",
+        "start_time": 2590,
+        "end_time": 2600
+    },
+    {
+        "text": "Has the team reviewed anomaly spikes in outbound traffic from the dev subnet. We need to DNS requests hitting known malicious domains.",
+        "start_time": 2600,
+        "end_time": 2610
+    },
+    {
+        "text": "Let\u2019s check on risk scoring logic for internal assets. Has the team reviewed the pen test findings shared by the external vendor. Has the team reviewed endpoint protection logs from remote employees.",
+        "start_time": 2610,
+        "end_time": 2620
+    },
+    {
+        "text": "Can someone validate segmentation of legacy systems from internet-facing services. Has anyone tested credential reuse flags triggered during yesterday\u2019s scan. Let\u2019s check on a patch management strategy before the next compliance audit.",
+        "start_time": 2620,
+        "end_time": 2630
+    },
+    {
+        "text": "It looks like risk scoring logic for internal assets. Let\u2019s check on the firewall rule changes pushed to production last night.",
+        "start_time": 2630,
+        "end_time": 2640
+    },
+    {
+        "text": "It looks like DNS requests hitting known malicious domains. Let\u2019s check on the incident response playbook for ransomware.",
+        "start_time": 2640,
+        "end_time": 2650
+    },
+    {
+        "text": "We discovered that access logs for the restricted data warehouse. We should prioritize endpoint protection logs from remote employees. Has the team reviewed the new MFA policy adoption across departments.",
+        "start_time": 2650,
+        "end_time": 2660
+    },
+    {
+        "text": "Has anyone tested the firewall rule changes pushed to production last night. Can someone validate anomaly spikes in outbound traffic from the dev subnet.",
+        "start_time": 2660,
+        "end_time": 2670
+    },
+    {
+        "text": "We need to credential reuse flags triggered during yesterday\u2019s scan. Our logs indicate endpoint protection logs from remote employees. Did anyone follow up with the incident response playbook for ransomware.",
+        "start_time": 2670,
+        "end_time": 2680
+    },
+    {
+        "text": "Did anyone follow up with segmentation of legacy systems from internet-facing services. We\u2019re seeing alerts from a patch management strategy before the next compliance audit.",
+        "start_time": 2680,
+        "end_time": 2690
+    },
+    {
+        "text": "Our logs indicate credential reuse flags triggered during yesterday\u2019s scan. Can someone validate a patch management strategy before the next compliance audit.",
+        "start_time": 2690,
+        "end_time": 2700
+    },
+    {
+        "text": "Has the team reviewed risk scoring logic for internal assets. Let\u2019s check on anomaly spikes in outbound traffic from the dev subnet. Has anyone tested privilege escalation attempts reported over the weekend.",
+        "start_time": 2700,
+        "end_time": 2710
+    },
+    {
+        "text": "We\u2019re seeing alerts from the firewall rule changes pushed to production last night. Following yesterday\u2019s audit risk scoring logic for internal assets. There\u2019s a concern about risk scoring logic for internal assets.",
+        "start_time": 2710,
+        "end_time": 2720
+    },
+    {
+        "text": "We discovered that threat intelligence updates from our external feeds. Did anyone follow up with the new MFA policy adoption across departments. Our logs indicate the SIEM configurations for false positives this week.",
+        "start_time": 2720,
+        "end_time": 2730
+    },
+    {
+        "text": "Let\u2019s check on the firewall rule changes pushed to production last night. We should prioritize the incident response playbook for ransomware. I think we should threat intelligence updates from our external feeds.",
+        "start_time": 2730,
+        "end_time": 2740
+    },
+    {
+        "text": "It looks like access logs for the restricted data warehouse. Do we have updates on anomaly spikes in outbound traffic from the dev subnet.",
+        "start_time": 2740,
+        "end_time": 2750
+    },
+    {
+        "text": "I think we should risk scoring logic for internal assets. Following yesterday\u2019s audit the pen test findings shared by the external vendor.",
+        "start_time": 2750,
+        "end_time": 2760
+    },
+    {
+        "text": "It looks like threat intelligence updates from our external feeds. Did anyone follow up with the SIEM configurations for false positives this week.",
+        "start_time": 2760,
+        "end_time": 2770
+    },
+    {
+        "text": "We need to endpoint protection logs from remote employees. We discovered that credential reuse flags triggered during yesterday\u2019s scan.",
+        "start_time": 2770,
+        "end_time": 2780
+    },
+    {
+        "text": "We need to access logs for the restricted data warehouse. I think we should the new MFA policy adoption across departments.",
+        "start_time": 2780,
+        "end_time": 2790
+    },
+    {
+        "text": "There\u2019s a concern about access logs for the restricted data warehouse. There\u2019s a concern about the new MFA policy adoption across departments.",
+        "start_time": 2790,
+        "end_time": 2800
+    },
+    {
+        "text": "We should prioritize privilege escalation attempts reported over the weekend. Has the team reviewed credential reuse flags triggered during yesterday\u2019s scan. Following yesterday\u2019s audit anomaly spikes in outbound traffic from the dev subnet.",
+        "start_time": 2800,
+        "end_time": 2810
+    },
+    {
+        "text": "We\u2019re seeing alerts from the SIEM configurations for false positives this week. There\u2019s a concern about threat intelligence updates from our external feeds.",
+        "start_time": 2810,
+        "end_time": 2820
+    },
+    {
+        "text": "We\u2019re seeing alerts from the SIEM configurations for false positives this week. Has anyone tested the incident response playbook for ransomware. We should prioritize segmentation of legacy systems from internet-facing services.",
+        "start_time": 2820,
+        "end_time": 2830
+    },
+    {
+        "text": "There\u2019s a concern about threat intelligence updates from our external feeds. Has the team reviewed the pen test findings shared by the external vendor.",
+        "start_time": 2830,
+        "end_time": 2840
+    },
+    {
+        "text": "It looks like the firewall rule changes pushed to production last night. Let\u2019s check on endpoint protection logs from remote employees.",
+        "start_time": 2840,
+        "end_time": 2850
+    },
+    {
+        "text": "Following yesterday\u2019s audit endpoint protection logs from remote employees. Has the team reviewed segmentation of legacy systems from internet-facing services. Has the team reviewed a patch management strategy before the next compliance audit.",
+        "start_time": 2850,
+        "end_time": 2860
+    },
+    {
+        "text": "Let\u2019s check on the SIEM configurations for false positives this week. I think we should endpoint protection logs from remote employees.",
+        "start_time": 2860,
+        "end_time": 2870
+    },
+    {
+        "text": "It looks like the pen test findings shared by the external vendor. We need to a patch management strategy before the next compliance audit.",
+        "start_time": 2870,
+        "end_time": 2880
+    },
+    {
+        "text": "Do we have updates on the new MFA policy adoption across departments. We need to credential reuse flags triggered during yesterday\u2019s scan.",
+        "start_time": 2880,
+        "end_time": 2890
+    },
+    {
+        "text": "Did anyone follow up with threat intelligence updates from our external feeds. Has anyone tested anomaly spikes in outbound traffic from the dev subnet.",
+        "start_time": 2890,
+        "end_time": 2900
+    },
+    {
+        "text": "We\u2019re seeing alerts from the firewall rule changes pushed to production last night. Following yesterday\u2019s audit the incident response playbook for ransomware. There\u2019s a concern about access logs for the restricted data warehouse.",
+        "start_time": 2900,
+        "end_time": 2910
+    },
+    {
+        "text": "We need to the firewall rule changes pushed to production last night. We\u2019re seeing alerts from the new MFA policy adoption across departments. Can someone validate access logs for the restricted data warehouse.",
+        "start_time": 2910,
+        "end_time": 2920
+    },
+    {
+        "text": "Did anyone follow up with the new MFA policy adoption across departments. Did anyone follow up with segmentation of legacy systems from internet-facing services.",
+        "start_time": 2920,
+        "end_time": 2930
+    },
+    {
+        "text": "Can someone validate the pen test findings shared by the external vendor. Can someone validate privilege escalation attempts reported over the weekend.",
+        "start_time": 2930,
+        "end_time": 2940
+    },
+    {
+        "text": "Our logs indicate endpoint protection logs from remote employees. It looks like the firewall rule changes pushed to production last night.",
+        "start_time": 2940,
+        "end_time": 2950
+    },
+    {
+        "text": "Our logs indicate a patch management strategy before the next compliance audit. Has the team reviewed segmentation of legacy systems from internet-facing services.",
+        "start_time": 2950,
+        "end_time": 2960
+    },
+    {
+        "text": "Our logs indicate privilege escalation attempts reported over the weekend. Do we have updates on the SIEM configurations for false positives this week.",
+        "start_time": 2960,
+        "end_time": 2970
+    },
+    {
+        "text": "Following yesterday\u2019s audit credential reuse flags triggered during yesterday\u2019s scan. We should prioritize the new MFA policy adoption across departments. Do we have updates on DNS requests hitting known malicious domains.",
+        "start_time": 2970,
+        "end_time": 2980
+    },
+    {
+        "text": "We should prioritize risk scoring logic for internal assets. Can someone validate endpoint protection logs from remote employees. Has anyone tested threat intelligence updates from our external feeds.",
+        "start_time": 2980,
+        "end_time": 2990
+    },
+    {
+        "text": "Following yesterday\u2019s audit the new MFA policy adoption across departments. Do we have updates on the firewall rule changes pushed to production last night.",
+        "start_time": 2990,
+        "end_time": 3000
+    },
+    {
+        "text": "Following yesterday\u2019s audit endpoint protection logs from remote employees. We need to credential reuse flags triggered during yesterday\u2019s scan. Following yesterday\u2019s audit a patch management strategy before the next compliance audit.",
+        "start_time": 3000,
+        "end_time": 3010
+    },
+    {
+        "text": "We should prioritize credential reuse flags triggered during yesterday\u2019s scan. We discovered that credential reuse flags triggered during yesterday\u2019s scan.",
+        "start_time": 3010,
+        "end_time": 3020
+    },
+    {
+        "text": "Our logs indicate privilege escalation attempts reported over the weekend. It looks like the SIEM configurations for false positives this week.",
+        "start_time": 3020,
+        "end_time": 3030
+    },
+    {
+        "text": "It looks like threat intelligence updates from our external feeds. Did anyone follow up with privilege escalation attempts reported over the weekend.",
+        "start_time": 3030,
+        "end_time": 3040
+    },
+    {
+        "text": "It looks like the firewall rule changes pushed to production last night. Did anyone follow up with privilege escalation attempts reported over the weekend.",
+        "start_time": 3040,
+        "end_time": 3050
+    },
+    {
+        "text": "We discovered that risk scoring logic for internal assets. Has the team reviewed credential reuse flags triggered during yesterday\u2019s scan. Do we have updates on the new MFA policy adoption across departments.",
+        "start_time": 3050,
+        "end_time": 3060
+    },
+    {
+        "text": "Has the team reviewed threat intelligence updates from our external feeds. Do we have updates on credential reuse flags triggered during yesterday\u2019s scan.",
+        "start_time": 3060,
+        "end_time": 3070
+    },
+    {
+        "text": "Has anyone tested a patch management strategy before the next compliance audit. Let\u2019s check on risk scoring logic for internal assets.",
+        "start_time": 3070,
+        "end_time": 3080
+    },
+    {
+        "text": "Our logs indicate the pen test findings shared by the external vendor. Did anyone follow up with credential reuse flags triggered during yesterday\u2019s scan.",
+        "start_time": 3080,
+        "end_time": 3090
+    },
+    {
+        "text": "Let\u2019s check on threat intelligence updates from our external feeds. Did anyone follow up with segmentation of legacy systems from internet-facing services.",
+        "start_time": 3090,
+        "end_time": 3100
+    },
+    {
+        "text": "Do we have updates on anomaly spikes in outbound traffic from the dev subnet. Can someone validate the pen test findings shared by the external vendor.",
+        "start_time": 3100,
+        "end_time": 3110
+    },
+    {
+        "text": "Do we have updates on the firewall rule changes pushed to production last night. Has the team reviewed anomaly spikes in outbound traffic from the dev subnet.",
+        "start_time": 3110,
+        "end_time": 3120
+    },
+    {
+        "text": "Did anyone follow up with the pen test findings shared by the external vendor. Has the team reviewed the new MFA policy adoption across departments.",
+        "start_time": 3120,
+        "end_time": 3130
+    },
+    {
+        "text": "Did anyone follow up with the pen test findings shared by the external vendor. It looks like segmentation of legacy systems from internet-facing services.",
+        "start_time": 3130,
+        "end_time": 3140
+    },
+    {
+        "text": "Has the team reviewed risk scoring logic for internal assets. We discovered that privilege escalation attempts reported over the weekend. Do we have updates on the new MFA policy adoption across departments.",
+        "start_time": 3140,
+        "end_time": 3150
+    },
+    {
+        "text": "There\u2019s a concern about the incident response playbook for ransomware. Has the team reviewed credential reuse flags triggered during yesterday\u2019s scan.",
+        "start_time": 3150,
+        "end_time": 3160
+    },
+    {
+        "text": "We need to endpoint protection logs from remote employees. I think we should segmentation of legacy systems from internet-facing services. We need to credential reuse flags triggered during yesterday\u2019s scan.",
+        "start_time": 3160,
+        "end_time": 3170
+    },
+    {
+        "text": "Has anyone tested access logs for the restricted data warehouse. Let\u2019s check on the incident response playbook for ransomware.",
+        "start_time": 3170,
+        "end_time": 3180
+    },
+    {
+        "text": "Has the team reviewed credential reuse flags triggered during yesterday\u2019s scan. Can someone validate credential reuse flags triggered during yesterday\u2019s scan. Do we have updates on segmentation of legacy systems from internet-facing services.",
+        "start_time": 3180,
+        "end_time": 3190
+    },
+    {
+        "text": "Can someone validate a patch management strategy before the next compliance audit. It looks like endpoint protection logs from remote employees. Can someone validate the incident response playbook for ransomware.",
+        "start_time": 3190,
+        "end_time": 3200
+    },
+    {
+        "text": "I think we should the firewall rule changes pushed to production last night. There\u2019s a concern about risk scoring logic for internal assets.",
+        "start_time": 3200,
+        "end_time": 3210
+    },
+    {
+        "text": "I think we should threat intelligence updates from our external feeds. Did anyone follow up with DNS requests hitting known malicious domains. We need to threat intelligence updates from our external feeds.",
+        "start_time": 3210,
+        "end_time": 3220
+    },
+    {
+        "text": "Has the team reviewed the pen test findings shared by the external vendor. We discovered that a patch management strategy before the next compliance audit.",
+        "start_time": 3220,
+        "end_time": 3230
+    },
+    {
+        "text": "Our logs indicate DNS requests hitting known malicious domains. Has anyone tested the SIEM configurations for false positives this week. Has anyone tested the new MFA policy adoption across departments.",
+        "start_time": 3230,
+        "end_time": 3240
+    },
+    {
+        "text": "Following yesterday\u2019s audit the firewall rule changes pushed to production last night. Do we have updates on the incident response playbook for ransomware.",
+        "start_time": 3240,
+        "end_time": 3250
+    },
+    {
+        "text": "Our logs indicate anomaly spikes in outbound traffic from the dev subnet. Did anyone follow up with DNS requests hitting known malicious domains.",
+        "start_time": 3250,
+        "end_time": 3260
+    },
+    {
+        "text": "We should prioritize credential reuse flags triggered during yesterday\u2019s scan. We discovered that access logs for the restricted data warehouse. Has anyone tested privilege escalation attempts reported over the weekend.",
+        "start_time": 3260,
+        "end_time": 3270
+    },
+    {
+        "text": "Our logs indicate access logs for the restricted data warehouse. Let\u2019s check on risk scoring logic for internal assets. Do we have updates on the incident response playbook for ransomware.",
+        "start_time": 3270,
+        "end_time": 3280
+    },
+    {
+        "text": "Has anyone tested privilege escalation attempts reported over the weekend. Did anyone follow up with DNS requests hitting known malicious domains.",
+        "start_time": 3280,
+        "end_time": 3290
+    },
+    {
+        "text": "Did anyone follow up with anomaly spikes in outbound traffic from the dev subnet. We\u2019re seeing alerts from the pen test findings shared by the external vendor.",
+        "start_time": 3290,
+        "end_time": 3300
+    },
+    {
+        "text": "Following yesterday\u2019s audit the new MFA policy adoption across departments. There\u2019s a concern about the SIEM configurations for false positives this week. We should prioritize threat intelligence updates from our external feeds.",
+        "start_time": 3300,
+        "end_time": 3310
+    },
+    {
+        "text": "Did anyone follow up with DNS requests hitting known malicious domains. Has anyone tested the new MFA policy adoption across departments.",
+        "start_time": 3310,
+        "end_time": 3320
+    },
+    {
+        "text": "Our logs indicate the new MFA policy adoption across departments. There\u2019s a concern about the incident response playbook for ransomware.",
+        "start_time": 3320,
+        "end_time": 3330
+    },
+    {
+        "text": "There\u2019s a concern about a patch management strategy before the next compliance audit. We discovered that the pen test findings shared by the external vendor.",
+        "start_time": 3330,
+        "end_time": 3340
+    },
+    {
+        "text": "There\u2019s a concern about endpoint protection logs from remote employees. We discovered that the SIEM configurations for false positives this week. We discovered that the pen test findings shared by the external vendor.",
+        "start_time": 3340,
+        "end_time": 3350
+    },
+    {
+        "text": "We need to privilege escalation attempts reported over the weekend. Our logs indicate anomaly spikes in outbound traffic from the dev subnet. It looks like the firewall rule changes pushed to production last night.",
+        "start_time": 3350,
+        "end_time": 3360
+    },
+    {
+        "text": "It looks like the firewall rule changes pushed to production last night. Did anyone follow up with risk scoring logic for internal assets.",
+        "start_time": 3360,
+        "end_time": 3370
+    },
+    {
+        "text": "Our logs indicate privilege escalation attempts reported over the weekend. We should prioritize access logs for the restricted data warehouse.",
+        "start_time": 3370,
+        "end_time": 3380
+    },
+    {
+        "text": "It looks like anomaly spikes in outbound traffic from the dev subnet. Has anyone tested risk scoring logic for internal assets.",
+        "start_time": 3380,
+        "end_time": 3390
+    },
+    {
+        "text": "We need to risk scoring logic for internal assets. We discovered that endpoint protection logs from remote employees. Following yesterday\u2019s audit segmentation of legacy systems from internet-facing services.",
+        "start_time": 3390,
+        "end_time": 3400
+    },
+    {
+        "text": "Can someone validate threat intelligence updates from our external feeds. Did anyone follow up with threat intelligence updates from our external feeds.",
+        "start_time": 3400,
+        "end_time": 3410
+    },
+    {
+        "text": "There\u2019s a concern about anomaly spikes in outbound traffic from the dev subnet. I think we should endpoint protection logs from remote employees.",
+        "start_time": 3410,
+        "end_time": 3420
+    },
+    {
+        "text": "We need to the firewall rule changes pushed to production last night. Do we have updates on privilege escalation attempts reported over the weekend. We need to privilege escalation attempts reported over the weekend.",
+        "start_time": 3420,
+        "end_time": 3430
+    },
+    {
+        "text": "It looks like the SIEM configurations for false positives this week. There\u2019s a concern about a patch management strategy before the next compliance audit.",
+        "start_time": 3430,
+        "end_time": 3440
+    },
+    {
+        "text": "We should prioritize privilege escalation attempts reported over the weekend. Let\u2019s check on the SIEM configurations for false positives this week.",
+        "start_time": 3440,
+        "end_time": 3450
+    },
+    {
+        "text": "I think we should the incident response playbook for ransomware. Let\u2019s check on credential reuse flags triggered during yesterday\u2019s scan.",
+        "start_time": 3450,
+        "end_time": 3460
+    },
+    {
+        "text": "Our logs indicate access logs for the restricted data warehouse. Do we have updates on anomaly spikes in outbound traffic from the dev subnet.",
+        "start_time": 3460,
+        "end_time": 3470
+    },
+    {
+        "text": "Can someone validate a patch management strategy before the next compliance audit. Has the team reviewed privilege escalation attempts reported over the weekend.",
+        "start_time": 3470,
+        "end_time": 3480
+    },
+    {
+        "text": "Has anyone tested DNS requests hitting known malicious domains. Our logs indicate anomaly spikes in outbound traffic from the dev subnet.",
+        "start_time": 3480,
+        "end_time": 3490
+    },
+    {
+        "text": "It looks like the incident response playbook for ransomware. Has anyone tested the new MFA policy adoption across departments. We need to the incident response playbook for ransomware.",
+        "start_time": 3490,
+        "end_time": 3500
+    },
+    {
+        "text": "It looks like privilege escalation attempts reported over the weekend. It looks like segmentation of legacy systems from internet-facing services. Do we have updates on segmentation of legacy systems from internet-facing services.",
+        "start_time": 3500,
+        "end_time": 3510
+    },
+    {
+        "text": "We\u2019re seeing alerts from segmentation of legacy systems from internet-facing services. It looks like access logs for the restricted data warehouse. We\u2019re seeing alerts from credential reuse flags triggered during yesterday\u2019s scan.",
+        "start_time": 3510,
+        "end_time": 3520
+    },
+    {
+        "text": "We discovered that endpoint protection logs from remote employees. We\u2019re seeing alerts from segmentation of legacy systems from internet-facing services.",
+        "start_time": 3520,
+        "end_time": 3530
+    },
+    {
+        "text": "It looks like the new MFA policy adoption across departments. There\u2019s a concern about anomaly spikes in outbound traffic from the dev subnet.",
+        "start_time": 3530,
+        "end_time": 3540
+    },
+    {
+        "text": "Has anyone tested privilege escalation attempts reported over the weekend. Has anyone tested threat intelligence updates from our external feeds. We discovered that threat intelligence updates from our external feeds.",
+        "start_time": 3540,
+        "end_time": 3550
+    },
+    {
+        "text": "Has the team reviewed risk scoring logic for internal assets. We discovered that the pen test findings shared by the external vendor.",
+        "start_time": 3550,
+        "end_time": 3560
+    },
+    {
+        "text": "Has anyone tested endpoint protection logs from remote employees. Following yesterday\u2019s audit endpoint protection logs from remote employees. Our logs indicate the new MFA policy adoption across departments.",
+        "start_time": 3560,
+        "end_time": 3570
+    },
+    {
+        "text": "Our logs indicate privilege escalation attempts reported over the weekend. We\u2019re seeing alerts from credential reuse flags triggered during yesterday\u2019s scan.",
+        "start_time": 3570,
+        "end_time": 3580
+    },
+    {
+        "text": "We should prioritize anomaly spikes in outbound traffic from the dev subnet. There\u2019s a concern about endpoint protection logs from remote employees.",
+        "start_time": 3580,
+        "end_time": 3590
+    },
+    {
+        "text": "Has anyone tested the SIEM configurations for false positives this week. Let\u2019s check on a patch management strategy before the next compliance audit.",
+        "start_time": 3590,
+        "end_time": 3600
+    }
+]
