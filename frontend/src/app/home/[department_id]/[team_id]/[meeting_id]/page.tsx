@@ -269,25 +269,12 @@ export default function MeetingPage() {
                 }, durationMs);
             }
 
-            // Update meeting to show it has transcription
+            // Update meeting state locally to show it has transcription
             if (meeting) {
                 setMeeting({
                     ...meeting,
                     hasTranscription: true
                 });
-                
-                // Update the meeting in the backend to indicate it has a transcription
-                try {
-                    await fetch(`/api/backend/meetings/${meetingId}/transcription`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ hasTranscription: true }),
-                    });
-                } catch (error) {
-                    console.error("Error updating meeting transcription status:", error);
-                }
             }
         } catch (error) {
             console.error("Error accessing microphone:", error);

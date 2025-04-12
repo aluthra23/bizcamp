@@ -138,20 +138,3 @@ async def get_team_by_id(team_id: str):
         raise HTTPException(status_code=400, detail="Invalid team ID format")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error retrieving team: {str(e)}")
-
-@app.post("/meetings/{meeting_id}/transcription")
-async def update_meeting_transcription(meeting_id: str, request: Request):
-    try:
-        data = await request.json()
-        result = db["meetings"].update_one(
-            {"_id": ObjectId(meeting_id)},
-            {"$set": {"hasTranscription": data.get("hasTranscription", False)}}
-        )
-        
-        if result.matched_count == 0:
-            raise HTTPException(status_code=404, detail="Meeting not found")
-            
-        return {"success": True, "message": "Meeting transcription status updated"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error updating meeting: {str(e)}")
-
