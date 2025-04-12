@@ -1,12 +1,23 @@
-import motor.motor_asyncio
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
+import os 
 from dotenv import load_dotenv
-import os
+load_dotenv()
 
-load_dotenv("../.env")
+uri = os.getenv("MONGODB_URI")
 
-MONGO_URI = os.getenv("MONGODB_URI")
-DB_NAME = "biz_data"
+# Create a new client and connect to the server
+client = MongoClient(uri, server_api=ServerApi('1'))
 
-client = motor.motor_asyncio.AsyncIOMotorClient(MONGO_URI)
-db = client[DB_NAME]
-db['users'].insert_one({'data':'hi'})
+# Send a ping to confirm a successful connection
+try:
+    client.admin.command('ping')
+    print("Pinged your deployment. You successfully connected to MongoDB!")
+except Exception as e:
+    print(e)
+
+db = client["biz_data"]
+
+print(db)
+
+db.users.insert_one({"omg":"hi"})
