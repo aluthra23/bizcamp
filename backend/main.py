@@ -17,5 +17,5 @@ app.add_middleware(
 async def add_user(request: Request):
     data = await request.json()
     # Example expected: { "name": "Alice", "email": "alice@example.com" }
-    result = await db["users"].insert_one(data)
+    result = db["users"].insert_one(data)
     return {"inserted_id": str(result.inserted_id)}
