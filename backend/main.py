@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from db.mongo import db
 from bson import ObjectId #vedant import
+import datetime
 
 app = FastAPI()
 
@@ -172,3 +173,20 @@ async def update_meeting_transcription_status(meeting_id: str, request: Request)
         return {"success": True, "message": "Meeting transcription status updated"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Error updating meeting transcription status: {str(e)}")
+
+@app.post("/meetings/{meeting_id}/chat")
+async def chat_with_meeting(meeting_id: str, request: Request):
+    try:
+        data = await request.json()
+        user_message = data.get("message", "")
+        
+        # Mock response for now
+        response = {
+            "message": f"This is a mock response to: '{user_message}' for meeting {meeting_id}",
+            "meeting_id": meeting_id,
+            "timestamp": datetime.datetime.now().isoformat()
+        }
+        
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error processing chat request: {str(e)}")

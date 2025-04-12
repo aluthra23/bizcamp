@@ -347,6 +347,33 @@ export default function TeamPage() {
                             background-color: rgba(31, 31, 31, 0.3);
                             border-radius: 8px;
                         }
+                        /* Fix for day headers */
+                        .fc .fc-col-header-cell {
+                            background-color: rgba(50, 50, 50, 0.5);
+                        }
+                        /* Fix for day cells */
+                        .fc .fc-daygrid-day {
+                            background-color: rgba(30, 30, 30, 0.7);
+                        }
+                        /* Ensure text colors */
+                        .fc .fc-daygrid-day-top a {
+                            color: rgba(255, 255, 255, 0.8);
+                        }
+                        /* Fix for week numbers if visible */
+                        .fc .fc-daygrid-week-number {
+                            color: rgba(255, 255, 255, 0.6);
+                        }
+                        /* Fix for time slots in week/day views */
+                        .fc .fc-timegrid-slot-label-cushion {
+                            color: rgba(255, 255, 255, 0.7);
+                        }
+                        .fc .fc-timegrid-axis-cushion {
+                            color: rgba(255, 255, 255, 0.7);
+                        }
+                        /* Fix for color of text in month names on buttons */
+                        .fc .fc-button-primary span {
+                            color: white;
+                        }
                     `}</style>
                     <div className="calendar-container">
                         <FullCalendar
