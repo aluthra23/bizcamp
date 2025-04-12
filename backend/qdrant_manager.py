@@ -100,7 +100,7 @@ class QdrantManager:
             print(f"Collection '{collection_name}' does not exist")
             raise ValueError(f"Collection '{collection_name}' does not exist")
 
-        results = self.search_similar(collection_name, prompt, similarity_threshold=0.5)
+        results = self.search_similar(collection_name, prompt, similarity_threshold=0.2)
         print(results)
 
         if not results:
