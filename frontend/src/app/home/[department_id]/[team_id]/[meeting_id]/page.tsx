@@ -30,78 +30,20 @@ interface Action {
 }
 
 interface MeetingDetails {
-    id: string;
-    name: string;
-    date: string;
-    startTime: string;
-    endTime: string;
-    duration: number;
+    _id: string;
+    teamId: string;
+    title: string;
     description: string;
-    attendees: Attendee[];
-    agenda: AgendaItem[];
-    actions: Action[];
-    hasTranscription: boolean;
+    meeting_date: string;
+    // Extended details from sample data
+    startTime?: string;
+    endTime?: string;
+    duration?: number;
+    attendees?: Attendee[];
+    agenda?: AgendaItem[];
+    actions?: Action[];
+    hasTranscription?: boolean;
 }
-
-// Sample meeting data
-const meetingData: Record<string, MeetingDetails> = {
-    'sprint-1': {
-        id: 'sprint-1',
-        name: 'Sprint Planning',
-        date: '2023-05-15',
-        startTime: '10:00',
-        endTime: '11:00',
-        duration: 60,
-        description: 'Bi-weekly sprint planning session to define goals and tasks for the upcoming sprint.',
-        attendees: [
-            { id: 'user1', name: 'Sarah Chen', role: 'Product Manager', avatarColor: 'bg-gradient-to-br from-purple-500 to-indigo-500', speaking: 35 },
-            { id: 'user2', name: 'Alex Johnson', role: 'Tech Lead', avatarColor: 'bg-gradient-to-br from-blue-500 to-cyan-500', speaking: 25 },
-            { id: 'user3', name: 'Kai Ramirez', role: 'Frontend Dev', avatarColor: 'bg-gradient-to-br from-teal-500 to-emerald-500', speaking: 15 },
-            { id: 'user4', name: 'Jamie Wu', role: 'UX Designer', avatarColor: 'bg-gradient-to-br from-amber-500 to-orange-500', speaking: 15 },
-            { id: 'user5', name: 'Morgan Lee', role: 'QA Engineer', avatarColor: 'bg-gradient-to-br from-red-500 to-rose-500', speaking: 5 },
-            { id: 'user6', name: 'Taylor Kim', role: 'Backend Dev', avatarColor: 'bg-gradient-to-br from-pink-500 to-fuchsia-500', speaking: 5 },
-        ],
-        agenda: [
-            { id: 'ag1', title: 'Review previous sprint', isCompleted: true, duration: 10 },
-            { id: 'ag2', title: 'Discuss new feature priorities', isCompleted: true, duration: 15 },
-            { id: 'ag3', title: 'Estimate user stories', isCompleted: true, duration: 25 },
-            { id: 'ag4', title: 'Finalize sprint goals', isCompleted: true, duration: 10 },
-        ],
-        actions: [
-            { id: 'ac1', description: 'Create technical specs for user authentication flow', assignee: 'Alex Johnson', dueDate: '2023-05-17', isCompleted: true },
-            { id: 'ac2', description: 'Update UI mockups for dashboard', assignee: 'Jamie Wu', dueDate: '2023-05-18', isCompleted: false },
-            { id: 'ac3', description: 'Set up CI/CD pipeline for new microservice', assignee: 'Kai Ramirez', dueDate: '2023-05-19', isCompleted: false },
-            { id: 'ac4', description: 'Review API documentation', assignee: 'Taylor Kim', dueDate: '2023-05-20', isCompleted: false },
-        ],
-        hasTranscription: true
-    },
-    // Default meeting for demo
-    '_default': {
-        id: '_default',
-        name: 'Meeting',
-        date: '2023-05-20',
-        startTime: '14:00',
-        endTime: '15:00',
-        duration: 60,
-        description: 'Team sync-up meeting.',
-        attendees: [
-            { id: 'user1', name: 'Jane Doe', role: 'Manager', avatarColor: 'bg-gradient-to-br from-purple-500 to-indigo-500', speaking: 40 },
-            { id: 'user2', name: 'John Smith', role: 'Developer', avatarColor: 'bg-gradient-to-br from-blue-500 to-cyan-500', speaking: 30 },
-            { id: 'user3', name: 'Alice Brown', role: 'Designer', avatarColor: 'bg-gradient-to-br from-teal-500 to-emerald-500', speaking: 30 },
-        ],
-        agenda: [
-            { id: 'ag1', title: 'Project updates', isCompleted: true, duration: 20 },
-            { id: 'ag2', title: 'Roadmap discussion', isCompleted: true, duration: 20 },
-            { id: 'ag3', title: 'Open questions', isCompleted: true, duration: 20 },
-        ],
-        actions: [
-            { id: 'ac1', description: 'Follow up on project timeline', assignee: 'Jane Doe', dueDate: '2023-05-22', isCompleted: false },
-            { id: 'ac2', description: 'Create design assets', assignee: 'Alice Brown', dueDate: '2023-05-23', isCompleted: false },
-        ],
-        hasTranscription: true
-    }
-};
-
 
 interface DurationModalProps {
   isOpen: boolean;
@@ -175,13 +117,36 @@ function DurationModal({ isOpen, onClose, onConfirm }: DurationModalProps) {
   );
 }
 
+// Sample data for parts not provided by the API
+const sampleExtendedData = {
+        startTime: '10:00',
+        endTime: '11:00',
+        duration: 60,
+        attendees: [
+            { id: 'user1', name: 'Sarah Chen', role: 'Product Manager', avatarColor: 'bg-gradient-to-br from-purple-500 to-indigo-500', speaking: 35 },
+            { id: 'user2', name: 'Alex Johnson', role: 'Tech Lead', avatarColor: 'bg-gradient-to-br from-blue-500 to-cyan-500', speaking: 25 },
+            { id: 'user3', name: 'Kai Ramirez', role: 'Frontend Dev', avatarColor: 'bg-gradient-to-br from-teal-500 to-emerald-500', speaking: 15 },
+            { id: 'user4', name: 'Jamie Wu', role: 'UX Designer', avatarColor: 'bg-gradient-to-br from-amber-500 to-orange-500', speaking: 15 },
+        ],
+        agenda: [
+            { id: 'ag1', title: 'Review previous sprint', isCompleted: true, duration: 10 },
+            { id: 'ag2', title: 'Discuss new feature priorities', isCompleted: true, duration: 15 },
+            { id: 'ag3', title: 'Estimate user stories', isCompleted: true, duration: 25 },
+        ],
+        actions: [
+        { id: 'ac1', description: 'Create technical specs', assignee: 'Alex Johnson', dueDate: '2023-05-17', isCompleted: false },
+        { id: 'ac2', description: 'Update UI mockups', assignee: 'Jamie Wu', dueDate: '2023-05-18', isCompleted: false },
+    ],
+    hasTranscription: false
+};
+
 export default function MeetingPage() {
     const router = useRouter();
     const params = useParams();
     const departmentId = params.department_id as string;
     const teamId = params.team_id as string;
     const meetingId = params.meeting_id as string;
-    
+
     // Recording state
     const [transcriptionStarted, setTranscriptionStarted] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -191,19 +156,46 @@ export default function MeetingPage() {
     const chunksRef = useRef<Blob[]>([]);
     const durationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-    // Try to get the meeting data, or use default if not found
-    const [meeting, setMeeting] = useState<MeetingDetails | null>(
-        meetingData[meetingId] || meetingData['_default'] || null
-    );
+    // Meeting state
+    const [meeting, setMeeting] = useState<MeetingDetails | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
+        const fetchMeeting = async () => {
+            setIsLoading(true);
+            try {
+                const response = await fetch(`/api/backend/meetings/${meetingId}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch meeting');
+                }
+                
+                const meetingData = await response.json();
+                
+                // Combine API data with sample extended data for UI purposes
+                // In a real app, all this data would come from the API
+                setMeeting({
+                    ...meetingData,
+                    ...sampleExtendedData
+                });
+                
+            } catch (err) {
+                console.error('Error fetching meeting:', err);
+                setError('Failed to load meeting');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        
+        fetchMeeting();
+
         return () => {
             handleStopTranscription();
             if (durationTimeoutRef.current) {
                 clearTimeout(durationTimeoutRef.current);
             }
         };
-    }, []);
+    }, [meetingId]);
 
     const startNewRecordingInterval = async () => {
         if (!streamRef.current) return;
@@ -283,6 +275,19 @@ export default function MeetingPage() {
                     ...meeting,
                     hasTranscription: true
                 });
+                
+                // Update the meeting in the backend to indicate it has a transcription
+                try {
+                    await fetch(`/api/backend/meetings/${meetingId}/transcription`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ hasTranscription: true }),
+                    });
+                } catch (error) {
+                    console.error("Error updating meeting transcription status:", error);
+                }
             }
         } catch (error) {
             console.error("Error accessing microphone:", error);
@@ -329,7 +334,15 @@ export default function MeetingPage() {
         }
     };
 
-    if (!meeting) {
+    if (isLoading) {
+        return (
+            <div className="min-h-screen bg-background flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+            </div>
+        );
+    }
+
+    if (error || !meeting) {
         return (
             <div className="min-h-screen bg-background flex items-center justify-center">
                 <div className="text-center p-8">
@@ -363,14 +376,14 @@ export default function MeetingPage() {
                         Meetings
                     </Link>
                     <span className="text-white/40">→</span>
-                    <span className="text-white">{meeting.name}</span>
+                    <span className="text-white">{meeting.title}</span>
                 </div>
 
                 {/* Meeting header */}
                 <div className="glass-effect rounded-xl p-6 border border-white/10 mb-8">
                     <div className="flex flex-col md:flex-row justify-between items-start mb-4 gap-4">
                         <div>
-                            <h1 className="text-2xl font-bold text-white">{meeting.name}</h1>
+                            <h1 className="text-2xl font-bold text-white">{meeting.title}</h1>
                             <p className="text-text-secondary mt-1">{meeting.description}</p>
                         </div>
 
@@ -397,19 +410,19 @@ export default function MeetingPage() {
                                 {transcriptionStarted ? 'Stop Recording' : 'Start Recording'}
                             </button>
 
-                            {meeting.hasTranscription && (
-                                <Link
-                                    href={`/home/${departmentId}/${teamId}/${meetingId}/transcription`}
-                                    className="bg-gradient-to-r from-primary to-accent text-white px-4 py-2 rounded-full font-medium flex items-center gap-2"
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                                        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-                                        <path d="M19.07 5.93a10 10 0 0 1 0 12.14"></path>
-                                    </svg>
-                                    View Transcription
-                                </Link>
-                            )}
+                        {meeting.hasTranscription && (
+                            <Link
+                                href={`/home/${departmentId}/${teamId}/${meetingId}/transcription`}
+                                className="bg-gradient-to-r from-primary to-accent text-white px-4 py-2 rounded-full font-medium flex items-center gap-2"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                                    <path d="M19.07 5.93a10 10 0 0 1 0 12.14"></path>
+                                </svg>
+                                View Transcription
+                            </Link>
+                        )}
                         </div>
                     </div>
 
@@ -422,7 +435,7 @@ export default function MeetingPage() {
                                 <line x1="3" y1="10" x2="21" y2="10"></line>
                             </svg>
                             <span className="text-white">
-                                {new Date(meeting.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                                {new Date(meeting.meeting_date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                             </span>
                         </div>
 
@@ -441,7 +454,7 @@ export default function MeetingPage() {
                                 <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
                                 <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                             </svg>
-                            <span className="text-white">{meeting.attendees.length} Attendees</span>
+                            <span className="text-white">{meeting.attendees?.length || 0} Attendees</span>
                         </div>
                     </div>
                 </div>
@@ -453,7 +466,7 @@ export default function MeetingPage() {
                         <h2 className="text-xl font-semibold text-white mb-4">Attendees</h2>
                         <div className="glass-effect rounded-xl border border-white/10 p-6">
                             <div className="space-y-4">
-                                {meeting.attendees.map((attendee) => (
+                                {meeting.attendees && meeting.attendees.map((attendee) => (
                                     <div key={attendee.id} className="flex items-center gap-3">
                                         <div className={`w-10 h-10 rounded-full ${attendee.avatarColor} flex items-center justify-center text-white font-medium`}>
                                             {attendee.name.charAt(0)}
@@ -470,10 +483,11 @@ export default function MeetingPage() {
                                 ))}
                             </div>
 
+                            {meeting.attendees && meeting.attendees.length > 0 && (
                             <div className="mt-6 pt-6 border-t border-white/10">
                                 <h3 className="text-lg font-medium text-white mb-3">Speaking Distribution</h3>
                                 <div className="h-6 rounded-full flex overflow-hidden">
-                                    {meeting.attendees.map((attendee, index) => (
+                                        {meeting.attendees.map((attendee) => (
                                         <div
                                             key={attendee.id}
                                             className={`${attendee.avatarColor} h-full`}
@@ -487,6 +501,7 @@ export default function MeetingPage() {
                                     <p className="text-xs text-text-secondary">{meeting.duration}:00</p>
                                 </div>
                             </div>
+                            )}
                         </div>
                     </div>
 
@@ -494,6 +509,7 @@ export default function MeetingPage() {
                     <div>
                         <h2 className="text-xl font-semibold text-white mb-4">Agenda</h2>
                         <div className="glass-effect rounded-xl border border-white/10 p-6">
+                            {meeting.agenda && meeting.agenda.length > 0 ? (
                             <div className="space-y-4">
                                 {meeting.agenda.map((item, index) => (
                                     <div key={item.id} className="flex items-start gap-3">
@@ -517,6 +533,9 @@ export default function MeetingPage() {
                                     </div>
                                 ))}
                             </div>
+                            ) : (
+                                <p className="text-text-secondary text-center">No agenda items available</p>
+                            )}
                         </div>
                     </div>
 
@@ -524,6 +543,7 @@ export default function MeetingPage() {
                     <div>
                         <h2 className="text-xl font-semibold text-white mb-4">Action Items</h2>
                         <div className="glass-effect rounded-xl border border-white/10 p-6">
+                            {meeting.actions && meeting.actions.length > 0 ? (
                             <div className="space-y-4">
                                 {meeting.actions.map((action) => (
                                     <div key={action.id} className="flex items-start gap-3">
@@ -553,6 +573,9 @@ export default function MeetingPage() {
                                     </div>
                                 ))}
                             </div>
+                            ) : (
+                                <p className="text-text-secondary text-center">No action items available</p>
+                            )}
                         </div>
                     </div>
                 </div>

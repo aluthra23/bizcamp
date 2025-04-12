@@ -17,7 +17,6 @@ const client = new AssemblyAI({
 
 export async function processAudioChunk(audioBlob: Blob, collectionName: string) {
   try {
-
     // Check if the blob is valid
     if (!audioBlob.type.includes('audio/')) {
       console.error("Invalid audio blob type:", audioBlob.type);
@@ -64,23 +63,67 @@ export async function processAudioChunk(audioBlob: Blob, collectionName: string)
 }
 
 export async function initializeCollection(collectionName: string, vectorSize: number = 768): Promise<void> {
-    try {
-      console.log(`Initializing collection '${collectionName}' with vector size ${vectorSize}`);
-      await manager.createCollection(collectionName, vectorSize);
-    } catch (error) {
-      console.error(`Error initializing collection '${collectionName}':`, error);
+  try {
+    console.log(`Initializing collection '${collectionName}'`);
+    
+    // Use our API proxy to communicate with the backend
+    const response = await fetch(`/api/backend/transcriptions/collections/${collectionName}/initialize`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ vectorSize }),
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to initialize collection: ${response.statusText}`);
     }
+    
+    console.log('Collection initialized successfully');
+  } catch (error) {
+    console.error(`Error initializing collection '${collectionName}':`, error);
+    throw error;
+  }
 }
 
 export async function restartCollection(collectionName: string, vectorSize: number = 768): Promise<void> {
   try {
-    await manager.deleteCollection(collectionName);
-    await manager.createCollection(collectionName, vectorSize);
+    console.log(`Restarting collection '${collectionName}'`);
+    
+    // Use our API proxy to communicate with the backend
+    const response = await fetch(`/api/backend/transcriptions/collections/${collectionName}/restart`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ vectorSize }),
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to restart collection: ${response.statusText}`);
+    }
+    
+    console.log('Collection restarted successfully');
   } catch (error) {
     console.error(`Error restarting collection '${collectionName}':`, error);
+    throw error;
   }
 }
 
 export async function collectionExists(collectionName: string): Promise<boolean> {
-  return await manager.collectionExists(collectionName);
+  try {
+    const response = await fetch(`/api/backend/transcriptions/collections/${collectionName}/exists`, {
+      method: 'GET',
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to check if collection exists: ${response.statusText}`);
+    }
+    
+    const data = await response.json();
+    return data.exists;
+  } catch (error) {
+    console.error(`Error checking if collection '${collectionName}' exists:`, error);
+    return false;
+  }
 }

@@ -62,3 +62,41 @@ async def delete_department(department_id: str):
         return {"success": True, "message": "Department deleted successfully"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Error deleting department: {str(e)}")
+
+@app.get("/departments/{department_id}/teams")
+async def get_teams_by_department(department_id: str):
+    try:
+        teams = list(db["teams"].find({"departmentId": department_id}))
+        print(teams)
+        for team in teams:
+            team["_id"] = str(team["_id"])
+        return teams
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/departments/{department_id}/teams")
+async def add_team(department_id: str, request: Request):
+    data = await request.json()
+    data["departmentId"] = department_id
+    result = db["teams"].insert_one(data)
+    return {"inserted_id": str(result.inserted_id)}
+
+@app.get("/teams/{team_id}/meetings")
+async def get_meetings_by_team(team_id: str):
+    try:
+        meetings = list(db["meetings"].find({"teamId": team_id}))
+        print(meetings)
+        return meetings
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/teams/{team_id}/meetings")
+async def add_meeting(team_id: str, request: Request):
+    try:
+        data = await request.json()
+        data["teamId"] = team_id
+        result = db["meetings"].insert_one(data)
+        return {"inserted_id": str(result.inserted_id)}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+

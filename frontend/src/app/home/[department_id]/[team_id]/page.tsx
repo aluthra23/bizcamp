@@ -6,71 +6,18 @@ import { useParams, useRouter } from 'next/navigation';
 
 // Define types
 interface Meeting {
-    id: string;
-    name: string;
-    date: string;
-    duration: number;
-    attendees: number;
-    hasTranscription: boolean;
+    _id: string;
+    teamId: string;
+    title: string;
+    description: string;
+    meeting_date: string;
 }
 
 interface Team {
+    _id: string;
     name: string;
     description: string;
-    meetings: Meeting[];
-}
-
-interface TeamData {
-    [deptId: string]: {
-        [teamId: string]: Team;
-    };
-}
-
-// Sample team data
-const teamData: TeamData = {
-    'eng': {
-        'frontend': {
-            name: 'Frontend',
-            description: 'Web UI development team',
-            meetings: [
-                { id: 'sprint-1', name: 'Sprint Planning', date: '2023-05-15', duration: 60, attendees: 6, hasTranscription: true },
-                { id: 'retro-1', name: 'Sprint Retrospective', date: '2023-05-20', duration: 45, attendees: 5, hasTranscription: true },
-                { id: 'design-1', name: 'Design Review', date: '2023-05-22', duration: 30, attendees: 4, hasTranscription: false },
-                { id: 'standup-1', name: 'Daily Standup', date: '2023-05-23', duration: 15, attendees: 6, hasTranscription: true },
-                { id: 'sprint-2', name: 'Sprint Planning', date: '2023-05-29', duration: 60, attendees: 6, hasTranscription: true },
-                { id: 'demo-1', name: 'Product Demo', date: '2023-05-30', duration: 45, attendees: 8, hasTranscription: true },
-                { id: 'retro-2', name: 'Sprint Retrospective', date: '2023-06-03', duration: 45, attendees: 5, hasTranscription: false },
-                { id: 'standup-2', name: 'Daily Standup', date: '2023-06-05', duration: 15, attendees: 5, hasTranscription: true },
-            ]
-        },
-        'backend': {
-            name: 'Backend',
-            description: 'API and server development team',
-            meetings: [
-                { id: 'sprint-1', name: 'Sprint Planning', date: '2023-05-15', duration: 60, attendees: 7, hasTranscription: true },
-                { id: 'arch-1', name: 'Architecture Review', date: '2023-05-18', duration: 90, attendees: 5, hasTranscription: true },
-                { id: 'retro-1', name: 'Sprint Retrospective', date: '2023-05-20', duration: 45, attendees: 6, hasTranscription: false },
-                { id: 'standup-1', name: 'Daily Standup', date: '2023-05-23', duration: 15, attendees: 6, hasTranscription: true },
-                { id: 'sprint-2', name: 'Sprint Planning', date: '2023-05-29', duration: 60, attendees: 7, hasTranscription: true },
-                { id: 'demo-1', name: 'Product Demo', date: '2023-05-30', duration: 45, attendees: 7, hasTranscription: true },
-            ]
-        },
-    }
-};
-
-// Add some sample data for other departments/teams to avoid "not found" errors in demo
-for (const deptId of ['product', 'marketing', 'sales', 'hr']) {
-    teamData[deptId] = {};
-
-    // Add a sample team with meetings for any team ID
-    teamData[deptId]['_default'] = {
-        name: 'Team',
-        description: 'Sample team description',
-        meetings: [
-            { id: 'meeting-1', name: 'Weekly Sync', date: '2023-05-20', duration: 60, attendees: 5, hasTranscription: true },
-            { id: 'meeting-2', name: 'Planning', date: '2023-05-27', duration: 45, attendees: 4, hasTranscription: false },
-        ]
-    };
+    departmentId: string;
 }
 
 export default function TeamPage() {
@@ -79,19 +26,116 @@ export default function TeamPage() {
     const departmentId = params.department_id as string;
     const teamId = params.team_id as string;
 
-    // Try to find exact match, otherwise use default
-    const [team, setTeam] = useState<Team | null>(
-        (teamData[departmentId] && teamData[departmentId][teamId]) ||
-        (teamData[departmentId] && teamData[departmentId]['_default']) ||
-        null
-    );
+    const [team, setTeam] = useState<Team | null>(null);
+    const [meetings, setMeetings] = useState<Meeting[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [showAddMeetingModal, setShowAddMeetingModal] = useState(false);
+    const [newMeeting, setNewMeeting] = useState({ 
+        title: '', 
+        description: '', 
+        meeting_date: new Date().toISOString().split('T')[0]
+    });
 
-    // Sort meetings by date (newest first)
-    const sortedMeetings = team?.meetings.slice().sort((a, b) => {
-        return new Date(b.date).getTime() - new Date(a.date).getTime();
-    }) || [];
+    useEffect(() => {
+        const fetchTeamData = async () => {
+            setIsLoading(true);
+            setError(null);
+            
+            try {
+                // First, fetch the teams for this department
+                const teamsResponse = await fetch(`/api/backend/departments/${departmentId}/teams`);
+                
+                if (!teamsResponse.ok) {
+                    throw new Error('Failed to fetch teams');
+                }
+                
+                const teamsData = await teamsResponse.json();
+                const currentTeam = teamsData.find((t: Team) => t._id === teamId);
+                
+                if (currentTeam) {
+                    setTeam(currentTeam);
+                    
+                    // Now fetch meetings for this team
+                    await fetchMeetings(teamId);
+                } else {
+                    setError('Team not found');
+                }
+            } catch (err) {
+                console.error('Error fetching team data:', err);
+                setError('Failed to load team data');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        
+        fetchTeamData();
+    }, [departmentId, teamId]);
+    
+    const fetchMeetings = async (teamId: string) => {
+        try {
+            const response = await fetch(`/api/backend/teams/${teamId}/meetings`);
+            
+            if (!response.ok) {
+                throw new Error('Failed to fetch meetings');
+            }
+            
+            const meetingsData = await response.json();
+            setMeetings(meetingsData);
+        } catch (err) {
+            console.error('Error fetching meetings:', err);
+            setError('Failed to load meetings');
+        }
+    };
+    
+    const handleAddMeeting = async (e: React.FormEvent) => {
+        e.preventDefault();
+        
+        if (!newMeeting.title.trim()) return;
+        
+        try {
+            const response = await fetch(`/api/backend/teams/${teamId}/meetings`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    ...newMeeting,
+                    teamId: teamId
+                }),
+            });
+            
+            if (!response.ok) {
+                throw new Error('Failed to add meeting');
+            }
+            
+            // Refresh the meetings list
+            await fetchMeetings(teamId);
+            
+            // Reset the form and close the modal
+            setNewMeeting({ 
+                title: '', 
+                description: '', 
+                meeting_date: new Date().toISOString().split('T')[0]
+            });
+            setShowAddMeetingModal(false);
+        } catch (err) {
+            console.error('Error adding meeting:', err);
+            alert('Failed to add meeting. Please try again.');
+        }
+    };
 
-    if (!team) {
+    if (isLoading) {
+        return (
+            <div className="min-h-screen bg-background flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+            </div>
+        );
+    }
+
+    console.log(error)
+
+    if (error || !team) {
         return (
             <div className="min-h-screen bg-background flex items-center justify-center">
                 <div className="text-center p-8">
@@ -129,7 +173,10 @@ export default function TeamPage() {
                             <h1 className="text-2xl font-bold text-white">{team.name}</h1>
                             <p className="text-text-secondary mt-1">{team.description}</p>
                         </div>
-                        <button className="bg-gradient-to-r from-primary to-accent text-white px-4 py-2 rounded-full font-medium">
+                        <button 
+                            onClick={() => setShowAddMeetingModal(true)} 
+                            className="bg-gradient-to-r from-primary to-accent text-white px-4 py-2 rounded-full font-medium"
+                        >
                             + Schedule Meeting
                         </button>
                     </div>
@@ -137,39 +184,45 @@ export default function TeamPage() {
 
                 <h2 className="text-xl font-semibold text-white mb-4">Meetings</h2>
 
-                <div className="glass-effect rounded-xl border border-white/10 overflow-hidden">
-                    <div className="overflow-x-auto">
-                        <table className="w-full">
-                            <thead>
-                                <tr className="border-b border-white/10">
-                                    <th className="py-3 px-4 text-left text-white/70 font-medium">Meeting</th>
-                                    <th className="py-3 px-4 text-left text-white/70 font-medium">Date</th>
-                                    <th className="py-3 px-4 text-left text-white/70 font-medium">Duration</th>
-                                    <th className="py-3 px-4 text-left text-white/70 font-medium">Attendees</th>
-                                    <th className="py-3 px-4 text-left text-white/70 font-medium">Transcription</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {sortedMeetings.map((meeting) => (
-                                    <tr key={meeting.id} className="border-b border-white/5 hover:bg-white/5 transition-all">
-                                        <td className="py-3 px-4">
-                                            <Link href={`/home/${departmentId}/${teamId}/${meeting.id}`} className="text-white hover:text-primary-light transition">
-                                                {meeting.name}
-                                            </Link>
-                                        </td>
-                                        <td className="py-3 px-4 text-text-secondary">
-                                            {new Date(meeting.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
-                                        </td>
-                                        <td className="py-3 px-4 text-text-secondary">
-                                            {meeting.duration} min
-                                        </td>
-                                        <td className="py-3 px-4 text-text-secondary">
-                                            {meeting.attendees}
-                                        </td>
-                                        <td className="py-3 px-4">
-                                            {meeting.hasTranscription ? (
+                {meetings.length === 0 ? (
+                    <div className="glass-effect rounded-xl p-8 border border-white/10 text-center">
+                        <p className="text-text-secondary mb-4">No meetings found for this team.</p>
+                        <button
+                            onClick={() => setShowAddMeetingModal(true)}
+                            className="bg-gradient-to-r from-primary to-accent text-white px-4 py-2 rounded-full font-medium"
+                        >
+                            Schedule your first meeting
+                        </button>
+                    </div>
+                ) : (
+                    <div className="glass-effect rounded-xl border border-white/10 overflow-hidden">
+                        <div className="overflow-x-auto">
+                            <table className="w-full">
+                                <thead>
+                                    <tr className="border-b border-white/10">
+                                        <th className="py-3 px-4 text-left text-white/70 font-medium">Meeting</th>
+                                        <th className="py-3 px-4 text-left text-white/70 font-medium">Date</th>
+                                        <th className="py-3 px-4 text-left text-white/70 font-medium">Description</th>
+                                        <th className="py-3 px-4 text-left text-white/70 font-medium">Transcription</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {meetings.map((meeting) => (
+                                        <tr key={meeting._id} className="border-b border-white/5 hover:bg-white/5 transition-all">
+                                            <td className="py-3 px-4">
+                                                <Link href={`/home/${departmentId}/${teamId}/${meeting._id}`} className="text-white hover:text-primary-light transition">
+                                                    {meeting.title}
+                                                </Link>
+                                            </td>
+                                            <td className="py-3 px-4 text-text-secondary">
+                                                {new Date(meeting.meeting_date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                                            </td>
+                                            <td className="py-3 px-4 text-text-secondary">
+                                                {meeting.description}
+                                            </td>
+                                            <td className="py-3 px-4">
                                                 <Link
-                                                    href={`/home/${departmentId}/${teamId}/${meeting.id}/transcription`}
+                                                    href={`/home/${departmentId}/${teamId}/${meeting._id}/transcription`}
                                                     className="text-primary-light hover:underline flex items-center gap-1"
                                                 >
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -179,17 +232,80 @@ export default function TeamPage() {
                                                     </svg>
                                                     View
                                                 </Link>
-                                            ) : (
-                                                <span className="text-white/40">Not available</span>
-                                            )}
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                )}
+            </main>
+            
+            {/* Add Meeting Modal */}
+            {showAddMeetingModal && (
+                <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+                    <div className="glass-effect rounded-xl border border-white/10 p-6 w-full max-w-md mx-auto">
+                        <h2 className="text-xl font-semibold text-white mb-4">Schedule Meeting</h2>
+                        
+                        <form onSubmit={handleAddMeeting}>
+                            <div className="mb-4">
+                                <label className="block text-text-secondary text-sm font-medium mb-2">
+                                    Meeting Title
+                                </label>
+                                <input
+                                    type="text"
+                                    value={newMeeting.title}
+                                    onChange={(e) => setNewMeeting({...newMeeting, title: e.target.value})}
+                                    className="w-full bg-surface border border-white/10 rounded-lg p-2 text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                                    required
+                                />
+                            </div>
+                            
+                            <div className="mb-4">
+                                <label className="block text-text-secondary text-sm font-medium mb-2">
+                                    Date
+                                </label>
+                                <input
+                                    type="date"
+                                    value={newMeeting.meeting_date}
+                                    onChange={(e) => setNewMeeting({...newMeeting, meeting_date: e.target.value})}
+                                    className="w-full bg-surface border border-white/10 rounded-lg p-2 text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                                    required
+                                />
+                            </div>
+                            
+                            <div className="mb-6">
+                                <label className="block text-text-secondary text-sm font-medium mb-2">
+                                    Description
+                                </label>
+                                <textarea
+                                    value={newMeeting.description}
+                                    onChange={(e) => setNewMeeting({...newMeeting, description: e.target.value})}
+                                    className="w-full bg-surface border border-white/10 rounded-lg p-2 text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                                    rows={3}
+                                />
+                            </div>
+                            
+                            <div className="flex justify-end gap-3">
+                                <button
+                                    type="button"
+                                    onClick={() => setShowAddMeetingModal(false)}
+                                    className="px-4 py-2 border border-white/10 rounded-full text-white hover:bg-surface-light"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="px-4 py-2 bg-gradient-to-r from-primary to-accent text-white rounded-full"
+                                >
+                                    Schedule
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-            </main>
+            )}
         </div>
     );
 }
