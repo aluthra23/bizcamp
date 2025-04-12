@@ -119,21 +119,21 @@ function DurationModal({ isOpen, onClose, onConfirm }: DurationModalProps) {
 
 // Sample data for parts not provided by the API
 const sampleExtendedData = {
-        startTime: '10:00',
-        endTime: '11:00',
-        duration: 60,
-        attendees: [
-            { id: 'user1', name: 'Sarah Chen', role: 'Product Manager', avatarColor: 'bg-gradient-to-br from-purple-500 to-indigo-500', speaking: 35 },
-            { id: 'user2', name: 'Alex Johnson', role: 'Tech Lead', avatarColor: 'bg-gradient-to-br from-blue-500 to-cyan-500', speaking: 25 },
-            { id: 'user3', name: 'Kai Ramirez', role: 'Frontend Dev', avatarColor: 'bg-gradient-to-br from-teal-500 to-emerald-500', speaking: 15 },
-            { id: 'user4', name: 'Jamie Wu', role: 'UX Designer', avatarColor: 'bg-gradient-to-br from-amber-500 to-orange-500', speaking: 15 },
-        ],
-        agenda: [
-            { id: 'ag1', title: 'Review previous sprint', isCompleted: true, duration: 10 },
-            { id: 'ag2', title: 'Discuss new feature priorities', isCompleted: true, duration: 15 },
-            { id: 'ag3', title: 'Estimate user stories', isCompleted: true, duration: 25 },
-        ],
-        actions: [
+    startTime: '10:00',
+    endTime: '11:00',
+    duration: 60,
+    attendees: [
+        { id: 'user1', name: 'Sarah Chen', role: 'Product Manager', avatarColor: 'bg-gradient-to-br from-purple-500 to-indigo-500', speaking: 35 },
+        { id: 'user2', name: 'Alex Johnson', role: 'Tech Lead', avatarColor: 'bg-gradient-to-br from-blue-500 to-cyan-500', speaking: 25 },
+        { id: 'user3', name: 'Kai Ramirez', role: 'Frontend Dev', avatarColor: 'bg-gradient-to-br from-teal-500 to-emerald-500', speaking: 15 },
+        { id: 'user4', name: 'Jamie Wu', role: 'UX Designer', avatarColor: 'bg-gradient-to-br from-amber-500 to-orange-500', speaking: 15 },
+    ],
+    agenda: [
+        { id: 'ag1', title: 'Review previous sprint', isCompleted: true, duration: 10 },
+        { id: 'ag2', title: 'Discuss new feature priorities', isCompleted: true, duration: 15 },
+        { id: 'ag3', title: 'Estimate user stories', isCompleted: true, duration: 25 },
+    ],
+    actions: [
         { id: 'ac1', description: 'Create technical specs', assignee: 'Alex Johnson', dueDate: '2023-05-17', isCompleted: false },
         { id: 'ac2', description: 'Update UI mockups', assignee: 'Jamie Wu', dueDate: '2023-05-18', isCompleted: false },
     ],
@@ -397,19 +397,19 @@ export default function MeetingPage() {
                                 {transcriptionStarted ? 'Stop Recording' : 'Start Recording'}
                             </button>
 
-                        {meeting.hasTranscription && (
-                            <Link
-                                href={`/home/${departmentId}/${teamId}/${meetingId}/transcription`}
-                                className="bg-gradient-to-r from-primary to-accent text-white px-4 py-2 rounded-full font-medium flex items-center gap-2"
-                            >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-                                    <path d="M19.07 5.93a10 10 0 0 1 0 12.14"></path>
-                                </svg>
-                                View Transcription
-                            </Link>
-                        )}
+                            {meeting.hasTranscription && (
+                                <Link
+                                    href={`/home/${departmentId}/${teamId}/${meetingId}/transcription`}
+                                    className="bg-gradient-to-r from-primary to-accent text-white px-4 py-2 rounded-full font-medium flex items-center gap-2"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                                        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                                        <path d="M19.07 5.93a10 10 0 0 1 0 12.14"></path>
+                                    </svg>
+                                    View Transcription
+                                </Link>
+                            )}
                         </div>
                     </div>
 
@@ -474,7 +474,7 @@ export default function MeetingPage() {
                             <div className="mt-6 pt-6 border-t border-white/10">
                                 <h3 className="text-lg font-medium text-white mb-3">Speaking Distribution</h3>
                                 <div className="h-6 rounded-full flex overflow-hidden">
-                                        {meeting.attendees.map((attendee) => (
+                                    {meeting.attendees.map((attendee) => (
                                         <div
                                             key={attendee.id}
                                             className={`${attendee.avatarColor} h-full`}
