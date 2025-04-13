@@ -44,81 +44,15 @@ interface MeetingDetails {
     meeting_date: string;
 }
 
-// Sample transcript data
-const transcriptData: Record<string, TranscriptData> = {
-    'sprint-1': {
-        meetingId: 'sprint-1',
-        meetingName: 'Sprint Planning',
-        date: '2023-05-15',
-        duration: '01:00:00',
-        speakers: [
-            { id: 'user1', name: 'Sarah Chen', role: 'Product Manager', avatarColor: 'bg-gradient-to-br from-purple-500 to-indigo-500' },
-            { id: 'user2', name: 'Alex Johnson', role: 'Tech Lead', avatarColor: 'bg-gradient-to-br from-blue-500 to-cyan-500' },
-            { id: 'user3', name: 'Kai Ramirez', role: 'Frontend Dev', avatarColor: 'bg-gradient-to-br from-teal-500 to-emerald-500' },
-            { id: 'user4', name: 'Jamie Wu', role: 'UX Designer', avatarColor: 'bg-gradient-to-br from-amber-500 to-orange-500' },
-            { id: 'user5', name: 'Morgan Lee', role: 'QA Engineer', avatarColor: 'bg-gradient-to-br from-red-500 to-rose-500' },
-            { id: 'user6', name: 'Taylor Kim', role: 'Backend Dev', avatarColor: 'bg-gradient-to-br from-pink-500 to-fuchsia-500' },
-        ],
-        segments: [
-            { id: 'seg1', speakerId: 'user1', timestamp: '00:00:15', text: "Good morning everyone. Let's get started with our sprint planning. First, I'd like to do a quick review of our last sprint and then discuss priorities for the upcoming one.", sentiment: 'positive' },
-            { id: 'seg2', speakerId: 'user1', timestamp: '00:01:20', text: "Overall, we completed 85% of our planned story points. There were a few items that got pushed due to unforeseen technical challenges.", sentiment: 'neutral' },
-            { id: 'seg3', speakerId: 'user2', timestamp: '00:02:05', text: "Yeah, we had some issues with the third-party API integration. We spent almost two days troubleshooting, but we've resolved it now.", sentiment: 'negative' },
-            { id: 'seg4', speakerId: 'user1', timestamp: '00:03:30', text: "Thanks for the update, Alex. For this sprint, our top priority is launching the new authentication flow. The design team has finalized all the screens.", sentiment: 'positive' },
-            { id: 'seg5', speakerId: 'user4', timestamp: '00:04:45', text: "That's right. I've put together a comprehensive UI spec with all the different states. I'll share the link in the chat.", sentiment: 'positive' },
-            { id: 'seg6', speakerId: 'user3', timestamp: '00:05:40', text: "I've looked at the designs, and I think we should be able to implement them within the sprint. Though we might need to optimize some of the animations.", sentiment: 'neutral' },
-            { id: 'seg7', speakerId: 'user6', timestamp: '00:07:15', text: "On the backend side, we already have the auth APIs ready. We just need to add the new password policies and multi-factor authentication endpoints.", sentiment: 'positive' },
-            { id: 'seg8', speakerId: 'user5', timestamp: '00:08:30', text: "I'll need to update our test plans to cover all the new authentication scenarios. Do we have a list of all the edge cases we need to handle?", sentiment: 'neutral' },
-            { id: 'seg9', speakerId: 'user2', timestamp: '00:09:45', text: "Good point, Morgan. I think we should allocate some time to brainstorm all possible edge cases. I can lead that session tomorrow.", isHighlighted: true, sentiment: 'positive' },
-            { id: 'seg10', speakerId: 'user1', timestamp: '00:11:00', text: "Perfect. Let's set that up for tomorrow morning. Now, let's start estimating the user stories for this sprint.", sentiment: 'positive' },
-            // More segments would go here...
-        ],
-        summary: "The team conducted their bi-weekly sprint planning session. They reviewed the previous sprint's performance (85% completion rate) and discussed priorities for the upcoming sprint. The main focus will be implementing a new authentication flow with updated security features. The team discussed technical challenges, design requirements, and testing needs for this feature.",
-        keyPoints: [
-            "Previous sprint achieved 85% completion rate",
-            "Main priority for new sprint is the authentication flow update",
-            "Backend APIs are already prepared, need to add password policies and MFA",
-            "Design team has completed all UI screens",
-            "A session to identify edge cases will be held tomorrow",
-            "Some animation optimizations may be needed for performance"
-        ],
-        actionItems: [
-            "Alex to lead edge case identification session tomorrow",
-            "Jamie to share UI spec documentation",
-            "Morgan to update test plans for new authentication flow",
-            "Kai to evaluate animation performance",
-            "Taylor to implement new password policies and MFA endpoints"
-        ]
-    },
-    // Default transcript for demo
-    '_default': {
-        meetingId: '_default',
-        meetingName: 'Meeting',
-        date: '2023-05-20',
-        duration: '01:00:00',
-        speakers: [
-            { id: 'user1', name: 'Jane Doe', role: 'Manager', avatarColor: 'bg-gradient-to-br from-purple-500 to-indigo-500' },
-            { id: 'user2', name: 'John Smith', role: 'Developer', avatarColor: 'bg-gradient-to-br from-blue-500 to-cyan-500' },
-            { id: 'user3', name: 'Alice Brown', role: 'Designer', avatarColor: 'bg-gradient-to-br from-teal-500 to-emerald-500' }
-        ],
-        segments: [
-            { id: 'seg1', speakerId: 'user1', timestamp: '00:00:10', text: "Let's get started with our weekly meeting. We have a few things to discuss today.", sentiment: 'positive' },
-            { id: 'seg2', speakerId: 'user2', timestamp: '00:01:00', text: "I've completed the implementation of the feature we discussed last week.", sentiment: 'positive' },
-            { id: 'seg3', speakerId: 'user3', timestamp: '00:02:15', text: "Great! I've prepared the designs for the next feature. Would you like to review them now?", sentiment: 'positive' },
-            { id: 'seg4', speakerId: 'user1', timestamp: '00:03:30', text: "Yes, let's take a look at those designs.", sentiment: 'neutral' },
-        ],
-        summary: "The team discussed progress on current features and reviewed designs for upcoming work.",
-        keyPoints: [
-            "Feature implementation completed",
-            "New designs ready for review",
-            "Team aligned on next steps"
-        ],
-        actionItems: [
-            "John to continue with backend implementation",
-            "Alice to finalize designs based on feedback",
-            "Jane to update project timeline"
-        ]
-    }
-};
+// Sample transcript data for speakers
+const sampleSpeakers: Speaker[] = [
+    { id: 'user1', name: 'Sarah Chen', role: 'Product Manager', avatarColor: 'bg-gradient-to-br from-purple-500 to-indigo-500' },
+    { id: 'user2', name: 'Alex Johnson', role: 'Tech Lead', avatarColor: 'bg-gradient-to-br from-blue-500 to-cyan-500' },
+    { id: 'user3', name: 'Kai Ramirez', role: 'Frontend Dev', avatarColor: 'bg-gradient-to-br from-teal-500 to-emerald-500' },
+    { id: 'user4', name: 'Jamie Wu', role: 'UX Designer', avatarColor: 'bg-gradient-to-br from-amber-500 to-orange-500' },
+    { id: 'user5', name: 'Morgan Lee', role: 'QA Engineer', avatarColor: 'bg-gradient-to-br from-red-500 to-rose-500' },
+    { id: 'user6', name: 'Taylor Kim', role: 'Backend Dev', avatarColor: 'bg-gradient-to-br from-pink-500 to-fuchsia-500' },
+];
 
 export default function TranscriptionPage() {
     const router = useRouter();
@@ -131,10 +65,8 @@ export default function TranscriptionPage() {
     const [meeting, setMeeting] = useState<MeetingDetails | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
-    // Try to get the transcript data, or use default if not found
-    const [transcript, setTranscript] = useState<TranscriptData | null>(
-        transcriptData[meetingId] || transcriptData['_default'] || null
-    );
+    // Initialize with empty transcript
+    const [transcript, setTranscript] = useState<TranscriptData | null>(null);
 
     // State for active tab
     const [activeTab, setActiveTab] = useState<'transcript' | 'summary'>('transcript');
@@ -203,17 +135,18 @@ export default function TranscriptionPage() {
                 const meetingData = await response.json();
                 setMeeting(meetingData);
                 
-                // Update transcript with actual meeting data
-                if (transcript) {
-                    // Format the date from ISO string to locale date string
-                    const meetingDate = new Date(meetingData.meeting_date);
-                    
-                    setTranscript({
-                        ...transcript,
-                        meetingName: meetingData.title,
-                        date: meetingData.meeting_date,
-                    });
-                }
+                // Initialize a basic transcript structure
+                setTranscript({
+                    meetingId: meetingId,
+                    meetingName: meetingData.title,
+                    date: meetingData.meeting_date,
+                    duration: '00:00:00', // Will be updated based on transcription
+                    speakers: sampleSpeakers,
+                    segments: [],
+                    summary: '',
+                    keyPoints: [],
+                    actionItems: []
+                });
 
                 // Fetch transcriptions from API
                 await fetchTranscriptions(meetingId);
@@ -226,6 +159,14 @@ export default function TranscriptionPage() {
         };
         
         fetchMeeting();
+
+        // Set up polling every 5 seconds
+        const intervalId = setInterval(() => {
+            fetchTranscriptions(meetingId);
+        }, 5000);
+
+        // Clean up the interval on component unmount
+        return () => clearInterval(intervalId);
     }, [meetingId]);
 
     // Effect to fetch AI summary when user switches to summary tab
@@ -238,7 +179,6 @@ export default function TranscriptionPage() {
     // Fetch transcriptions from API
     const fetchTranscriptions = async (meetingId: string) => {
         setIsLoadingTranscriptions(true);
-        setTranscriptError(null);
         try {
             const response = await fetch(`/api/backend/meetings/${meetingId}/transcriptions`);
             
@@ -250,11 +190,11 @@ export default function TranscriptionPage() {
             const transcriptions = data.transcriptions || [];
             
             // Map API transcriptions to our TranscriptSegment format
-            // Assign random speakers for demo purposes
-            const speakerIds = transcript?.speakers.map(s => s.id) || [];
+            // Assign random speakers for tracking
+            const speakerIds = sampleSpeakers.map(s => s.id) || [];
             
             const formattedTranscriptions = transcriptions.map((t: any, index: number) => {
-                // Randomly assign a speaker from our sample speakers
+                // Randomly assign a speaker for internal tracking
                 const randomSpeakerId = speakerIds[index % speakerIds.length];
                 
                 return {
@@ -281,6 +221,7 @@ export default function TranscriptionPage() {
                 });
             }
             
+            setTranscriptError(null);
         } catch (err) {
             console.error('Error fetching transcriptions:', err);
             setTranscriptError('Failed to load transcriptions from API');
@@ -316,17 +257,17 @@ export default function TranscriptionPage() {
         );
     }
 
-    if (!transcript || !meeting) {
+    if (!meeting) {
         return (
             <div className="min-h-screen bg-background flex items-center justify-center">
                 <div className="text-center p-8">
-                    <h2 className="text-2xl font-bold text-white mb-4">Transcript not found</h2>
-                    <p className="text-text-secondary mb-6">The meeting transcript you're looking for doesn't exist or has been removed.</p>
+                    <h2 className="text-2xl font-bold text-white mb-4">Meeting not found</h2>
+                    <p className="text-text-secondary mb-6">The meeting you're looking for doesn't exist or has been removed.</p>
                     <Link
-                        href={`/home/${departmentId}/${teamId}/${meetingId}`}
+                        href={`/home/${departmentId}/${teamId}`}
                         className="bg-gradient-to-r from-primary to-accent text-white px-4 py-2 rounded-full font-medium"
                     >
-                        Back to Meeting
+                        Back to Meetings
                     </Link>
                 </div>
             </div>
@@ -369,7 +310,7 @@ export default function TranscriptionPage() {
                                     month: 'long',
                                     day: 'numeric'
                                 })}
-                                {' • '}{transcript.duration} duration
+                                {transcript && transcript.segments.length > 0 && ` • ${transcript.segments.length} segments`}
                             </p>
                         </div>
 
@@ -403,68 +344,50 @@ export default function TranscriptionPage() {
                 </div>
 
                 {/* Content */}
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-                    {/* Left sidebar - speakers */}
-                    <div className="lg:col-span-1">
-                        <div className="sticky top-8">
-                            <h2 className="text-xl font-semibold text-white mb-4">Speakers</h2>
-                            <div className="glass-effect rounded-xl border border-white/10 p-4">
-                                <div className="space-y-3">
-                                    {transcript.speakers.map((speaker) => (
-                                        <div
-                                            key={speaker.id}
-                                            className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer transition ${selectedSpeakers.includes(speaker.id) || selectedSpeakers.length === 0
-                                                ? 'bg-white/5'
-                                                : 'opacity-50'
-                                                }`}
-                                            onClick={() => toggleSpeaker(speaker.id)}
-                                        >
-                                            <div className={`w-8 h-8 rounded-full ${speaker.avatarColor} flex items-center justify-center text-white font-medium`}>
-                                                {speaker.name.charAt(0)}
-                                            </div>
-                                            <div>
-                                                <p className="text-white font-medium">{speaker.name}</p>
-                                                <p className="text-xs text-text-secondary">{speaker.role}</p>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+                <div className="grid grid-cols-1">
                     {/* Main content area */}
-                    <div className="lg:col-span-3">
+                    <div>
                         {activeTab === 'transcript' ? (
-                            <div className="space-y-6">
-                                {filteredSegments.map((segment) => {
-                                    const speaker = getSpeaker(segment.speakerId);
-                                    if (!speaker) return null;
-
-                                    return (
-                                        <div 
-                                            key={segment.id} 
-                                            className={`flex gap-4 p-4 rounded-lg transition ${segment.isHighlighted ? 'bg-primary/10 border border-primary/20' : 'hover:bg-white/5'}`}
-                                        >
-                                            <div className={`w-10 h-10 rounded-full ${speaker.avatarColor} flex-shrink-0 flex items-center justify-center text-white font-medium mt-1`}>
-                                                {speaker.name.charAt(0)}
-                                            </div>
-                                            <div className="flex-grow">
-                                                <div className="flex items-center gap-2 mb-1">
-                                                    <p className="font-medium text-white">{speaker.name}</p>
-                                                    <span className="text-xs text-text-secondary">{segment.timestamp}</span>
-                                                    {segment.sentiment === 'positive' && (
-                                                        <span className="text-xs text-green-400 bg-green-400/10 px-2 py-0.5 rounded-full">Positive</span>
-                                                    )}
-                                                    {segment.sentiment === 'negative' && (
-                                                        <span className="text-xs text-red-400 bg-red-400/10 px-2 py-0.5 rounded-full">Negative</span>
-                                                    )}
+                            <div className="glass-effect rounded-xl border border-white/10 p-6">
+                                {isLoadingTranscriptions && transcript?.segments.length === 0 ? (
+                                    <div className="flex justify-center items-center py-8">
+                                        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
+                                    </div>
+                                ) : transcript?.segments && transcript.segments.length > 0 ? (
+                                    <div className="space-y-4">
+                                        {transcript.segments.map((segment) => (
+                                            <div 
+                                                key={segment.id} 
+                                                className={`p-4 rounded-lg transition ${segment.isHighlighted ? 'bg-primary/10 border border-primary/20' : 'hover:bg-white/5'}`}
+                                            >
+                                                <div className="flex items-center gap-2 mb-2">
+                                                    <span className="text-sm font-medium text-primary-light">{segment.timestamp}</span>
                                                 </div>
                                                 <p className="text-text-primary">{segment.text}</p>
                                             </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="text-center py-12">
+                                        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-white/5 flex items-center justify-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white/40">
+                                                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                                                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                                                <path d="M19.07 5.93a10 10 0 0 1 0 12.14"></path>
+                                            </svg>
                                         </div>
-                                    );
-                                })}
+                                        <h3 className="text-xl font-medium text-white mb-2">No Transcription Available</h3>
+                                        <p className="text-text-secondary max-w-md mx-auto">
+                                            Transcription hasn't started for this meeting. Start recording from the meeting page to begin transcription.
+                                        </p>
+                                        <Link 
+                                            href={`/home/${departmentId}/${teamId}/${meetingId}`}
+                                            className="mt-6 inline-block bg-gradient-to-r from-primary to-accent text-white px-4 py-2 rounded-full font-medium"
+                                        >
+                                            Back to Meeting
+                                        </Link>
+                                    </div>
+                                )}
                             </div>
                         ) : (
                             <div className="glass-effect rounded-xl border border-white/10 p-6">
@@ -529,43 +452,16 @@ export default function TranscriptionPage() {
                                         </div>
                                     </div>
                                 ) : (
-                                    <div>
-                                        <div className="mb-6">
-                                            <h3 className="text-lg font-semibold text-white mb-3">Meeting Summary</h3>
-                                            <p className="text-text-primary">{transcript.summary}</p>
+                                    <div className="text-center py-12">
+                                        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-white/5 flex items-center justify-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white/40">
+                                                <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
+                                            </svg>
                                         </div>
-
-                                        <div className="mb-6">
-                                            <h3 className="text-lg font-semibold text-white mb-3">Key Points</h3>
-                                            <ul className="space-y-2">
-                                                {transcript.keyPoints.map((point, index) => (
-                                                    <li key={index} className="flex items-start gap-2">
-                                                        <div className="w-5 h-5 rounded-full bg-primary/20 text-primary-light flex items-center justify-center flex-shrink-0 mt-0.5">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                                <polyline points="20 6 9 17 4 12"></polyline>
-                                                            </svg>
-                                                        </div>
-                                                        <span className="text-text-primary">{point}</span>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-
-                                        <div>
-                                            <h3 className="text-lg font-semibold text-white mb-3">Action Items</h3>
-                                            <ul className="space-y-2">
-                                                {transcript.actionItems.map((item, index) => (
-                                                    <li key={index} className="flex items-start gap-2">
-                                                        <div className="w-5 h-5 rounded-full bg-accent/20 text-accent-light flex items-center justify-center flex-shrink-0 mt-0.5">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                                <path d="M3 10h18M7 15h10M12 3v6M14.5 13.5l-5-3M9.5 13.5l5-3"/>
-                                                            </svg>
-                                                        </div>
-                                                        <span className="text-text-primary">{item}</span>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
+                                        <h3 className="text-xl font-medium text-white mb-2">No Summary Available</h3>
+                                        <p className="text-text-secondary max-w-md mx-auto">
+                                            A summary hasn't been generated for this meeting yet. Summaries are automatically generated after transcription is complete.
+                                        </p>
                                     </div>
                                 )}
                             </div>

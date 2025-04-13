@@ -341,6 +341,13 @@ export default function MeetingPage() {
             mediaRecorderRef.current = null;
             chunksRef.current = [];
             console.log("Audio recording stopped.");
+
+            // Trigger summary generation in the background
+            // Using fetch with no await, we don't need the response
+            fetch(`/api/backend/meetings/${meetingId}/summary`)
+                .then(() => console.log("Summary generation triggered"))
+                .catch(err => console.error("Error triggering summary generation:", err));
+            
         } catch (error) {
             console.error("Error stopping transcription:", error);
         } finally {
