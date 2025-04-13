@@ -139,7 +139,7 @@ class QdrantManager:
         combined_text = ""
 
         for result in results:
-            if result.payload['isPDF']:
+            if 'isPDF' in result.payload:
                 combined_text += f"From PDF: {result.payload['text']}\n"
             else:
                 combined_text += f"From Transcription: {result.payload['start_time']} - {result.payload['end_time']}: {result.payload['text']}\n"
@@ -176,7 +176,7 @@ class QdrantManager:
                 # Extract required fields and store as JSON objects
                 transcriptions = []
                 for point in points:
-                    if point.payload['isPDF']:
+                    if 'isPDF' in point.payload:
                         continue
                     else:
                         transcriptions.append({
