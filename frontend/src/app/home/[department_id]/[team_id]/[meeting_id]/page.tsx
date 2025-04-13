@@ -73,18 +73,18 @@ function DurationModal({ isOpen, onClose, onConfirm }: DurationModalProps) {
     };
 
     return (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-            <div className="glass-effect rounded-xl border border-white/10 p-6 w-full max-w-sm mx-auto">
-                <h2 className="text-xl font-semibold text-white mb-4">Set Recording Duration</h2>
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="glass-effect rounded-2xl border border-white/20 p-8 w-full max-w-md mx-auto shadow-2xl animate-fadeIn">
+                <h2 className="text-2xl font-bold gradient-text mb-6 text-center">Set Recording Duration</h2>
 
-                <div className="flex flex-col sm:flex-row gap-4 mb-6">
+                <div className="flex flex-col sm:flex-row gap-6 mb-8">
                     {/* Hours */}
                     <div className="flex-1">
-                        <label className="block text-sm font-medium text-text-secondary mb-1">Hours</label>
+                        <label className="block text-sm font-medium text-white mb-2">Hours</label>
                         <select
                             value={hours}
                             onChange={(e) => setHours(Number(e.target.value))}
-                            className="w-full px-3 py-2 bg-surface border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-light"
+                            className="w-full px-4 py-3 bg-surface/70 border border-white/20 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-primary shadow-inner transition-all"
                         >
                             {[...Array(5)].map((_, i) => (
                                 <option key={i} value={i}>{i}</option>
@@ -94,11 +94,11 @@ function DurationModal({ isOpen, onClose, onConfirm }: DurationModalProps) {
 
                     {/* Minutes */}
                     <div className="flex-1">
-                        <label className="block text-sm font-medium text-text-secondary mb-1">Minutes</label>
+                        <label className="block text-sm font-medium text-white mb-2">Minutes</label>
                         <select
                             value={minutes}
                             onChange={(e) => setMinutes(Number(e.target.value))}
-                            className="w-full px-3 py-2 bg-surface border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-light"
+                            className="w-full px-4 py-3 bg-surface/70 border border-white/20 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-primary shadow-inner transition-all"
                         >
                             {[...Array(12)].map((_, i) => (
                                 <option key={i} value={i * 5}>{i * 5}</option>
@@ -107,16 +107,16 @@ function DurationModal({ isOpen, onClose, onConfirm }: DurationModalProps) {
                     </div>
                 </div>
 
-                <div className="flex flex-col-reverse sm:flex-row justify-end gap-3">
+                <div className="flex flex-col-reverse sm:flex-row justify-center gap-4">
                     <button
                         onClick={onClose}
-                        className="px-4 py-2 bg-surface border border-white/10 rounded-full text-white hover:bg-surface-light transition-colors"
+                        className="w-full sm:w-auto px-6 py-3 bg-surface/80 border border-white/10 rounded-xl text-white hover:bg-surface-light transition-all hover:shadow-md"
                     >
                         Cancel
                     </button>
                     <button
                         onClick={handleConfirm}
-                        className="px-4 py-2 bg-gradient-to-r from-primary to-accent text-white rounded-full hover:opacity-90 transition-opacity"
+                        className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-primary to-accent text-white rounded-xl hover:opacity-90 transition-all shadow-md hover:shadow-lg"
                     >
                         Start Recording
                     </button>
@@ -447,10 +447,37 @@ export default function MeetingPage() {
         }
     };
 
+    // First, add the deleteDocument function to handle document deletion
+    const deleteDocument = async (documentId: string) => {
+        try {
+            const response = await fetch(`/api/backend/pdf-documents/${documentId}`, {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to delete document');
+            }
+
+            // Refresh the list of PDFs
+            await fetchPdfDocuments(meetingId);
+        } catch (err) {
+            console.error('Error deleting document:', err);
+            alert('Failed to delete the document. Please try again.');
+        }
+    };
+
     if (isLoading) {
         return (
             <div className="min-h-screen bg-background flex items-center justify-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+                <div className="flex flex-col items-center gap-6">
+                    <div className="relative">
+                        <div className="h-16 w-16 rounded-full border-4 border-primary-light border-t-transparent animate-spin"></div>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="h-8 w-8 rounded-full bg-gradient-to-r from-primary to-accent"></div>
+                        </div>
+                    </div>
+                    <p className="text-lg text-white animate-pulse">Loading meeting details...</p>
+                </div>
             </div>
         );
     }
@@ -458,13 +485,24 @@ export default function MeetingPage() {
     if (error || !meeting) {
         return (
             <div className="min-h-screen bg-background flex items-center justify-center">
-                <div className="text-center p-8">
-                    <h2 className="text-2xl font-bold text-white mb-4">Meeting not found</h2>
-                    <p className="text-text-secondary mb-6">The meeting you're looking for doesn't exist or has been removed.</p>
+                <div className="text-center p-8 max-w-md glass-effect rounded-2xl border border-white/20 shadow-xl">
+                    <div className="bg-red-500/20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-red-500">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                    </div>
+                    <h2 className="text-2xl font-bold gradient-text mb-4">Meeting Not Found</h2>
+                    <p className="text-text-secondary mb-8">The meeting you're looking for doesn't exist or has been removed.</p>
                     <Link
                         href={`/home/${departmentId}/${teamId}`}
-                        className="bg-gradient-to-r from-primary to-accent text-white px-4 py-2 rounded-full font-medium"
+                        className="bg-gradient-to-r from-primary to-accent text-white px-6 py-3 rounded-xl font-medium shadow-md hover:shadow-lg transition-all inline-flex items-center gap-2"
                     >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
                         Back to Meetings
                     </Link>
                 </div>
@@ -474,9 +512,9 @@ export default function MeetingPage() {
 
     return (
         <div className="min-h-screen bg-background">
-            <main className="max-w-7xl mx-auto py-8 px-4">
+            <main className="max-w-7xl mx-auto py-8 px-4 space-y-8">
                 {/* Breadcrumbs */}
-                <div className="flex items-center gap-2 mb-6">
+                <div className="flex items-center gap-2 mb-2">
                     <Link href="/home" className="text-white/60 hover:text-white transition">
                         Departments
                     </Link>
@@ -493,132 +531,163 @@ export default function MeetingPage() {
                 </div>
 
                 {/* Meeting header */}
-                <div className="glass-effect rounded-xl p-6 border border-white/10 mb-8">
-                    <div className="flex flex-col md:flex-row justify-between items-start mb-4 gap-4">
+                <div className="glass-effect rounded-2xl p-8 border border-white/20 mb-8 shadow-xl">
+                    <div className="flex flex-col md:flex-row justify-between items-start mb-6 gap-6">
                         <div>
-                            <h1 className="text-2xl font-bold text-white">{meeting.title}</h1>
-                            <p className="text-text-secondary mt-1">{meeting.description}</p>
+                            <h1 className="text-3xl font-bold gradient-text mb-2">{meeting.title}</h1>
+                            <p className="text-text-secondary text-lg">{meeting.description}</p>
                         </div>
 
-                        <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-                            {transcriptionStarted && (
-                                <div className="flex items-center bg-primary/20 rounded-full px-3 py-1 text-primary-light gap-2">
-                                    <div className="relative">
-                                        <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                                        <div className="absolute inset-0 w-3 h-3 bg-red-500 rounded-full animate-ping"></div>
-                                    </div>
-                                    <span className="text-sm">Recording</span>
+                        {transcriptionStarted && (
+                            <div className="flex items-center bg-primary/20 rounded-full px-4 py-2 text-primary-light gap-2 border border-primary/30 shadow-md">
+                                <div className="relative">
+                                    <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                                    <div className="absolute inset-0 w-3 h-3 bg-red-500 rounded-full animate-ping"></div>
                                 </div>
-                            )}
-
-                            <Link
-                                href={`/home/${departmentId}/${teamId}/${meetingId}/transcription`}
-                                className="bg-gradient-to-r from-primary to-accent text-white px-4 py-2 rounded-full font-medium flex items-center gap-2"
-                            >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-                                    <path d="M19.07 5.93a10 10 0 0 1 0 12.14"></path>
-                                </svg>
-                                View Transcription
-                            </Link>
-
-                            <button
-                                onClick={transcriptionStarted ? handleStopTranscription : () => setIsModalOpen(true)}
-                                className={`
-                                    px-4 py-2 rounded-full transition-colors text-white
-                                    ${transcriptionStarted
-                                        ? 'bg-red-500 hover:bg-red-600'
-                                        : 'bg-gradient-to-r from-green-500 to-teal-500 hover:opacity-90'}
-                                `}
-                            >
-                                {transcriptionStarted ? 'Stop Recording' : 'Start Recording'}
-                            </button>
-
-                            
-
-                            <div className="relative">
-                                <input
-                                    type="file"
-                                    accept="application/pdf"
-                                    onChange={handlePdfUpload}
-                                    className="hidden"
-                                    id="pdf-upload"
-                                    ref={fileInputRef}
-                                    disabled={isUploadingPdf}
-                                />
-                                <label
-                                    htmlFor="pdf-upload"
-                                    className="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-4 py-2 rounded-full font-medium flex items-center gap-2 cursor-pointer"
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                                        <polyline points="14 2 14 8 20 8" />
-                                        <line x1="12" y1="18" x2="12" y2="12" />
-                                        <line x1="9" y1="15" x2="15" y2="15" />
-                                    </svg>
-                                    {isUploadingPdf ? 'Uploading...' : 'Upload PDF'}
-                                </label>
-                                {pdfUploadError && (
-                                    <p className="absolute text-xs text-red-500 mt-1">{pdfUploadError}</p>
-                                )}
+                                <span className="text-sm font-medium">Recording in Progress</span>
                             </div>
+                        )}
+                    </div>
 
-                            <Link
-                                href={`/home/${departmentId}/${teamId}/${meetingId}/chat`}
-                                className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-4 py-2 rounded-full font-medium flex items-center gap-2"
-                            >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    {/* Meeting info cards */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div className="glass-effect bg-white/5 rounded-xl p-4 border border-white/10 flex items-center gap-3 shadow-md">
+                            <div className="p-2 rounded-lg bg-primary/20">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary-light">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
                                 </svg>
-                                Chat with Assistant
-                            </Link>
-                            <Link
-                                href={`/home/${departmentId}/${teamId}/${meetingId}/conceptgraph`}
-                                className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full font-medium flex items-center gap-2"
-                            >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <circle cx="18" cy="5" r="3"></circle>
-                                    <circle cx="6" cy="12" r="3"></circle>
-                                    <circle cx="18" cy="19" r="3"></circle>
-                                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-                                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                            </div>
+                            <div>
+                                <p className="text-text-secondary text-xs">Date</p>
+                                <p className="text-white font-medium">
+                                    {new Date(meeting.meeting_date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="glass-effect bg-white/5 rounded-xl p-4 border border-white/10 flex items-center gap-3 shadow-md">
+                            <div className="p-2 rounded-lg bg-primary/20">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary-light">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
                                 </svg>
-                                Concept Graph
-                            </Link>
+                            </div>
+                            <div>
+                                <p className="text-text-secondary text-xs">Time</p>
+                                <p className="text-white font-medium">{meeting.startTime} - {meeting.endTime} ({meeting.duration} min)</p>
+                            </div>
+                        </div>
+
+                        <div className="glass-effect bg-white/5 rounded-xl p-4 border border-white/10 flex items-center gap-3 shadow-md">
+                            <div className="p-2 rounded-lg bg-primary/20">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary-light">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <p className="text-text-secondary text-xs">Participants</p>
+                                <p className="text-white font-medium">{meeting.attendees?.length || 0} Attendees</p>
+                            </div>
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                        <div className="flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary-light">
-                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                                <line x1="16" y1="2" x2="16" y2="6"></line>
-                                <line x1="8" y1="2" x2="8" y2="6"></line>
-                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                    {/* Action buttons */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+                        <button
+                            onClick={transcriptionStarted ? handleStopTranscription : () => setIsModalOpen(true)}
+                            className={`
+                                px-4 py-3 rounded-xl transition-all text-white font-medium flex items-center justify-center gap-2 shadow-md hover:shadow-lg
+                                ${transcriptionStarted
+                                    ? 'bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600'
+                                    : 'bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700'}
+                            `}
+                        >
+                            {transcriptionStarted ? (
+                                <>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <rect x="6" y="4" width="4" height="16"></rect>
+                                        <rect x="14" y="4" width="4" height="16"></rect>
+                                    </svg>
+                                    Stop Recording
+                                </>
+                            ) : (
+                                <>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                    Start Recording
+                                </>
+                            )}
+                        </button>
+
+                        <Link
+                            href={`/home/${departmentId}/${teamId}/${meetingId}/transcription`}
+                            className="bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white px-4 py-3 rounded-xl font-medium flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                                <path d="M19.07 5.93a10 10 0 0 1 0 12.14"></path>
                             </svg>
-                            <span className="text-white">
-                                {new Date(meeting.meeting_date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-                            </span>
+                            View Transcription
+                        </Link>
+
+                        <div className="relative">
+                            <input
+                                type="file"
+                                accept="application/pdf"
+                                onChange={handlePdfUpload}
+                                className="hidden"
+                                id="pdf-upload"
+                                ref={fileInputRef}
+                                disabled={isUploadingPdf}
+                            />
+                            <label
+                                htmlFor="pdf-upload"
+                                className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white px-4 py-3 rounded-xl font-medium flex items-center justify-center gap-2 cursor-pointer shadow-md hover:shadow-lg transition-all w-full"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                    <polyline points="14 2 14 8 20 8" />
+                                    <line x1="12" y1="18" x2="12" y2="12" />
+                                    <line x1="9" y1="15" x2="15" y2="15" />
+                                </svg>
+                                {isUploadingPdf ? 'Uploading...' : 'Upload PDF'}
+                            </label>
+                            {pdfUploadError && (
+                                <p className="absolute text-xs text-red-500 mt-1">{pdfUploadError}</p>
+                            )}
                         </div>
 
-                        <div className="flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary-light">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
+                        <Link
+                            href={`/home/${departmentId}/${teamId}/${meetingId}/chat`}
+                            className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white px-4 py-3 rounded-xl font-medium flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                             </svg>
-                            <span className="text-white">{meeting.startTime} - {meeting.endTime} ({meeting.duration} min)</span>
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary-light">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="9" cy="7" r="4"></circle>
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            Chat with Assistant
+                        </Link>
+                        <Link
+                            href={`/home/${departmentId}/${teamId}/${meetingId}/conceptgraph`}
+                            className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-4 py-3 rounded-xl font-medium flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <circle cx="18" cy="5" r="3"></circle>
+                                <circle cx="6" cy="12" r="3"></circle>
+                                <circle cx="18" cy="19" r="3"></circle>
+                                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
                             </svg>
-                            <span className="text-white">{meeting.attendees?.length || 0} Attendees</span>
-                        </div>
+                            Concept Graph
+                        </Link>
                     </div>
                 </div>
 
@@ -626,156 +695,262 @@ export default function MeetingPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Left column - Attendees and Speaking Time */}
                     <div>
-                        <h2 className="text-xl font-semibold text-white mb-4">Attendees</h2>
-                        <div className="glass-effect rounded-xl border border-white/10 p-6">
-                            <div className="space-y-4">
-                                {meeting.attendees && meeting.attendees.map((attendee) => (
-                                    <div key={attendee.id} className="flex items-center gap-3">
-                                        <div className={`w-10 h-10 rounded-full ${attendee.avatarColor} flex items-center justify-center text-white font-medium`}>
-                                            {attendee.name.charAt(0)}
+                        <div className="flex items-center gap-2 mb-4">
+                            <div className="h-8 w-1 bg-gradient-to-b from-primary to-accent rounded-full"></div>
+                            <h2 className="text-xl font-bold text-white">Attendees</h2>
+                        </div>
+                        <div className="glass-effect rounded-2xl border border-white/20 p-6 shadow-lg">
+                            {meeting.attendees && meeting.attendees.length > 0 ? (
+                                <div className="space-y-5">
+                                    {meeting.attendees.map((attendee) => (
+                                        <div key={attendee.id} className="flex items-center gap-4 group transition-all hover:bg-white/5 p-2 rounded-xl cursor-pointer">
+                                            <div className={`w-12 h-12 rounded-full ${attendee.avatarColor} flex items-center justify-center text-white font-medium text-lg shadow-md group-hover:scale-105 transition-transform`}>
+                                                {attendee.name.charAt(0)}
+                                            </div>
+                                            <div className="flex-grow">
+                                                <p className="text-white font-medium">{attendee.name}</p>
+                                                <p className="text-sm text-text-secondary">{attendee.role}</p>
+                                            </div>
+                                            <div className="text-right flex flex-col items-center justify-center bg-white/5 rounded-lg p-2 shadow-inner">
+                                                <p className="text-white font-bold text-lg">{attendee.speaking}%</p>
+                                                <p className="text-xs text-text-secondary">speaking</p>
+                                            </div>
                                         </div>
-                                        <div className="flex-grow">
-                                            <p className="text-white font-medium">{attendee.name}</p>
-                                            <p className="text-sm text-text-secondary">{attendee.role}</p>
+                                    ))}
+
+                                    <div className="mt-6 pt-6 border-t border-white/10">
+                                        <h3 className="text-lg font-medium text-white mb-3">Speaking Distribution</h3>
+                                        <div className="h-8 rounded-full flex overflow-hidden shadow-md">
+                                            {meeting.attendees.map((attendee) => (
+                                                <div
+                                                    key={attendee.id}
+                                                    className={`${attendee.avatarColor} h-full relative group`}
+                                                    style={{ width: `${attendee.speaking}%` }}
+                                                >
+                                                    <div className="opacity-0 group-hover:opacity-100 absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-2 py-1 rounded text-xs whitespace-nowrap transition-opacity">
+                                                        {attendee.name}: {attendee.speaking}%
+                                                    </div>
+                                                </div>
+                                            ))}
                                         </div>
-                                        <div className="text-right">
-                                            <p className="text-white font-medium">{attendee.speaking}%</p>
-                                            <p className="text-xs text-text-secondary">speaking time</p>
+                                        <div className="flex justify-between mt-2">
+                                            <p className="text-sm text-text-secondary">0:00</p>
+                                            <p className="text-sm text-text-secondary">{meeting.duration}:00</p>
                                         </div>
                                     </div>
-                                ))}
-                            </div>
-
-                            {meeting.attendees && meeting.attendees.length > 0 && (
-                            <div className="mt-6 pt-6 border-t border-white/10">
-                                <h3 className="text-lg font-medium text-white mb-3">Speaking Distribution</h3>
-                                <div className="h-6 rounded-full flex overflow-hidden">
-                                        {meeting.attendees.map((attendee) => (
-                                        <div
-                                            key={attendee.id}
-                                            className={`${attendee.avatarColor} h-full`}
-                                            style={{ width: `${attendee.speaking}%` }}
-                                            title={`${attendee.name}: ${attendee.speaking}%`}
-                                        />
-                                    ))}
                                 </div>
-                                <div className="flex justify-between mt-2">
-                                    <p className="text-xs text-text-secondary">0:00</p>
-                                    <p className="text-xs text-text-secondary">{meeting.duration}:00</p>
+                            ) : (
+                                <div className="flex flex-col items-center justify-center py-8">
+                                    <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white/40">
+                                            <circle cx="9" cy="7" r="4"></circle>
+                                            <path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"></path>
+                                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                            <path d="M21 21v-2a4 4 0 0 0-3-3.87"></path>
+                                        </svg>
+                                    </div>
+                                    <p className="text-text-secondary">No attendees available</p>
                                 </div>
-                            </div>
                             )}
                         </div>
                     </div>
 
                     {/* Middle column - Agenda */}
                     <div>
-                        <h2 className="text-xl font-semibold text-white mb-4">Agenda</h2>
-                        <div className="glass-effect rounded-xl border border-white/10 p-6">
+                        <div className="flex items-center gap-2 mb-4">
+                            <div className="h-8 w-1 bg-gradient-to-b from-primary to-accent rounded-full"></div>
+                            <h2 className="text-xl font-bold text-white">Agenda</h2>
+                        </div>
+                        <div className="glass-effect rounded-2xl border border-white/20 p-6 shadow-lg min-h-[400px]">
                             {meeting.agenda && meeting.agenda.length > 0 ? (
-                            <div className="space-y-4">
-                                {meeting.agenda.map((item, index) => (
-                                    <div key={item.id} className="flex items-start gap-3">
-                                        <div className="min-w-6 mt-1">
-                                            <div className={`w-6 h-6 rounded-full flex items-center justify-center ${item.isCompleted ? 'bg-primary/20 text-primary-light' : 'bg-white/10 text-white/60'}`}>
-                                                {item.isCompleted ? (
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                <div className="space-y-5">
+                                    {meeting.agenda.map((item, index) => (
+                                        <div key={item.id} className="flex items-start gap-4 group hover:bg-white/5 p-3 rounded-xl transition-all">
+                                            <div className="min-w-8 mt-1">
+                                                <div className={`w-8 h-8 rounded-xl flex items-center justify-center shadow-md ${item.isCompleted ? 'bg-primary/30 text-primary-light' : 'bg-white/10 text-white/60'}`}>
+                                                    {item.isCompleted ? (
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                            <polyline points="20 6 9 17 4 12"></polyline>
+                                                        </svg>
+                                                    ) : (
+                                                        <span>{index + 1}</span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <div className="flex-grow">
+                                                <p className={`font-medium text-lg ${item.isCompleted ? 'text-white/60' : 'text-white'}`}>
+                                                    {item.title}
+                                                </p>
+                                                <div className="flex items-center mt-2">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary-light mr-1">
+                                                        <circle cx="12" cy="12" r="10"></circle>
+                                                        <polyline points="12 6 12 12 16 14"></polyline>
                                                     </svg>
-                                                ) : (
-                                                    <span>{index + 1}</span>
-                                                )}
+                                                    <p className="text-sm text-text-secondary">{item.duration} minutes</p>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div className="flex-grow">
-                                            <p className={`font-medium ${item.isCompleted ? 'text-white/60' : 'text-white'}`}>
-                                                {item.title}
-                                            </p>
-                                            <p className="text-sm text-text-secondary">{item.duration} minutes</p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
+                                    ))}
+                                </div>
                             ) : (
-                                <p className="text-text-secondary text-center">No agenda items available</p>
+                                <div className="flex flex-col items-center justify-center h-full py-8">
+                                    <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white/40">
+                                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                                        </svg>
+                                    </div>
+                                    <p className="text-text-secondary">No agenda items available</p>
+                                </div>
                             )}
                         </div>
                     </div>
 
                     {/* Right column - Action Items */}
                     <div>
-                        <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-xl font-semibold text-white">Action Items</h2>
-                        </div>
-                        <div className="glass-effect rounded-xl border border-white/10 p-6">
-                            {meeting.actions && meeting.actions.length > 0 ? (
-                            <div className="space-y-4">
-                                {meeting.actions.map((action) => (
-                                    <div key={action.id} className="flex items-start gap-3">
-                                        <div className="min-w-6 mt-1">
-                                            <div className={`w-6 h-6 rounded-full flex items-center justify-center ${action.isCompleted ? 'bg-primary/20 text-primary-light' : 'bg-white/10 text-white/60'}`}>
-                                                {action.isCompleted ? (
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                                    </svg>
-                                                ) : (
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                                                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                                                    </svg>
-                                                )}
-                                            </div>
-                                        </div>
-                                        <div className="flex-grow">
-                                            <p className={`font-medium ${action.isCompleted ? 'text-white/60' : 'text-white'}`}>
-                                                {action.description}
-                                            </p>
-                                            <div className="flex justify-between text-sm mt-1">
-                                                <p className="text-text-secondary">Assigned to: <span className="text-primary-light">{action.assignee}</span></p>
-                                                <p className="text-text-secondary">Due: {new Date(action.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
+                        <div className="flex flex-col gap-8">
+                            <div>
+                                <div className="flex items-center gap-2 mb-4">
+                                    <div className="h-8 w-1 bg-gradient-to-b from-primary to-accent rounded-full"></div>
+                                    <h2 className="text-xl font-bold text-white">Action Items</h2>
                                 </div>
-                            ) : (
-                                <p className="text-text-secondary text-center">No action items available</p>
-                            )}
-                        </div>
-
-                        {/* PDF Documents Section */}
-                        <div className="mt-8">
-                            <h2 className="text-xl font-semibold text-white mb-4">Documents</h2>
-                            <div className="glass-effect rounded-xl border border-white/10 p-6">
-                                {uploadedPdfs.length > 0 ? (
-                                    <div className="space-y-4">
-                                        {uploadedPdfs.map((pdf) => (
-                                            <div key={pdf._id} className="flex items-start gap-3">
-                                                <div className="min-w-6 mt-1">
-                                                    <div className="w-6 h-6 rounded-full flex items-center justify-center bg-amber-500/20 text-amber-400">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                                                            <polyline points="14 2 14 8 20 8" />
-                                                        </svg>
+                                <div className="glass-effect rounded-2xl border border-white/20 p-6 shadow-lg">
+                                    {meeting.actions && meeting.actions.length > 0 ? (
+                                        <div className="space-y-5">
+                                            {meeting.actions.map((action) => (
+                                                <div key={action.id} className="flex items-start gap-4 group hover:bg-white/5 p-3 rounded-xl transition-all">
+                                                    <div className="min-w-8 mt-1">
+                                                        <div className={`w-8 h-8 rounded-xl flex items-center justify-center shadow-md ${action.isCompleted ? 'bg-primary/30 text-primary-light' : 'bg-white/10 text-white/60'}`}>
+                                                            {action.isCompleted ? (
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                                                </svg>
+                                                            ) : (
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                                                </svg>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex-grow">
+                                                        <p className={`font-medium text-lg ${action.isCompleted ? 'text-white/60' : 'text-white'}`}>
+                                                            {action.description}
+                                                        </p>
+                                                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-0 mt-2">
+                                                            <div className="flex items-center">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary-light mr-1">
+                                                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                                                    <circle cx="9" cy="7" r="4"></circle>
+                                                                </svg>
+                                                                <p className="text-sm text-text-secondary"><span className="text-primary-light">{action.assignee}</span></p>
+                                                            </div>
+                                                            <div className="flex items-center">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary-light mr-1">
+                                                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                                                </svg>
+                                                                <p className="text-sm text-text-secondary">Due: {new Date(action.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div className="flex-grow">
-                                                    <button
-                                                        onClick={() => openPdf(pdf._id)}
-                                                        className="font-medium text-white hover:text-amber-400 transition"
-                                                    >
-                                                        {pdf.filename}
-                                                    </button>
-                                                    <p className="text-sm text-text-secondary">
-                                                        {new Date(pdf.uploaded_at).toLocaleString()}
-                                                    </p>
-                                                </div>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <div className="flex flex-col items-center justify-center py-8">
+                                            <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white/40">
+                                                    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+                                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                                </svg>
                                             </div>
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <p className="text-text-secondary text-center">No documents uploaded</p>
-                                )}
+                                            <p className="text-text-secondary">No action items available</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* PDF Documents Section */}
+                            <div>
+                                <div className="flex items-center gap-2 mb-4">
+                                    <div className="h-8 w-1 bg-gradient-to-b from-amber-500 to-orange-500 rounded-full"></div>
+                                    <h2 className="text-xl font-bold text-white">Documents</h2>
+                                </div>
+                                <div className="glass-effect rounded-2xl border border-white/20 p-6 shadow-lg">
+                                    {uploadedPdfs.length > 0 ? (
+                                        <div className="space-y-5">
+                                            {uploadedPdfs.map((pdf) => (
+                                                <div key={pdf._id} className="flex items-start gap-4 group hover:bg-white/5 p-3 rounded-xl transition-all">
+                                                    <div className="min-w-8 mt-1">
+                                                        <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-amber-500/20 text-amber-400 shadow-md group-hover:scale-105 transition-transform">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                                                <polyline points="14 2 14 8 20 8" />
+                                                            </svg>
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex-grow">
+                                                        <button
+                                                            onClick={() => openPdf(pdf._id)}
+                                                            className="font-medium text-lg text-white hover:text-amber-400 transition group-hover:underline"
+                                                        >
+                                                            {pdf.filename}
+                                                        </button>
+                                                        <div className="flex items-center mt-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-amber-400 mr-1">
+                                                                <circle cx="12" cy="12" r="10"></circle>
+                                                                <polyline points="12 6 12 12 16 14"></polyline>
+                                                            </svg>
+                                                            <p className="text-sm text-text-secondary">
+                                                                {new Date(pdf.uploaded_at).toLocaleString()}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
+                                                        <button
+                                                            onClick={() => openPdf(pdf._id)}
+                                                            className="p-2 rounded-full hover:bg-amber-500/20 text-white hover:text-amber-400 transition-colors"
+                                                            title="Open PDF"
+                                                        >
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                                                <polyline points="15 3 21 3 21 9"></polyline>
+                                                                <line x1="10" y1="14" x2="21" y2="3"></line>
+                                                            </svg>
+                                                        </button>
+                                                        <button
+                                                            onClick={() => deleteDocument(pdf._id)}
+                                                            className="p-2 rounded-full hover:bg-red-500/20 text-white hover:text-red-400 transition-colors"
+                                                            title="Delete PDF"
+                                                        >
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                                <path d="M3 6h18"></path>
+                                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                                                <line x1="10" y1="11" x2="10" y2="17"></line>
+                                                                <line x1="14" y1="11" x2="14" y2="17"></line>
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <div className="flex flex-col items-center justify-center py-8">
+                                            <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white/40">
+                                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                                    <polyline points="14 2 14 8 20 8" />
+                                                </svg>
+                                            </div>
+                                            <p className="text-text-secondary">No documents uploaded</p>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -309,6 +309,34 @@ async def get_pdf_document(document_id: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error retrieving PDF document: {str(e)}")
 
+@app.delete("/pdf-documents/{document_id}")
+async def delete_pdf_document(document_id: str):
+    try:
+        # Find the document to get the meeting_id
+        document = db["pdf_documents"].find_one({"_id": ObjectId(document_id)})
+        if not document:
+            raise HTTPException(status_code=404, detail="PDF document not found")
+        
+        meeting_id = document["meeting_id"]
+        
+        # Delete the document from the pdf_documents collection
+        result = db["pdf_documents"].delete_one({"_id": ObjectId(document_id)})
+        
+        if result.deleted_count == 0:
+            raise HTTPException(status_code=404, detail="PDF document not found")
+        
+        # Update the meeting to remove the reference to the deleted PDF
+        db["meetings"].update_one(
+            {"_id": ObjectId(meeting_id)},
+            {"$pull": {"pdf_documents": document_id}}
+        )
+        
+        return {"success": True, "message": "PDF document deleted successfully"}
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid document ID format")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error deleting PDF document: {str(e)}")
+
 @app.get("/meetings/{meeting_id}/conceptgraph")
 async def get_concept_graph(meeting_id: str):
    try:
