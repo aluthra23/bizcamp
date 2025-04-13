@@ -378,12 +378,6 @@ export default function TeamPage() {
                             </div>
                             <div>
                                 <h2 className="text-xl font-semibold gradient-text">Team Calendar</h2>
-                                <p className="text-text-secondary text-sm">
-                                    {meetings.length > 0 
-                                        ? `${meetings.length} meeting${meetings.length === 1 ? '' : 's'} scheduled`
-                                        : 'No meetings scheduled yet'
-                                    }
-                                </p>
                             </div>
                         </div>
                     </div>
