@@ -6,6 +6,11 @@
   transition: all 0.3s ease;
   padding: 0 5px;
   box-sizing: border-box;
+  background-color: rgba(13, 13, 15, 0.6) !important;
+  border-radius: 12px !important;
+  padding: 20px !important;
+  width: 100% !important;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
 }
 
 .calendar-container:hover {
@@ -111,9 +116,9 @@
 .fc {
     --fc-border-color: rgba(255, 255, 255, 0.1);
     --fc-button-text-color: #fff;
-    --fc-button-bg-color: rgba(255, 255, 255, 0.1);
+    --fc-button-bg-color: rgba(13, 13, 15, 0.6); /* More matte black but still opaque */
     --fc-button-border-color: transparent;
-    --fc-button-hover-bg-color: rgba(255, 255, 255, 0.2);
+    --fc-button-hover-bg-color: rgba(30, 30, 35, 0.8);
     --fc-button-hover-border-color: transparent;
     --fc-button-active-bg-color: #9333ea;
     --fc-button-active-border-color: transparent;
@@ -130,9 +135,37 @@
 }
 
 /* Fix calendar buttons */
+.fc .fc-button-primary {
+    background-color: rgba(13, 13, 15, 0.6) !important; /* More matte black */
+    border: none !important;
+    border-radius: 8px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 3px !important;
+    font-size: 0.9rem !important;
+    transition: all 0.2s ease !important;
+}
+
+.fc .fc-button-primary:hover {
+    background-color: rgba(30, 30, 35, 0.8) !important;
+}
+
+/* View selector buttons (month/week/day) */
+.fc .fc-button-group .fc-button-primary {
+    height: 36px !important;
+    width: 70px !important;
+    border-radius: 8px !important;
+    margin: 0 2px !important;
+    font-weight: 500 !important;
+    padding: 0 !important;
+}
+
 .fc .fc-button-primary:not(:disabled).fc-button-active,
 .fc .fc-button-primary:not(:disabled):active {
-    background: #9333ea !important;
+    background: linear-gradient(135deg, rgb(121, 40, 202), rgb(157, 58, 227)) !important;
     border-color: transparent !important;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
@@ -264,17 +297,23 @@
     display: flex !important;
     flex-direction: column !important;
     margin-bottom: 3px !important;
+    background: linear-gradient(135deg, #9333ea, #a855f7) !important;
 }
 
-/* Make event title truncate with ellipsis when too long */
-.fc-event-title-container {
-    width: 100% !important;
-    display: block !important;
+.fc-daygrid-event-harness {
+    margin-right: 4px !important;
+    margin-left: 4px !important;
 }
 
-.fc-event:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+/* Ensure time and title are properly spaced */
+.fc-daygrid-event .fc-event-main {
+    padding: 2px 4px !important;
+}
+
+/* Fix the calendar's handling of meridiem (am/pm) indicator */
+.fc .fc-daygrid-event .fc-event-time {
+    font-weight: normal !important;
+    line-height: 1.2 !important;
 }
 
 /* Fix for mobile view */
@@ -391,8 +430,8 @@ button.fc-button-primary:hover {
 }
 
 .fc-view-harness {
-    width: 100% !important;
-    overflow: visible !important;
+    border-radius: 10px;
+    overflow: hidden !important;
 }
 
 /* Ensure the events are properly contained within days */
@@ -419,4 +458,166 @@ button.fc-button-primary:hover {
 .fc .fc-daygrid-event .fc-event-time {
     font-weight: normal !important;
     line-height: 1.2 !important;
+}
+
+/* Make event title truncate with ellipsis when too long */
+.fc-event-title-container {
+    width: 100% !important;
+    display: block !important;
+}
+
+.fc-event:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Event with transcription */
+.fc-event.has-transcription {
+    background: linear-gradient(135deg, #a855f7, #d946ef) !important;
+}
+
+/* Calendar toolbar */
+.fc .fc-toolbar {
+    margin-bottom: 1rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+}
+
+/* Navigation buttons (prev/next) */
+.fc .fc-prev-button, 
+.fc .fc-next-button {
+    width: 36px !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+}
+
+.fc-toolbar-chunk .fc-prev-button,
+.fc-toolbar-chunk .fc-next-button {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 8px !important;
+  background-color: rgba(13, 13, 15, 0.6) !important;
+  border: none !important;
+  color: white !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 5px !important;
+  transition: all 0.2s ease-in-out !important;
+}
+
+.fc-toolbar-chunk .fc-prev-button:hover,
+.fc-toolbar-chunk .fc-next-button:hover {
+  background-color: rgba(30, 30, 35, 0.8) !important;
+  transform: scale(1.05) !important;
+}
+
+.fc-toolbar-chunk .fc-dayGridMonth-button,
+.fc-toolbar-chunk .fc-timeGridWeek-button,
+.fc-toolbar-chunk .fc-timeGridDay-button {
+  background-color: rgba(13, 13, 15, 0.6) !important;
+  border: none !important;
+  color: white !important;
+  border-radius: 8px !important;
+  padding: 8px 12px !important;
+  margin: 0 4px !important;
+  min-width: 90px !important;
+  text-align: center !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease-in-out !important;
+}
+
+.fc-toolbar-chunk .fc-dayGridMonth-button:hover,
+.fc-toolbar-chunk .fc-timeGridWeek-button:hover,
+.fc-toolbar-chunk .fc-timeGridDay-button:hover {
+  background-color: rgba(30, 30, 35, 0.8) !important;
+  transform: scale(1.05) !important;
+}
+
+.fc-toolbar-chunk .fc-button-active {
+  background: linear-gradient(90deg, rgba(76, 29, 149, 0.8) 0%, rgba(124, 58, 237, 0.8) 100%) !important;
+  box-shadow: 0 2px 10px rgba(124, 58, 237, 0.3) !important;
+}
+
+.fc-toolbar-title {
+  font-size: 1.3rem !important;
+  font-weight: 600 !important;
+  color: white !important;
+}
+
+.fc-daygrid-day-frame {
+  padding: 4px !important;
+  transition: all 0.2s ease !important;
+}
+
+.fc-daygrid-day-frame:hover {
+  background-color: rgba(30, 30, 35, 0.3) !important;
+}
+
+.fc-col-header-cell {
+  background-color: rgba(13, 13, 15, 0.6) !important;
+  color: white !important;
+  padding: 10px !important;
+}
+
+.fc-daygrid-day-number {
+  color: white !important;
+  font-weight: 500 !important;
+}
+
+.fc-day-today {
+  background-color: rgba(124, 58, 237, 0.15) !important;
+}
+
+.fc-event {
+  border: none !important;
+  border-radius: 6px !important;
+  padding: 4px 8px !important;
+  margin-bottom: 4px !important;
+  background-color: rgba(76, 29, 149, 0.7) !important;
+  color: white !important;
+  cursor: pointer !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.fc-event:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+.fc-event-time {
+  font-weight: 600 !important;
+}
+
+.fc-event-title {
+  font-weight: 500 !important;
+  font-size: 0.9rem !important;
+}
+
+.has-transcription {
+  background: linear-gradient(90deg, rgba(76, 29, 149, 0.8) 0%, rgba(124, 58, 237, 0.8) 100%) !important;
+  border-left: 3px solid rgb(167, 139, 250) !important;
+}
+
+/* Media queries for responsive calendar */
+@media (max-width: 768px) {
+  .fc-toolbar-title {
+    font-size: 1rem !important;
+  }
+  
+  .fc-toolbar-chunk .fc-dayGridMonth-button,
+  .fc-toolbar-chunk .fc-timeGridWeek-button,
+  .fc-toolbar-chunk .fc-timeGridDay-button {
+    padding: 6px 8px !important;
+    min-width: 70px !important;
+    font-size: 0.8rem !important;
+  }
+  
+  .fc-toolbar-chunk .fc-prev-button,
+  .fc-toolbar-chunk .fc-next-button {
+    width: 32px !important;
+    height: 32px !important;
+  }
 } 

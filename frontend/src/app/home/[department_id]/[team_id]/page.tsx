@@ -75,6 +75,7 @@ export default function TeamPage() {
     const [isFetchingMeetings, setIsFetchingMeetings] = useState(false);
     const [addMeetingError, setAddMeetingError] = useState<string | null>(null);
     const [isAddingMeeting, setIsAddingMeeting] = useState(false);
+    const [calendarView, setCalendarView] = useState('dayGridMonth');
 
     // Helper functions for date and time
     const getTodayDate = () => {
@@ -345,13 +346,11 @@ export default function TeamPage() {
                             </svg>
                             Back to Teams
                         </Link>
-                        <span className="text-white/40">→</span>
-                        <span className="gradient-text">{team ? team.name : 'Loading...'}</span>
                     </div>
                     
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                         <div>
-                            <h1 className="text-3xl font-bold text-white mb-1">
+                            <h1 className="text-3xl font-bold gradient-text mb-1">
                                 {team ? team.name : 'Loading...'}
                             </h1>
                         </div>
@@ -367,7 +366,7 @@ export default function TeamPage() {
                     </div>
                 </div>
                 
-                <div className="glass-effect rounded-xl border border-white/10 p-6 mb-6 shadow-lg transition-all duration-300 hover:border-primary/20 hover:shadow-primary/10">
+                <div className="bg-[rgba(13,13,15,0.6)] rounded-xl border border-white/10 p-6 mb-6 shadow-lg transition-all duration-300 hover:border-primary/20 hover:shadow-primary/10">
                     {/* Calendar Header with Stats */}
                     <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6">
                         <div className="flex items-center mb-4 md:mb-0">
@@ -377,14 +376,14 @@ export default function TeamPage() {
                                 </svg>
                             </div>
                             <div>
-                                <h2 className="text-xl font-semibold gradient-text">Team Calendar</h2>
+                                <h2 className="text-xl font-semibold text-white">Team Calendar</h2>
                             </div>
                         </div>
                     </div>
 
                     {/* Calendar Statistics Boxes */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                        <div className="glass-effect rounded-xl p-4 border border-white/10 hover:border-primary/20 transition-all">
+                        <div className="bg-[rgba(13,13,15,0.6)] rounded-xl p-4 border border-white/10 hover:border-primary/20 transition-all">
                             <div className="flex items-center">
                                 <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center mr-3">
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary-light" viewBox="0 0 20 20" fill="currentColor">
@@ -398,7 +397,7 @@ export default function TeamPage() {
                             </div>
                         </div>
                         
-                        <div className="glass-effect rounded-xl p-4 border border-white/10 hover:border-primary/20 transition-all">
+                        <div className="bg-[rgba(13,13,15,0.6)] rounded-xl p-4 border border-white/10 hover:border-primary/20 transition-all">
                             <div className="flex items-center">
                                 <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center mr-3">
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
@@ -414,7 +413,7 @@ export default function TeamPage() {
                             </div>
                         </div>
                         
-                        <div className="glass-effect rounded-xl p-4 border border-white/10 hover:border-primary/20 transition-all">
+                        <div className="bg-[rgba(13,13,15,0.6)] rounded-xl p-4 border border-white/10 hover:border-primary/20 transition-all">
                             <div className="flex items-center">
                                 <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center mr-3">
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
@@ -430,7 +429,7 @@ export default function TeamPage() {
                             </div>
                         </div>
                         
-                        <div className="glass-effect rounded-xl p-4 border border-white/10 hover:border-primary/20 transition-all">
+                        <div className="bg-[rgba(13,13,15,0.6)] rounded-xl p-4 border border-white/10 hover:border-primary/20 transition-all">
                             <div className="flex items-center">
                                 <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center mr-3">
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-accent" viewBox="0 0 20 20" fill="currentColor">
@@ -453,61 +452,47 @@ export default function TeamPage() {
                         </div>
                     ) : (
                         <>
-                            <div className="calendar-container">
+                            <div className="calendar-container transform transition-all duration-300 hover:scale-[1.01]">
                                 <FullCalendar
-                                    ref={calendarRef}
                                     plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-                                    initialView="dayGridMonth"
+                                    initialView={calendarView}
                                     headerToolbar={{
                                         left: 'prev,next',
                                         center: 'title',
-                                        right: 'dayGridMonth,timeGridWeek,timeGridDay',
+                                        right: 'dayGridMonth,timeGridWeek,timeGridDay'
                                     }}
-                                    events={calendarEvents}
-                                    eventClick={handleEventClick}
-                                    height="auto"
-                                    contentHeight="auto"
-                                    aspectRatio={1.8}
-                                    expandRows={true}
-                                    dayMaxEventRows={3}
-                                    eventClassNames={(eventInfo) => {
-                                        // Add different class based on event title/description
-                                        let classes = [];
-                                        
-                                        // Add class for events with transcription
-                                        const meeting = meetings.find((m) => m._id === eventInfo.event.id);
-                                        if (meeting?.hasTranscription) {
-                                            classes.push('has-transcription');
-                                        }
-                                        
-                                        // Add active class when clicked
-                                        if (activeEvent === eventInfo.event.id) {
-                                            classes.push('active-event');
-                                        }
-                                        
-                                        return classes;
-                                    }}
-                                    dayCellClassNames={(arg) => {
-                                        const today = new Date();
-                                        today.setHours(0,0,0,0);
-                                        const cellDate = arg.date;
-                                        cellDate.setHours(0,0,0,0);
-                                        
-                                        // Add animation class to future dates
-                                        if (cellDate >= today) {
-                                            const diffInDays = Math.round((cellDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-                                            if (diffInDays < 14) { // only animate near-future dates
-                                                return `future-date delay-${diffInDays}`;
+                                    customButtons={{
+                                        prev: {
+                                            text: '❮',
+                                            click: function() {
+                                                const calendarApi = calendarRef.current.getApi();
+                                                calendarApi.prev();
+                                            }
+                                        },
+                                        next: {
+                                            text: '❯',
+                                            click: function() {
+                                                const calendarApi = calendarRef.current.getApi();
+                                                calendarApi.next();
                                             }
                                         }
-                                        return '';
                                     }}
+                                    height="auto"
+                                    events={calendarEvents}
+                                    eventClick={handleEventClick}
+                                    dayMaxEvents={3}
+                                    longPressDelay={100}
                                     eventTimeFormat={{
-                                        hour: '2-digit',
+                                        hour: 'numeric',
                                         minute: '2-digit',
-                                        meridiem: true,
-                                        hour12: true
+                                        meridiem: 'short'
                                     }}
+                                    eventClassNames={(eventInfo) => {
+                                        // Add a class for meetings with transcriptions
+                                        const meeting = meetings.find(m => m._id === eventInfo.event.extendedProps._id);
+                                        return meeting?.hasTranscription ? 'has-transcription' : '';
+                                    }}
+                                    ref={calendarRef}
                                 />
                             </div>
                         </>

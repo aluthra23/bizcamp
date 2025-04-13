@@ -164,13 +164,11 @@ export default function DepartmentPage() {
                             </svg>
                             Departments
                         </Link>
-                        <span className="text-white/40">→</span>
-                        <span className="gradient-text">{department.name}</span>
                     </div>
 
                     <div className="flex justify-between items-center">
                         <div>
-                            <h1 className="text-3xl font-bold text-white mb-1">{department.name}</h1>
+                            <h1 className="text-3xl font-bold gradient-text mb-1">{department.name}</h1>
                             <p className="text-text-secondary">{department.description}</p>
                         </div>
                         <button 
