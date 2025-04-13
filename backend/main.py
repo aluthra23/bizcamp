@@ -356,5 +356,11 @@ async def get_summary(meeting_id: str):
     all_text = ""
     for transcription in all_transcriptions:
         all_text += transcription['text']
-    summary = Summarizer().summarize(all_text)
+    summary = Summarizer().summarize(all_text)['summary']
+    db["summaries"].insert_one({"meeting_id": meeting_id, "summary": summary})
+    return {"success": True, "message": "Summary inserted successfully"}
+
+@app.get("/summaries/{meeting_id}/fetch_summary")
+async def fetch_summary(meeting_id: str):
+    summary = db["summaries"].find_one({"meeting_id": meeting_id})
     return {"summary": summary}
