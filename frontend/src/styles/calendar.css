@@ -1,0 +1,222 @@
+/* Calendar styles */
+.calendar-container {
+  width: 100%;
+  margin-top: 20px;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.calendar-container:hover {
+  transform: scale(1.01);
+}
+
+.calendar-header {
+  background-color: #f8f9fa;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.calendar-header h3 {
+  margin: 0;
+  font-weight: 600;
+}
+
+.calendar-navigation {
+  display: flex;
+  gap: 8px;
+}
+
+.calendar-navigation button {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.calendar-navigation button:hover {
+  background-color: #f1f5f9;
+}
+
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background-color: #f8f9fa;
+  font-weight: 600;
+  padding: 8px 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.calendar-weekdays span {
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  background-color: #e2e8f0;
+}
+
+.calendar-day {
+  background-color: #ffffff;
+  min-height: 100px;
+  padding: 8px;
+  position: relative;
+}
+
+.calendar-day-header {
+  font-weight: 500;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.calendar-day.today {
+  background-color: #f0f9ff;
+}
+
+.calendar-day.different-month {
+  background-color: #f8f9fa;
+  color: #94a3b8;
+}
+
+.calendar-event {
+  background-color: #3b82f6;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.calendar-event:hover {
+  background-color: #2563eb;
+}
+
+/* Calendar container styling */
+.fc {
+    --fc-border-color: rgba(255, 255, 255, 0.1);
+    --fc-button-text-color: #fff;
+    --fc-button-bg-color: rgba(255, 255, 255, 0.1);
+    --fc-button-border-color: transparent;
+    --fc-button-hover-bg-color: rgba(255, 255, 255, 0.2);
+    --fc-button-hover-border-color: transparent;
+    --fc-button-active-bg-color: var(--primary);
+    --fc-button-active-border-color: transparent;
+    --fc-today-bg-color: transparent;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active,
+.fc .fc-button-primary:not(:disabled):active {
+    background: linear-gradient(135deg, var(--primary), var(--accent)) !important;
+    border-color: transparent !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.fc-col-header-cell {
+    padding: 8px 0;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.fc-day-other .fc-daygrid-day-top {
+    opacity: 0.5;
+}
+
+.fc-day-today {
+    position: relative;
+    background: radial-gradient(circle at center, rgba(147, 51, 234, 0.15), transparent 70%) !important;
+}
+
+/* Event styling */
+.fc-event {
+    background: linear-gradient(135deg, var(--primary), var(--accent)) !important;
+    border: none !important;
+    border-radius: 6px !important;
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.85rem !important;
+    font-weight: 500 !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+    cursor: pointer !important;
+}
+
+.fc-event-title, .fc-event-time {
+    white-space: normal !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.fc-event:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Event with transcription */
+.fc-event.has-transcription {
+    background: linear-gradient(135deg, var(--accent), var(--accent)) !important;
+}
+
+/* Animation for active events */
+@keyframes pulseEvent {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 2px 12px rgba(147, 51, 234, 0.2);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 4px 20px rgba(147, 51, 234, 0.4);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 2px 12px rgba(147, 51, 234, 0.2);
+    }
+}
+
+.fc-event.active-event {
+    animation: pulseEvent 0.5s ease-in-out !important;
+    z-index: 5 !important;
+}
+
+/* Animation for future dates */
+@keyframes fadeInDate {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.future-date {
+    animation: fadeInDate 0.5s ease-out forwards;
+    opacity: 0;
+}
+
+.delay-0 { animation-delay: 0.05s; }
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.15s; }
+.delay-3 { animation-delay: 0.2s; }
+.delay-4 { animation-delay: 0.25s; }
+.delay-5 { animation-delay: 0.3s; }
+.delay-6 { animation-delay: 0.35s; }
+.delay-7 { animation-delay: 0.4s; }
+.delay-8 { animation-delay: 0.45s; }
+.delay-9 { animation-delay: 0.5s; }
+.delay-10 { animation-delay: 0.55s; }
+.delay-11 { animation-delay: 0.6s; }
+.delay-12 { animation-delay: 0.65s; }
+.delay-13 { animation-delay: 0.7s; } 
