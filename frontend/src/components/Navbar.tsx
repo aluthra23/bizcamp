@@ -18,7 +18,7 @@ export default function Navbar() {
 
         <div className="hidden md:flex items-center space-x-6">
           <a href="#features" className="text-white/80 hover:text-white transition">
-            Features
+
           </a>
         </div>
 
