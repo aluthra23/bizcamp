@@ -55,75 +55,75 @@ interface PdfDocument {
 }
 
 interface DurationModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onConfirm: (durationMs: number) => void;
+    isOpen: boolean;
+    onClose: () => void;
+    onConfirm: (durationMs: number) => void;
 }
 
 function DurationModal({ isOpen, onClose, onConfirm }: DurationModalProps) {
-  const [hours, setHours] = useState(1);
-  const [minutes, setMinutes] = useState(15);
+    const [hours, setHours] = useState(1);
+    const [minutes, setMinutes] = useState(15);
 
-  if (!isOpen) return null;
+    if (!isOpen) return null;
 
-  const handleConfirm = () => {
-    const durationMs = (hours * 60 * 60 * 1000) + (minutes * 60 * 1000);
-    onConfirm(durationMs);
-    onClose();
-  };
+    const handleConfirm = () => {
+        const durationMs = (hours * 60 * 60 * 1000) + (minutes * 60 * 1000);
+        onConfirm(durationMs);
+        onClose();
+    };
 
-  return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-      <div className="glass-effect rounded-xl border border-white/10 p-6 w-full max-w-sm mx-auto">
-        <h2 className="text-xl font-semibold text-white mb-4">Set Recording Duration</h2>
-        
-        <div className="flex flex-col sm:flex-row gap-4 mb-6">
-          {/* Hours */}
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-text-secondary mb-1">Hours</label>
-            <select 
-              value={hours}
-              onChange={(e) => setHours(Number(e.target.value))}
-              className="w-full px-3 py-2 bg-surface border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-light"
-            >
-              {[...Array(5)].map((_, i) => (
-                <option key={i} value={i}>{i}</option>
-              ))}
-            </select>
-          </div>
+    return (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+            <div className="glass-effect rounded-xl border border-white/10 p-6 w-full max-w-sm mx-auto">
+                <h2 className="text-xl font-semibold text-white mb-4">Set Recording Duration</h2>
 
-          {/* Minutes */}
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-text-secondary mb-1">Minutes</label>
-            <select 
-              value={minutes}
-              onChange={(e) => setMinutes(Number(e.target.value))}
-              className="w-full px-3 py-2 bg-surface border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-light"
-            >
-              {[...Array(12)].map((_, i) => (
-                <option key={i} value={i*5}>{i*5}</option>
-              ))}
-            </select>
-          </div>
+                <div className="flex flex-col sm:flex-row gap-4 mb-6">
+                    {/* Hours */}
+                    <div className="flex-1">
+                        <label className="block text-sm font-medium text-text-secondary mb-1">Hours</label>
+                        <select
+                            value={hours}
+                            onChange={(e) => setHours(Number(e.target.value))}
+                            className="w-full px-3 py-2 bg-surface border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-light"
+                        >
+                            {[...Array(5)].map((_, i) => (
+                                <option key={i} value={i}>{i}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {/* Minutes */}
+                    <div className="flex-1">
+                        <label className="block text-sm font-medium text-text-secondary mb-1">Minutes</label>
+                        <select
+                            value={minutes}
+                            onChange={(e) => setMinutes(Number(e.target.value))}
+                            className="w-full px-3 py-2 bg-surface border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-light"
+                        >
+                            {[...Array(12)].map((_, i) => (
+                                <option key={i} value={i * 5}>{i * 5}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+
+                <div className="flex flex-col-reverse sm:flex-row justify-end gap-3">
+                    <button
+                        onClick={onClose}
+                        className="px-4 py-2 bg-surface border border-white/10 rounded-full text-white hover:bg-surface-light transition-colors"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        onClick={handleConfirm}
+                        className="px-4 py-2 bg-gradient-to-r from-primary to-accent text-white rounded-full hover:opacity-90 transition-opacity"
+                    >
+                        Start Recording
+                    </button>
+                </div>
+            </div>
         </div>
-
-        <div className="flex flex-col-reverse sm:flex-row justify-end gap-3">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 bg-surface border border-white/10 rounded-full text-white hover:bg-surface-light transition-colors"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleConfirm}
-            className="px-4 py-2 bg-gradient-to-r from-primary to-accent text-white rounded-full hover:opacity-90 transition-opacity"
-          >
-            Start Recording
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+    );
 }
 
 // Sample data for parts not provided by the API
@@ -184,9 +184,9 @@ export default function MeetingPage() {
                 if (!response.ok) {
                     throw new Error('Failed to fetch meeting');
                 }
-                
+
                 const meetingData = await response.json();
-                
+
                 // Extract time from the ISO date string
                 const meetingDate = new Date(meetingData.meeting_date);
                 const startTime = meetingDate.toLocaleTimeString('en-US', {
@@ -194,7 +194,7 @@ export default function MeetingPage() {
                     minute: '2-digit',
                     hour12: false
                 });
-                
+
                 // Calculate end time (60 min after start time)
                 const endTime = new Date(meetingDate);
                 endTime.setMinutes(endTime.getMinutes() + 60);
@@ -203,7 +203,7 @@ export default function MeetingPage() {
                     minute: '2-digit',
                     hour12: false
                 });
-                
+
                 // Combine API data with sample extended data for UI purposes
                 // But preserve the start and end time from the actual meeting data
                 setMeeting({
@@ -212,10 +212,10 @@ export default function MeetingPage() {
                     startTime,
                     endTime: endTimeString
                 });
-                
+
                 // After successfully fetching the meeting, fetch associated PDFs
                 await fetchPdfDocuments(meetingId);
-                
+
             } catch (err) {
                 console.error('Error fetching meeting:', err);
                 setError('Failed to load meeting');
@@ -223,7 +223,7 @@ export default function MeetingPage() {
                 setIsLoading(false);
             }
         };
-        
+
         fetchMeeting();
 
         return () => {
@@ -288,7 +288,7 @@ export default function MeetingPage() {
 
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             streamRef.current = stream;
-            
+
             // Start first interval
             await startNewRecordingInterval();
 
@@ -362,11 +362,11 @@ export default function MeetingPage() {
     const fetchPdfDocuments = async (meetingId: string) => {
         try {
             const response = await fetch(`/api/backend/meetings/${meetingId}/pdf-documents`);
-            
+
             if (!response.ok) {
                 throw new Error('Failed to fetch PDF documents');
             }
-            
+
             const documents = await response.json();
             setUploadedPdfs(documents);
         } catch (err) {
@@ -374,40 +374,40 @@ export default function MeetingPage() {
             setPdfUploadError('Failed to load PDF documents');
         }
     };
-    
+
     // Handle PDF file selection and upload
     const handlePdfUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
         if (!files || files.length === 0) return;
-        
+
         const file = files[0];
-        
+
         // Validate file is a PDF
         if (file.type !== 'application/pdf') {
             setPdfUploadError('Only PDF files are allowed');
             return;
         }
-        
+
         setIsUploadingPdf(true);
         setPdfUploadError(null);
-        
+
         try {
             const formData = new FormData();
             formData.append('file', file);
-            
+
             const response = await fetch(`/api/backend/meetings/${meetingId}/upload-pdf`, {
                 method: 'POST',
                 body: formData,
             });
-            
+
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(errorData.detail || 'Failed to upload PDF');
             }
-            
+
             // Refresh the list of PDFs
             await fetchPdfDocuments(meetingId);
-            
+
             // Reset file input
             if (fileInputRef.current) {
                 fileInputRef.current.value = '';
@@ -418,18 +418,18 @@ export default function MeetingPage() {
             setIsUploadingPdf(false);
         }
     };
-    
+
     // Function to open a PDF in a new tab
     const openPdf = async (documentId: string) => {
         try {
             const response = await fetch(`/api/backend/pdf-documents/${documentId}`);
-            
+
             if (!response.ok) {
                 throw new Error('Failed to fetch PDF document');
             }
-            
+
             const document = await response.json();
-            
+
             // Create a blob from the base64 data
             const binaryString = atob(document.file_content);
             const bytes = new Uint8Array(binaryString.length);
@@ -437,7 +437,7 @@ export default function MeetingPage() {
                 bytes[i] = binaryString.charCodeAt(i);
             }
             const blob = new Blob([bytes], { type: 'application/pdf' });
-            
+
             // Create a URL for the blob and open it in a new tab
             const url = URL.createObjectURL(blob);
             window.open(url, '_blank');
@@ -510,14 +510,14 @@ export default function MeetingPage() {
                                     <span className="text-sm">Recording</span>
                                 </div>
                             )}
-                            
+
                             <button
                                 onClick={transcriptionStarted ? handleStopTranscription : () => setIsModalOpen(true)}
                                 className={`
                                     px-4 py-2 rounded-full transition-colors text-white
-                                    ${transcriptionStarted 
-                                    ? 'bg-red-500 hover:bg-red-600' 
-                                    : 'bg-gradient-to-r from-green-500 to-teal-500 hover:opacity-90'}
+                                    ${transcriptionStarted
+                                        ? 'bg-red-500 hover:bg-red-600'
+                                        : 'bg-gradient-to-r from-green-500 to-teal-500 hover:opacity-90'}
                                 `}
                             >
                                 {transcriptionStarted ? 'Stop Recording' : 'Start Recording'}
@@ -561,7 +561,7 @@ export default function MeetingPage() {
                                     <p className="absolute text-xs text-red-500 mt-1">{pdfUploadError}</p>
                                 )}
                             </div>
-                            
+
                             <Link
                                 href={`/home/${departmentId}/${teamId}/${meetingId}/chat`}
                                 className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-4 py-2 rounded-full font-medium flex items-center gap-2"
@@ -570,6 +570,19 @@ export default function MeetingPage() {
                                     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                                 </svg>
                                 Chat with Assistant
+                            </Link>
+                            <Link
+                                href={`/home/${departmentId}/${teamId}/${meetingId}/conceptgraph`}
+                                className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full font-medium flex items-center gap-2"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <circle cx="18" cy="5" r="3"></circle>
+                                    <circle cx="6" cy="12" r="3"></circle>
+                                    <circle cx="18" cy="19" r="3"></circle>
+                                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                                </svg>
+                                Concept Graph
                             </Link>
                         </div>
                     </div>
@@ -632,23 +645,23 @@ export default function MeetingPage() {
                             </div>
 
                             {meeting.attendees && meeting.attendees.length > 0 && (
-                            <div className="mt-6 pt-6 border-t border-white/10">
-                                <h3 className="text-lg font-medium text-white mb-3">Speaking Distribution</h3>
-                                <div className="h-6 rounded-full flex overflow-hidden">
-                                    {meeting.attendees.map((attendee) => (
-                                        <div
-                                            key={attendee.id}
-                                            className={`${attendee.avatarColor} h-full`}
-                                            style={{ width: `${attendee.speaking}%` }}
-                                            title={`${attendee.name}: ${attendee.speaking}%`}
-                                        />
-                                    ))}
+                                <div className="mt-6 pt-6 border-t border-white/10">
+                                    <h3 className="text-lg font-medium text-white mb-3">Speaking Distribution</h3>
+                                    <div className="h-6 rounded-full flex overflow-hidden">
+                                        {meeting.attendees.map((attendee) => (
+                                            <div
+                                                key={attendee.id}
+                                                className={`${attendee.avatarColor} h-full`}
+                                                style={{ width: `${attendee.speaking}%` }}
+                                                title={`${attendee.name}: ${attendee.speaking}%`}
+                                            />
+                                        ))}
+                                    </div>
+                                    <div className="flex justify-between mt-2">
+                                        <p className="text-xs text-text-secondary">0:00</p>
+                                        <p className="text-xs text-text-secondary">{meeting.duration}:00</p>
+                                    </div>
                                 </div>
-                                <div className="flex justify-between mt-2">
-                                    <p className="text-xs text-text-secondary">0:00</p>
-                                    <p className="text-xs text-text-secondary">{meeting.duration}:00</p>
-                                </div>
-                            </div>
                             )}
                         </div>
                     </div>
@@ -658,29 +671,29 @@ export default function MeetingPage() {
                         <h2 className="text-xl font-semibold text-white mb-4">Agenda</h2>
                         <div className="glass-effect rounded-xl border border-white/10 p-6">
                             {meeting.agenda && meeting.agenda.length > 0 ? (
-                            <div className="space-y-4">
-                                {meeting.agenda.map((item, index) => (
-                                    <div key={item.id} className="flex items-start gap-3">
-                                        <div className="min-w-6 mt-1">
-                                            <div className={`w-6 h-6 rounded-full flex items-center justify-center ${item.isCompleted ? 'bg-primary/20 text-primary-light' : 'bg-white/10 text-white/60'}`}>
-                                                {item.isCompleted ? (
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                                    </svg>
-                                                ) : (
-                                                    <span>{index + 1}</span>
-                                                )}
+                                <div className="space-y-4">
+                                    {meeting.agenda.map((item, index) => (
+                                        <div key={item.id} className="flex items-start gap-3">
+                                            <div className="min-w-6 mt-1">
+                                                <div className={`w-6 h-6 rounded-full flex items-center justify-center ${item.isCompleted ? 'bg-primary/20 text-primary-light' : 'bg-white/10 text-white/60'}`}>
+                                                    {item.isCompleted ? (
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                            <polyline points="20 6 9 17 4 12"></polyline>
+                                                        </svg>
+                                                    ) : (
+                                                        <span>{index + 1}</span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <div className="flex-grow">
+                                                <p className={`font-medium ${item.isCompleted ? 'text-white/60' : 'text-white'}`}>
+                                                    {item.title}
+                                                </p>
+                                                <p className="text-sm text-text-secondary">{item.duration} minutes</p>
                                             </div>
                                         </div>
-                                        <div className="flex-grow">
-                                            <p className={`font-medium ${item.isCompleted ? 'text-white/60' : 'text-white'}`}>
-                                                {item.title}
-                                            </p>
-                                            <p className="text-sm text-text-secondary">{item.duration} minutes</p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
+                                    ))}
+                                </div>
                             ) : (
                                 <p className="text-text-secondary text-center">No agenda items available</p>
                             )}
@@ -727,7 +740,7 @@ export default function MeetingPage() {
                                 <p className="text-text-secondary text-center">No action items available</p>
                             )}
                         </div>
-                        
+
                         {/* PDF Documents Section */}
                         <div className="mt-8">
                             <h2 className="text-xl font-semibold text-white mb-4">Documents</h2>
@@ -745,7 +758,7 @@ export default function MeetingPage() {
                                                     </div>
                                                 </div>
                                                 <div className="flex-grow">
-                                                    <button 
+                                                    <button
                                                         onClick={() => openPdf(pdf._id)}
                                                         className="font-medium text-white hover:text-amber-400 transition"
                                                     >
@@ -766,9 +779,9 @@ export default function MeetingPage() {
                     </div>
                 </div>
             </main>
-            
+
             {/* Duration Modal */}
-            <DurationModal 
+            <DurationModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 onConfirm={(durationMs) => {
