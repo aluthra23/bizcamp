@@ -6,6 +6,10 @@ import datetime
 from dotenv import load_dotenv
 import os
 from qdrant_manager import QdrantManager
+import base64
+from fastapi import UploadFile, File, Form
+import io
+import pdfplumber
 load_dotenv()
 
 app = FastAPI()
@@ -210,4 +214,98 @@ async def get_transcriptions(meeting_id: str):
         return {"transcriptions": transcriptions}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error retrieving transcriptions: {str(e)}")
+
+@app.post("/meetings/{meeting_id}/upload-pdf")
+async def upload_pdf_to_meeting(meeting_id: str, file: UploadFile = File(...)):
+    try:
+        # Validate file is a PDF
+        if not file.content_type == "application/pdf":
+            raise HTTPException(status_code=400, detail="Only PDF files are allowed")
+        
+        # Read the entire file content
+        pdf_content = await file.read()
+        
+        # Extract and log text from PDF using pdfplumber
+        try:
+            with pdfplumber.open(io.BytesIO(pdf_content)) as pdf:
+                for _, page in enumerate(pdf.pages, start=1):
+                    
+                    # Extract text from the page
+                    text = page.extract_text()
+                    if text:
+                        # Split into lines and print each line with line number
+                        lines = text.splitlines()
+                        for _, line in enumerate(lines, start=1):
+                            if line.strip():  # Skip empty lines
+                                # print(f"Line {line_index}: {line.strip()}")
+                                qdrant_manager.add_text_pdf(collection_name=meeting_id, text=line.strip())
+
+        except Exception as e:
+            print(f"Error extracting PDF content: {str(e)}")
+        
+        # Verify meeting exists
+        meeting = db["meetings"].find_one({"_id": ObjectId(meeting_id)})
+        if not meeting:
+            raise HTTPException(status_code=404, detail="Meeting not found")
+        
+        # Encode the PDF file as base64 to store in MongoDB
+        base64_pdf = base64.b64encode(pdf_content).decode('utf-8')
+        
+        # Store PDF in MongoDB
+        pdf_document = {
+            "meeting_id": meeting_id,
+            "filename": file.filename,
+            "content_type": file.content_type,
+            "uploaded_at": datetime.datetime.now().isoformat(),
+            "file_content": base64_pdf
+        }
+        
+        result = db["pdf_documents"].insert_one(pdf_document)
+        
+        # Update the meeting to track associated PDFs
+        db["meetings"].update_one(
+            {"_id": ObjectId(meeting_id)},
+            {"$addToSet": {"pdf_documents": str(result.inserted_id)}}
+        )
+        
+        return {
+            "success": True,
+            "message": "PDF uploaded successfully",
+            "document_id": str(result.inserted_id),
+            "filename": file.filename,
+            "ok": True
+        }
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error uploading PDF: {str(e)}")
+
+@app.get("/meetings/{meeting_id}/pdf-documents")
+async def get_meeting_pdf_documents(meeting_id: str):
+    try:
+        # Get all PDFs associated with this meeting
+        documents = list(db["pdf_documents"].find({"meeting_id": meeting_id}, {"file_content": 0}))
+        
+        # Convert ObjectIds to strings
+        for doc in documents:
+            doc["_id"] = str(doc["_id"])
+        
+        return documents
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error retrieving PDF documents: {str(e)}")
+
+@app.get("/pdf-documents/{document_id}")
+async def get_pdf_document(document_id: str):
+    try:
+        # Get the PDF document by ID
+        document = db["pdf_documents"].find_one({"_id": ObjectId(document_id)})
+        if not document:
+            raise HTTPException(status_code=404, detail="PDF document not found")
+        
+        document["_id"] = str(document["_id"])
+        return document
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid document ID format")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error retrieving PDF document: {str(e)}")
 
