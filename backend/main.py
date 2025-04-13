@@ -309,3 +309,13 @@ async def get_pdf_document(document_id: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error retrieving PDF document: {str(e)}")
 
+@app.get("/meetings/{meeting_id}/conceptgraph")
+async def get_concept_graph(meeting_id: str):
+   try:
+       # Generate concept graph from transcriptions
+       concept_graph = qdrant_manager.generate_concept_graph(collection_name=meeting_id)
+      
+       # Return the concept graph
+       return {"conceptgraph": concept_graph}
+   except Exception as e:
+       raise HTTPException(status_code=500, detail=f"Error retrieving concept graph: {str(e)}")
