@@ -278,7 +278,7 @@ class QdrantManager:
             {combined_text}
             
             Create a concept graph with the following structure:
-            1. Nodes: Identify 8-15 key concepts, topics, or entities from the transcript.
+            1. Nodes: Identify 8 key concepts, topics, or entities from the transcript.
             2. Edges: Identify relationships between these concepts.
             
             Output the result as a JSON object with the following structure:
