@@ -22,11 +22,10 @@ interface AgendaItem {
 }
 
 interface Action {
-    id: string;
+    _id: string;
     description: string;
-    assignee: string;
-    dueDate: string;
     isCompleted: boolean;
+    meeting_id: string;
 }
 
 interface MeetingDetails {
@@ -41,7 +40,6 @@ interface MeetingDetails {
     duration?: number;
     attendees?: Attendee[];
     agenda?: AgendaItem[];
-    actions?: Action[];
     hasTranscription?: boolean;
     pdf_documents?: string[]; // IDs of associated PDF documents
 }
@@ -128,25 +126,21 @@ function DurationModal({ isOpen, onClose, onConfirm }: DurationModalProps) {
 
 // Sample data for parts not provided by the API
 const sampleExtendedData = {
-    startTime: '10:00',
-    endTime: '11:00',
-    duration: 60,
-    attendees: [
-        { id: 'user1', name: 'Sarah Chen', role: 'Product Manager', avatarColor: 'bg-gradient-to-br from-purple-500 to-indigo-500', speaking: 35 },
+        startTime: '10:00',
+        endTime: '11:00',
+        duration: 60,
+        attendees: [
+            { id: 'user1', name: 'Sarah Chen', role: 'Product Manager', avatarColor: 'bg-gradient-to-br from-purple-500 to-indigo-500', speaking: 35 },
             { id: 'user2', name: 'Alex Johnson', role: 'Tech Lead', avatarColor: 'bg-gradient-to-br from-blue-500 to-cyan-500', speaking: 30 },
             { id: 'user3', name: 'Kai Havertz', role: 'Frontend Dev', avatarColor: 'bg-gradient-to-br from-teal-500 to-emerald-500', speaking: 20 },
-        { id: 'user4', name: 'Jamie Wu', role: 'UX Designer', avatarColor: 'bg-gradient-to-br from-amber-500 to-orange-500', speaking: 15 },
-    ],
-    agenda: [
-        { id: 'ag1', title: 'Review previous sprint', isCompleted: true, duration: 10 },
-        { id: 'ag2', title: 'Discuss new feature priorities', isCompleted: true, duration: 15 },
-        { id: 'ag3', title: 'Estimate user stories', isCompleted: true, duration: 25 },
-    ],
-    actions: [
-        { id: 'ac1', description: 'Create technical specs', assignee: 'Alex Johnson', dueDate: '2023-05-17', isCompleted: false },
-        { id: 'ac2', description: 'Update UI mockups', assignee: 'Jamie Wu', dueDate: '2023-05-18', isCompleted: false },
-    ],
-    hasTranscription: false
+            { id: 'user4', name: 'Jamie Wu', role: 'UX Designer', avatarColor: 'bg-gradient-to-br from-amber-500 to-orange-500', speaking: 15 },
+        ],
+        agenda: [
+            { id: 'ag1', title: 'Review previous sprint', isCompleted: true, duration: 10 },
+            { id: 'ag2', title: 'Discuss new feature priorities', isCompleted: true, duration: 15 },
+            { id: 'ag3', title: 'Estimate user stories', isCompleted: true, duration: 25 },
+        ],
+        hasTranscription: false
 };
 
 export default function MeetingPage() {
@@ -175,6 +169,11 @@ export default function MeetingPage() {
     const [isUploadingPdf, setIsUploadingPdf] = useState(false);
     const [pdfUploadError, setPdfUploadError] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    // State for action items
+    const [actions, setActions] = useState<Action[]>([]);
+    const [isLoadingActions, setIsLoadingActions] = useState(false);
+    const [actionsError, setActionsError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchMeeting = async () => {
@@ -215,6 +214,9 @@ export default function MeetingPage() {
                 
                 // After successfully fetching the meeting, fetch associated PDFs
                 await fetchPdfDocuments(meetingId);
+                
+                // Also fetch action items
+                await fetchActionItems(meetingId);
                 
             } catch (err) {
                 console.error('Error fetching meeting:', err);
@@ -473,6 +475,52 @@ export default function MeetingPage() {
         }
     };
 
+    // Function to fetch action items
+    const fetchActionItems = async (meetingId: string) => {
+        setIsLoadingActions(true);
+        setActionsError(null);
+        try {
+            const response = await fetch(`/api/backend/meetings/${meetingId}/actions`);
+            
+            if (!response.ok) {
+                throw new Error('Failed to fetch action items');
+            }
+            
+            const data = await response.json();
+            setActions(data.actions || []);
+        } catch (err) {
+            console.error('Error fetching action items:', err);
+            setActionsError('Failed to load action items');
+        } finally {
+            setIsLoadingActions(false);
+        }
+    };
+
+    // Function to toggle action item completion status
+    const toggleActionItemCompletion = async (actionId: string) => {
+        try {
+            const response = await fetch(`/api/backend/actions/${actionId}/toggle`, {
+                method: 'PUT'
+            });
+            
+            if (!response.ok) {
+                throw new Error('Failed to update action item');
+            }
+            
+            // Update local state to reflect the change
+            setActions(prevActions => 
+                prevActions.map(action => 
+                    action._id === actionId 
+                        ? { ...action, isCompleted: !action.isCompleted } 
+                        : action
+                )
+            );
+        } catch (err) {
+            console.error('Error updating action item:', err);
+            alert('Failed to update action item. Please try again.');
+        }
+    };
+
     if (isLoading) {
         return (
             <div className="min-h-screen bg-background flex items-center justify-center">
@@ -665,7 +713,7 @@ export default function MeetingPage() {
                                     <polyline points="14 2 14 8 20 8" />
                                     <line x1="12" y1="18" x2="12" y2="12" />
                                     <line x1="9" y1="15" x2="15" y2="15" />
-                                </svg>
+                            </svg>
                                 {isUploadingPdf ? 'Uploading...' : 'Upload PDF'}
                             </label>
                             {pdfUploadError && (
@@ -709,7 +757,7 @@ export default function MeetingPage() {
                         <div className="glass-effect rounded-2xl border border-white/20 p-6 shadow-lg">
                             {meeting.attendees && meeting.attendees.length > 0 ? (
                                 <div className="space-y-5">
-                                    {meeting.attendees.map((attendee) => (
+                                {meeting.attendees.map((attendee) => (
                                         <div key={attendee.id} className="flex items-center gap-4 group transition-all hover:bg-white/5 p-2 rounded-xl cursor-pointer">
                                             <div className={`w-12 h-12 rounded-full ${attendee.avatarColor} flex items-center justify-center text-white font-medium text-lg shadow-md group-hover:scale-105 transition-transform`}>
                                             {attendee.name.charAt(0)}
@@ -824,51 +872,44 @@ export default function MeetingPage() {
                                     <h2 className="text-xl font-bold text-white">Action Items</h2>
                                 </div>
                                 <div className="glass-effect rounded-2xl border border-white/20 p-6 shadow-lg">
-                            {meeting.actions && meeting.actions.length > 0 ? (
+                                    {isLoadingActions ? (
+                                        <div className="flex justify-center items-center py-8">
+                                            <div className="w-10 h-10 border-4 border-primary-light border-t-transparent animate-spin rounded-full"></div>
+                                        </div>
+                                    ) : actions.length > 0 ? (
                                         <div className="space-y-5">
-                                {meeting.actions.map((action) => (
-                                                <div key={action.id} className="flex items-start gap-4 group hover:bg-white/5 p-3 rounded-xl transition-all">
+                                            {actions.map((action) => (
+                                                <div key={action._id} className="flex items-start gap-4 group hover:bg-white/5 p-3 rounded-xl transition-all">
                                                     <div className="min-w-8 mt-1">
-                                                        <div className={`w-8 h-8 rounded-xl flex items-center justify-center shadow-md ${action.isCompleted ? 'bg-primary/30 text-primary-light' : 'bg-white/10 text-white/60'}`}>
-                                                {action.isCompleted ? (
+                                                        <button 
+                                                            onClick={() => toggleActionItemCompletion(action._id)}
+                                                            className={`w-8 h-8 rounded-xl flex items-center justify-center shadow-md ${action.isCompleted ? 'bg-primary/30 text-primary-light' : 'bg-white/10 text-white/60'}`}
+                                                        >
+                                                            {action.isCompleted ? (
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                                    </svg>
-                                                ) : (
+                                                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                                                </svg>
+                                                            ) : (
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                                                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                                                    </svg>
-                                                )}
-                                            </div>
-                                        </div>
-                                        <div className="flex-grow">
+                                                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                                                </svg>
+                                                            )}
+                                                        </button>
+                                                    </div>
+                                                    <div className="flex-grow">
                                                         <p className={`font-medium text-lg ${action.isCompleted ? 'text-white/60' : 'text-white'}`}>
-                                                {action.description}
-                                            </p>
-                                                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-0 mt-2">
-                                                            <div className="flex items-center">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary-light mr-1">
-                                                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                                                    <circle cx="9" cy="7" r="4"></circle>
-                                                                </svg>
-                                                                <p className="text-sm text-text-secondary"><span className="text-primary-light">{action.assignee}</span></p>
-                                                            </div>
-                                                            <div className="flex items-center">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary-light mr-1">
-                                                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                                                                    <line x1="16" y1="2" x2="16" y2="6"></line>
-                                                                    <line x1="8" y1="2" x2="8" y2="6"></line>
-                                                                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                                                                </svg>
-                                                                <p className="text-sm text-text-secondary">Due: {new Date(action.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
-                                                            </div>
-                                            </div>
+                                                            {action.description}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            ))}
                                         </div>
-                                    </div>
-                                ))}
-                            </div>
-                            ) : (
+                                    ) : actionsError ? (
+                                        <div className="text-center py-8">
+                                            <p className="text-text-secondary">Error loading action items. Please try again later.</p>
+                                        </div>
+                                    ) : (
                                         <div className="flex flex-col items-center justify-center py-8">
                                             <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white/40">
@@ -876,7 +917,7 @@ export default function MeetingPage() {
                                                     <polyline points="14 2 14 8 20 8"></polyline>
                                                 </svg>
                                             </div>
-                                            <p className="text-text-secondary">No action items available</p>
+                                            <p className="text-text-secondary">Meeting hasn't finished yet. Action items will be generated automatically after transcription.</p>
                                         </div>
                                     )}
                                 </div>

@@ -12,6 +12,7 @@ import io
 import pdfplumber
 from summarize import Summarizer
 import threading
+import google.generativeai as genai
 load_dotenv()
 
 app = FastAPI()
@@ -26,6 +27,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Configure Gemini API
+genai.configure(api_key=os.getenv('GOOGLE_API_KEY'))
 
 @app.post("/add-user")
 async def add_user(request: Request):
@@ -361,6 +365,55 @@ async def get_summary(meeting_id: str):
     # Return immediately
     return {"success": True, "message": "Summary generation started in separate thread"}
 
+# Function to generate action items from summary using Gemini
+def generate_action_items(summary):
+    try:
+        # Configure the model
+        model = genai.GenerativeModel('gemini-pro')
+        
+        # Create a prompt for generating 2 short action items
+        prompt = f"""
+        Based on the following meeting summary, generate exactly 2 action items.
+        Each action item must be 4 words maximum and should be clear, actionable tasks.
+        Format your response as a JSON array with objects that have 'description' field.
+        
+        Summary: {summary}
+        
+        Example format:
+        [
+            {{"description": "Schedule follow-up meeting"}},
+            {{"description": "Create design mockups"}}
+        ]
+        """
+        
+        # Generate response
+        response = model.generate_content(prompt)
+        
+        # Try to extract JSON content
+        text_response = response.text
+        # Clean up the response to handle potential formatting issues
+        text_response = text_response.strip()
+        if text_response.startswith("```json"):
+            text_response = text_response[7:]
+        if text_response.endswith("```"):
+            text_response = text_response[:-3]
+        
+        import json
+        action_items = json.loads(text_response)
+        
+        # Add the completed flag to each action item
+        for item in action_items:
+            item["isCompleted"] = False
+            
+        return action_items
+    except Exception as e:
+        print(f"Error generating action items: {str(e)}")
+        # Return default action items in case of failure
+        return [
+            {"description": "Review meeting notes", "isCompleted": False},
+            {"description": "Schedule next steps", "isCompleted": False}
+        ]
+
 # Non-async function to run in a separate thread
 def run_generate_summary(meeting_id: str):
     try:
@@ -370,12 +423,25 @@ def run_generate_summary(meeting_id: str):
             all_text += transcription['text']
         summary = Summarizer().summarize(all_text)['summary']
         
-        # Database operations
+        # Generate action items based on the summary
+        action_items = generate_action_items(summary)
+        
+        # Database operations for summary
         if db["summaries"].find_one({"meeting_id": meeting_id}):
             db["summaries"].update_one({"meeting_id": meeting_id}, {"$set": {"summary": summary}})
         else:
             db["summaries"].insert_one({"meeting_id": meeting_id, "summary": summary})
-        print(f"Summary for meeting {meeting_id} generated and saved successfully")
+            
+        # Database operations for action items
+        # First delete any existing action items for this meeting
+        db["actions"].delete_many({"meeting_id": meeting_id})
+        
+        # Then insert the new action items
+        for item in action_items:
+            item["meeting_id"] = meeting_id
+            db["actions"].insert_one(item)
+            
+        print(f"Summary and action items for meeting {meeting_id} generated and saved successfully")
     except Exception as e:
         print(f"Error generating summary for meeting {meeting_id}: {str(e)}")
 
@@ -386,3 +452,41 @@ async def fetch_summary(meeting_id: str):
         return {"summary": summary['summary']}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching summary: {str(e)}")
+
+# Add a new endpoint to toggle action item completion status
+@app.put("/actions/{action_id}/toggle")
+async def toggle_action_item(action_id: str):
+    try:
+        # Find the action item
+        action = db["actions"].find_one({"_id": ObjectId(action_id)})
+        
+        if not action:
+            raise HTTPException(status_code=404, detail="Action item not found")
+        
+        # Toggle the completion status
+        new_status = not action.get("isCompleted", False)
+        
+        # Update the action item
+        db["actions"].update_one(
+            {"_id": ObjectId(action_id)},
+            {"$set": {"isCompleted": new_status}}
+        )
+        
+        return {"success": True, "message": "Action item status updated", "isCompleted": new_status}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error updating action item: {str(e)}")
+
+# Add a new endpoint to get action items for a meeting
+@app.get("/meetings/{meeting_id}/actions")
+async def get_meeting_actions(meeting_id: str):
+    try:
+        # Get all action items for this meeting
+        actions = list(db["actions"].find({"meeting_id": meeting_id}))
+        
+        # Convert ObjectIds to strings
+        for action in actions:
+            action["_id"] = str(action["_id"])
+        
+        return {"actions": actions}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error retrieving action items: {str(e)}")
