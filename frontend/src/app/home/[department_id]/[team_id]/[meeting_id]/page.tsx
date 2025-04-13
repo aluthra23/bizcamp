@@ -43,6 +43,15 @@ interface MeetingDetails {
     agenda?: AgendaItem[];
     actions?: Action[];
     hasTranscription?: boolean;
+    pdf_documents?: string[]; // IDs of associated PDF documents
+}
+
+interface PdfDocument {
+    _id: string;
+    meeting_id: string;
+    filename: string;
+    content_type: string;
+    uploaded_at: string;
 }
 
 interface DurationModalProps {
@@ -161,6 +170,12 @@ export default function MeetingPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+    // PDF-related state
+    const [uploadedPdfs, setUploadedPdfs] = useState<PdfDocument[]>([]);
+    const [isUploadingPdf, setIsUploadingPdf] = useState(false);
+    const [pdfUploadError, setPdfUploadError] = useState<string | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
     useEffect(() => {
         const fetchMeeting = async () => {
             setIsLoading(true);
@@ -197,6 +212,9 @@ export default function MeetingPage() {
                     startTime,
                     endTime: endTimeString
                 });
+                
+                // After successfully fetching the meeting, fetch associated PDFs
+                await fetchPdfDocuments(meetingId);
                 
             } catch (err) {
                 console.error('Error fetching meeting:', err);
@@ -340,6 +358,95 @@ export default function MeetingPage() {
         }
     };
 
+    // Fetch PDF documents associated with this meeting
+    const fetchPdfDocuments = async (meetingId: string) => {
+        try {
+            const response = await fetch(`/api/backend/meetings/${meetingId}/pdf-documents`);
+            
+            if (!response.ok) {
+                throw new Error('Failed to fetch PDF documents');
+            }
+            
+            const documents = await response.json();
+            setUploadedPdfs(documents);
+        } catch (err) {
+            console.error('Error fetching PDF documents:', err);
+            setPdfUploadError('Failed to load PDF documents');
+        }
+    };
+    
+    // Handle PDF file selection and upload
+    const handlePdfUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files;
+        if (!files || files.length === 0) return;
+        
+        const file = files[0];
+        
+        // Validate file is a PDF
+        if (file.type !== 'application/pdf') {
+            setPdfUploadError('Only PDF files are allowed');
+            return;
+        }
+        
+        setIsUploadingPdf(true);
+        setPdfUploadError(null);
+        
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            const response = await fetch(`/api/backend/meetings/${meetingId}/upload-pdf`, {
+                method: 'POST',
+                body: formData,
+            });
+            
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.detail || 'Failed to upload PDF');
+            }
+            
+            // Refresh the list of PDFs
+            await fetchPdfDocuments(meetingId);
+            
+            // Reset file input
+            if (fileInputRef.current) {
+                fileInputRef.current.value = '';
+            }
+        } catch (err) {
+            console.error('Error uploading PDF:', err);
+        } finally {
+            setIsUploadingPdf(false);
+        }
+    };
+    
+    // Function to open a PDF in a new tab
+    const openPdf = async (documentId: string) => {
+        try {
+            const response = await fetch(`/api/backend/pdf-documents/${documentId}`);
+            
+            if (!response.ok) {
+                throw new Error('Failed to fetch PDF document');
+            }
+            
+            const document = await response.json();
+            
+            // Create a blob from the base64 data
+            const binaryString = atob(document.file_content);
+            const bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            const blob = new Blob([bytes], { type: 'application/pdf' });
+            
+            // Create a URL for the blob and open it in a new tab
+            const url = URL.createObjectURL(blob);
+            window.open(url, '_blank');
+        } catch (err) {
+            console.error('Error opening PDF:', err);
+            alert('Failed to open PDF. Please try again.');
+        }
+    };
+
     if (isLoading) {
         return (
             <div className="min-h-screen bg-background flex items-center justify-center">
@@ -428,6 +535,33 @@ export default function MeetingPage() {
                                 View Transcription
                             </Link>
 
+                            <div className="relative">
+                                <input
+                                    type="file"
+                                    accept="application/pdf"
+                                    onChange={handlePdfUpload}
+                                    className="hidden"
+                                    id="pdf-upload"
+                                    ref={fileInputRef}
+                                    disabled={isUploadingPdf}
+                                />
+                                <label
+                                    htmlFor="pdf-upload"
+                                    className="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-4 py-2 rounded-full font-medium flex items-center gap-2 cursor-pointer"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                        <polyline points="14 2 14 8 20 8" />
+                                        <line x1="12" y1="18" x2="12" y2="12" />
+                                        <line x1="9" y1="15" x2="15" y2="15" />
+                                    </svg>
+                                    {isUploadingPdf ? 'Uploading...' : 'Upload PDF'}
+                                </label>
+                                {pdfUploadError && (
+                                    <p className="absolute text-xs text-red-500 mt-1">{pdfUploadError}</p>
+                                )}
+                            </div>
+                            
                             <Link
                                 href={`/home/${departmentId}/${teamId}/${meetingId}/chat`}
                                 className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-4 py-2 rounded-full font-medium flex items-center gap-2"
@@ -555,41 +689,79 @@ export default function MeetingPage() {
 
                     {/* Right column - Action Items */}
                     <div>
-                        <h2 className="text-xl font-semibold text-white mb-4">Action Items</h2>
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-xl font-semibold text-white">Action Items</h2>
+                        </div>
                         <div className="glass-effect rounded-xl border border-white/10 p-6">
                             {meeting.actions && meeting.actions.length > 0 ? (
-                            <div className="space-y-4">
-                                {meeting.actions.map((action) => (
-                                    <div key={action.id} className="flex items-start gap-3">
-                                        <div className="min-w-6 mt-1">
-                                            <div className={`w-6 h-6 rounded-full flex items-center justify-center ${action.isCompleted ? 'bg-primary/20 text-primary-light' : 'bg-white/10 text-white/60'}`}>
-                                                {action.isCompleted ? (
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                                    </svg>
-                                                ) : (
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                                                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                                                    </svg>
-                                                )}
+                                <div className="space-y-4">
+                                    {meeting.actions.map((action) => (
+                                        <div key={action.id} className="flex items-start gap-3">
+                                            <div className="min-w-6 mt-1">
+                                                <div className={`w-6 h-6 rounded-full flex items-center justify-center ${action.isCompleted ? 'bg-primary/20 text-primary-light' : 'bg-white/10 text-white/60'}`}>
+                                                    {action.isCompleted ? (
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                            <polyline points="20 6 9 17 4 12"></polyline>
+                                                        </svg>
+                                                    ) : (
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                                                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                                                        </svg>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <div className="flex-grow">
+                                                <p className={`font-medium ${action.isCompleted ? 'text-white/60' : 'text-white'}`}>
+                                                    {action.description}
+                                                </p>
+                                                <div className="flex justify-between text-sm mt-1">
+                                                    <p className="text-text-secondary">Assigned to: <span className="text-primary-light">{action.assignee}</span></p>
+                                                    <p className="text-text-secondary">Due: {new Date(action.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div className="flex-grow">
-                                            <p className={`font-medium ${action.isCompleted ? 'text-white/60' : 'text-white'}`}>
-                                                {action.description}
-                                            </p>
-                                            <div className="flex justify-between text-sm mt-1">
-                                                <p className="text-text-secondary">Assigned to: <span className="text-primary-light">{action.assignee}</span></p>
-                                                <p className="text-text-secondary">Due: {new Date(action.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
+                                    ))}
+                                </div>
                             ) : (
                                 <p className="text-text-secondary text-center">No action items available</p>
                             )}
+                        </div>
+                        
+                        {/* PDF Documents Section */}
+                        <div className="mt-8">
+                            <h2 className="text-xl font-semibold text-white mb-4">Documents</h2>
+                            <div className="glass-effect rounded-xl border border-white/10 p-6">
+                                {uploadedPdfs.length > 0 ? (
+                                    <div className="space-y-4">
+                                        {uploadedPdfs.map((pdf) => (
+                                            <div key={pdf._id} className="flex items-start gap-3">
+                                                <div className="min-w-6 mt-1">
+                                                    <div className="w-6 h-6 rounded-full flex items-center justify-center bg-amber-500/20 text-amber-400">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                                            <polyline points="14 2 14 8 20 8" />
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                                <div className="flex-grow">
+                                                    <button 
+                                                        onClick={() => openPdf(pdf._id)}
+                                                        className="font-medium text-white hover:text-amber-400 transition"
+                                                    >
+                                                        {pdf.filename}
+                                                    </button>
+                                                    <p className="text-sm text-text-secondary">
+                                                        {new Date(pdf.uploaded_at).toLocaleString()}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <p className="text-text-secondary text-center">No documents uploaded</p>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
