@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
-import ReactMarkdown from 'react-markdown';
 
 // Define types
 interface Speaker {
@@ -20,6 +19,8 @@ interface TranscriptSegment {
     text: string;
     isHighlighted?: boolean;
     sentiment?: 'positive' | 'neutral' | 'negative';
+    start_time?: number; // from API, in seconds
+    end_time?: number; // from API, in seconds
 }
 
 interface TranscriptData {
@@ -136,14 +137,27 @@ export default function TranscriptionPage() {
 
     // State for active tab
     const [activeTab, setActiveTab] = useState<'transcript' | 'summary'>('transcript');
-    
-    // State for AI Summary
-    const [aiSummary, setAiSummary] = useState<string | null>(null);
-    const [isSummaryLoading, setIsSummaryLoading] = useState(false);
-    const [summaryError, setSummaryError] = useState<string | null>(null);
 
     // State for speaker filter
     const [selectedSpeakers, setSelectedSpeakers] = useState<string[]>([]);
+    
+    // State for API transcriptions
+    const [apiTranscriptions, setApiTranscriptions] = useState<TranscriptSegment[]>([]);
+    const [isLoadingTranscriptions, setIsLoadingTranscriptions] = useState(false);
+    const [transcriptError, setTranscriptError] = useState<string | null>(null);
+
+    // Helper function to format seconds to "HH:MM:SS" format
+    const formatTime = (seconds: number): string => {
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const secs = Math.floor(seconds % 60);
+        
+        return [
+            hours.toString().padStart(2, '0'),
+            minutes.toString().padStart(2, '0'),
+            secs.toString().padStart(2, '0')
+        ].join(':');
+    };
 
     useEffect(() => {
         const fetchMeeting = async () => {
@@ -169,6 +183,9 @@ export default function TranscriptionPage() {
                         date: meetingData.meeting_date,
                     });
                 }
+
+                // Fetch transcriptions from API
+                await fetchTranscriptions(meetingId);
                 
             } catch (err) {
                 console.error('Error fetching meeting:', err);
@@ -179,6 +196,60 @@ export default function TranscriptionPage() {
         
         fetchMeeting();
     }, [meetingId]);
+
+    // Fetch transcriptions from API
+    const fetchTranscriptions = async (meetingId: string) => {
+        setIsLoadingTranscriptions(true);
+        setTranscriptError(null);
+        try {
+            const response = await fetch(`/api/backend/meetings/${meetingId}/transcriptions`);
+            
+            if (!response.ok) {
+                throw new Error('Failed to fetch transcriptions');
+            }
+            
+            const data = await response.json();
+            const transcriptions = data.transcriptions || [];
+            
+            // Map API transcriptions to our TranscriptSegment format
+            // Assign random speakers for demo purposes
+            const speakerIds = transcript?.speakers.map(s => s.id) || [];
+            
+            const formattedTranscriptions = transcriptions.map((t: any, index: number) => {
+                // Randomly assign a speaker from our sample speakers
+                const randomSpeakerId = speakerIds[index % speakerIds.length];
+                
+                return {
+                    id: `api-seg-${index}`,
+                    speakerId: randomSpeakerId,
+                    timestamp: formatTime(t.start_time),
+                    text: t.text,
+                    start_time: t.start_time,
+                    end_time: t.end_time,
+                    sentiment: 'neutral' as 'positive' | 'neutral' | 'negative',
+                };
+            });
+            
+            setApiTranscriptions(formattedTranscriptions);
+            
+            // If we have API transcriptions, update the transcript object
+            if (formattedTranscriptions.length > 0) {
+                setTranscript(prev => {
+                    if (!prev) return prev;
+                    return {
+                        ...prev,
+                        segments: formattedTranscriptions,
+                    };
+                });
+            }
+            
+        } catch (err) {
+            console.error('Error fetching transcriptions:', err);
+            setTranscriptError('Failed to load transcriptions from API');
+        } finally {
+            setIsLoadingTranscriptions(false);
+        }
+    };
 
     // Filter segments by selected speakers or show all if none selected
     const filteredSegments = transcript?.segments.filter(segment =>
@@ -197,46 +268,6 @@ export default function TranscriptionPage() {
     // Function to get speaker info
     const getSpeaker = (speakerId: string) => {
         return transcript?.speakers.find(speaker => speaker.id === speakerId);
-    };
-
-    // Fetch AI-generated summary when the tab is selected
-    const fetchAiSummary = async () => {
-        if (aiSummary !== null) return; // Don't fetch if we already have it
-        
-        setIsSummaryLoading(true);
-        setSummaryError(null);
-        
-        try {
-            // Add a longer timeout (3 minutes) to prevent socket timeout issues
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 180000);
-            
-            const response = await fetch(`/api/backend/meetings/${meetingId}/summary`, {
-                signal: controller.signal
-            });
-            
-            clearTimeout(timeoutId);
-            
-            if (!response.ok) {
-                throw new Error(`Failed to fetch AI summary: ${response.status}`);
-            }
-            
-            const data = await response.json();
-            setAiSummary(data.summary);
-        } catch (err) {
-            console.error('Error fetching AI summary:', err);
-            setSummaryError('Failed to generate AI summary. Please try again.');
-        } finally {
-            setIsSummaryLoading(false);
-        }
-    };
-
-    // Handle tab change
-    const handleTabChange = (tab: 'transcript' | 'summary') => {
-        setActiveTab(tab);
-        if (tab === 'summary') {
-            fetchAiSummary();
-        }
     };
 
     if (isLoading) {
@@ -321,13 +352,13 @@ export default function TranscriptionPage() {
                 <div className="flex border-b border-white/10 mb-6">
                     <button
                         className={`px-6 py-3 font-medium text-sm ${activeTab === 'transcript' ? 'text-white border-b-2 border-primary' : 'text-white/60 hover:text-white'}`}
-                        onClick={() => handleTabChange('transcript')}
+                        onClick={() => setActiveTab('transcript')}
                     >
                         Transcript
                     </button>
                     <button
                         className={`px-6 py-3 font-medium text-sm ${activeTab === 'summary' ? 'text-white border-b-2 border-primary' : 'text-white/60 hover:text-white'}`}
-                        onClick={() => handleTabChange('summary')}
+                        onClick={() => setActiveTab('summary')}
                     >
                         AI Summary
                     </button>
@@ -399,75 +430,42 @@ export default function TranscriptionPage() {
                             </div>
                         ) : (
                             <div className="glass-effect rounded-xl border border-white/10 p-6">
-                                {isSummaryLoading ? (
-                                    <div className="flex flex-col items-center justify-center py-12">
-                                        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mb-4"></div>
-                                        <p className="text-text-secondary">Generating AI summary...</p>
-                                        <p className="text-text-secondary text-sm mt-2">This may take a moment as we analyze the meeting content.</p>
-                                    </div>
-                                ) : summaryError ? (
-                                    <div className="text-center py-8">
-                                        <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-red-400">
-                                                <circle cx="12" cy="12" r="10"></circle>
-                                                <line x1="12" y1="8" x2="12" y2="12"></line>
-                                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                                            </svg>
-                                        </div>
-                                        <h3 className="text-lg font-semibold text-white mb-2">Summary Generation Failed</h3>
-                                        <p className="text-text-secondary mb-4">{summaryError}</p>
-                                        <button 
-                                            onClick={fetchAiSummary}
-                                            className="bg-gradient-to-r from-primary to-accent text-white px-4 py-2 rounded-full font-medium"
-                                        >
-                                            Try Again
-                                        </button>
-                                    </div>
-                                ) : aiSummary ? (
-                                    <div>
-                                        <h3 className="text-lg font-semibold text-white mb-4">AI-Generated Meeting Summary</h3>
-                                        <div className="prose prose-invert max-w-none prose-headings:text-white prose-p:text-text-primary prose-a:text-primary-light">
-                                            <ReactMarkdown>{aiSummary}</ReactMarkdown>
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <div className="mb-6">
-                                        <h3 className="text-lg font-semibold text-white mb-3">Meeting Summary</h3>
-                                        <p className="text-text-primary">{transcript.summary}</p>
-                                        
-                                        <div className="mb-6 mt-6">
-                                            <h3 className="text-lg font-semibold text-white mb-3">Key Points</h3>
-                                            <ul className="space-y-2">
-                                                {transcript.keyPoints.map((point, index) => (
-                                                    <li key={index} className="flex items-start gap-2">
-                                                        <div className="w-5 h-5 rounded-full bg-primary/20 text-primary-light flex items-center justify-center flex-shrink-0 mt-0.5">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                                <polyline points="20 6 9 17 4 12"></polyline>
-                                                            </svg>
-                                                        </div>
-                                                        <span className="text-text-primary">{point}</span>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
+                                <div className="mb-6">
+                                    <h3 className="text-lg font-semibold text-white mb-3">Meeting Summary</h3>
+                                    <p className="text-text-primary">{transcript.summary}</p>
+                                </div>
 
-                                        <div>
-                                            <h3 className="text-lg font-semibold text-white mb-3">Action Items</h3>
-                                            <ul className="space-y-2">
-                                                {transcript.actionItems.map((item, index) => (
-                                                    <li key={index} className="flex items-start gap-2">
-                                                        <div className="w-5 h-5 rounded-full bg-accent/20 text-accent-light flex items-center justify-center flex-shrink-0 mt-0.5">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                                <path d="M3 10h18M7 15h10M12 3v6M14.5 13.5l-5-3M9.5 13.5l5-3"/>
-                                                            </svg>
-                                                        </div>
-                                                        <span className="text-text-primary">{item}</span>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    </div>
-                                )}
+                                <div className="mb-6">
+                                    <h3 className="text-lg font-semibold text-white mb-3">Key Points</h3>
+                                    <ul className="space-y-2">
+                                        {transcript.keyPoints.map((point, index) => (
+                                            <li key={index} className="flex items-start gap-2">
+                                                <div className="w-5 h-5 rounded-full bg-primary/20 text-primary-light flex items-center justify-center flex-shrink-0 mt-0.5">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                                    </svg>
+                                                </div>
+                                                <span className="text-text-primary">{point}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+
+                                <div>
+                                    <h3 className="text-lg font-semibold text-white mb-3">Action Items</h3>
+                                    <ul className="space-y-2">
+                                        {transcript.actionItems.map((item, index) => (
+                                            <li key={index} className="flex items-start gap-2">
+                                                <div className="w-5 h-5 rounded-full bg-accent/20 text-accent-light flex items-center justify-center flex-shrink-0 mt-0.5">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                        <path d="M3 10h18M7 15h10M12 3v6M14.5 13.5l-5-3M9.5 13.5l5-3"/>
+                                                    </svg>
+                                                </div>
+                                                <span className="text-text-primary">{item}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
                             </div>
                         )}
                     </div>
