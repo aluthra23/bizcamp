@@ -10,6 +10,7 @@ import base64
 from fastapi import UploadFile, File, Form
 import io
 import pdfplumber
+from summarize import Summarizer
 load_dotenv()
 
 app = FastAPI()
@@ -347,3 +348,13 @@ async def get_concept_graph(meeting_id: str):
        return {"conceptgraph": concept_graph}
    except Exception as e:
        raise HTTPException(status_code=500, detail=f"Error retrieving concept graph: {str(e)}")
+
+
+@app.get("/meetings/{meeting_id}/summary")
+async def get_summary(meeting_id: str):
+    all_transcriptions = qdrant_manager.get_transcriptions(collection_name=meeting_id)
+    all_text = ""
+    for transcription in all_transcriptions:
+        all_text += transcription['text']
+    summary = Summarizer().summarize(all_text)
+    return {"summary": summary}
