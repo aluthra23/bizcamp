@@ -136,12 +136,13 @@ class QdrantManager:
 
         history_context = "\n".join(conversation_history[-6:])
 
-        combined_text = "\n".join(
-            [
-                f"{result.payload['start_time']} - {result.payload['end_time']}: {result.payload['text']}"
-                for result in results
-            ]
-        )
+        combined_text = ""
+
+        for result in results:
+            if result.payload['isPDF']:
+                combined_text += f"From PDF: {result.payload['text']}\n"
+            else:
+                combined_text += f"From Transcription: {result.payload['start_time']} - {result.payload['end_time']}: {result.payload['text']}\n"
 
         input_text = f"""Previous Conversation:\n{history_context}\n\nContext: {combined_text}\n\nUser: {prompt}\n"""
 
@@ -173,14 +174,17 @@ class QdrantManager:
 
 
                 # Extract required fields and store as JSON objects
-                transcriptions = [
-                    {
-                        "text": point.payload.get("text", ""),
-                        "start_time": point.payload.get("start_time", 0),
-                        "end_time": point.payload.get("end_time", 0),
-                    }
-                    for point in points
-                ]
+                transcriptions = []
+                for point in points:
+                    if point.payload['isPDF']:
+                        continue
+                    else:
+                        transcriptions.append({
+                            "text": point.payload.get("text", ""),
+                            "start_time": point.payload.get("start_time", 0),
+                            "end_time": point.payload.get("end_time", 0),
+                        })
+                        
                 all_transcriptions.extend(transcriptions)
 
                 # Stop when no more data
