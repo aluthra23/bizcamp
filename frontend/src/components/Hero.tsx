@@ -45,14 +45,10 @@ export default function Hero() {
 
           <div className="flex items-center justify-center space-x-4">
             <div className="flex -space-x-2">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="w-10 h-10 rounded-full border-2 border-background bg-surface overflow-hidden">
-                  <div className="w-full h-full bg-gradient-to-br from-purple-500 to-pink-500" />
-                </div>
-              ))}
+
             </div>
             <p className="text-sm text-text-secondary">
-              <span className="text-white font-medium">1,500+</span> teams optimizing their meetings
+              <span className="text-white font-medium"></span>
             </p>
           </div>
         </div>
