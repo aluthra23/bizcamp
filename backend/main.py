@@ -369,7 +369,7 @@ async def get_summary(meeting_id: str):
 def generate_action_items(summary):
     try:
         # Configure the model
-        model = genai.GenerativeModel('gemini-pro')
+        model = genai.GenerativeModel('gemini-1.5-flash')
         
         # Create a prompt for generating 2 short action items
         prompt = f"""
