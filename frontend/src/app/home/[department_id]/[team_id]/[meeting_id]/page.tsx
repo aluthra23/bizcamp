@@ -128,21 +128,21 @@ function DurationModal({ isOpen, onClose, onConfirm }: DurationModalProps) {
 
 // Sample data for parts not provided by the API
 const sampleExtendedData = {
-    startTime: '10:00',
-    endTime: '11:00',
-    duration: 60,
-    attendees: [
-        { id: 'user1', name: 'Sarah Chen', role: 'Product Manager', avatarColor: 'bg-gradient-to-br from-purple-500 to-indigo-500', speaking: 35 },
-        { id: 'user2', name: 'Alex Johnson', role: 'Tech Lead', avatarColor: 'bg-gradient-to-br from-blue-500 to-cyan-500', speaking: 25 },
-        { id: 'user3', name: 'Kai Ramirez', role: 'Frontend Dev', avatarColor: 'bg-gradient-to-br from-teal-500 to-emerald-500', speaking: 15 },
-        { id: 'user4', name: 'Jamie Wu', role: 'UX Designer', avatarColor: 'bg-gradient-to-br from-amber-500 to-orange-500', speaking: 15 },
-    ],
-    agenda: [
-        { id: 'ag1', title: 'Review previous sprint', isCompleted: true, duration: 10 },
-        { id: 'ag2', title: 'Discuss new feature priorities', isCompleted: true, duration: 15 },
-        { id: 'ag3', title: 'Estimate user stories', isCompleted: true, duration: 25 },
-    ],
-    actions: [
+        startTime: '10:00',
+        endTime: '11:00',
+        duration: 60,
+        attendees: [
+            { id: 'user1', name: 'Sarah Chen', role: 'Product Manager', avatarColor: 'bg-gradient-to-br from-purple-500 to-indigo-500', speaking: 35 },
+            { id: 'user2', name: 'Alex Johnson', role: 'Tech Lead', avatarColor: 'bg-gradient-to-br from-blue-500 to-cyan-500', speaking: 25 },
+            { id: 'user3', name: 'Kai Ramirez', role: 'Frontend Dev', avatarColor: 'bg-gradient-to-br from-teal-500 to-emerald-500', speaking: 15 },
+            { id: 'user4', name: 'Jamie Wu', role: 'UX Designer', avatarColor: 'bg-gradient-to-br from-amber-500 to-orange-500', speaking: 15 },
+        ],
+        agenda: [
+            { id: 'ag1', title: 'Review previous sprint', isCompleted: true, duration: 10 },
+            { id: 'ag2', title: 'Discuss new feature priorities', isCompleted: true, duration: 15 },
+            { id: 'ag3', title: 'Estimate user stories', isCompleted: true, duration: 25 },
+        ],
+        actions: [
         { id: 'ac1', description: 'Create technical specs', assignee: 'Alex Johnson', dueDate: '2023-05-17', isCompleted: false },
         { id: 'ac2', description: 'Update UI mockups', assignee: 'Jamie Wu', dueDate: '2023-05-18', isCompleted: false },
     ],
@@ -645,23 +645,23 @@ export default function MeetingPage() {
                             </div>
 
                             {meeting.attendees && meeting.attendees.length > 0 && (
-                                <div className="mt-6 pt-6 border-t border-white/10">
-                                    <h3 className="text-lg font-medium text-white mb-3">Speaking Distribution</h3>
-                                    <div className="h-6 rounded-full flex overflow-hidden">
+                            <div className="mt-6 pt-6 border-t border-white/10">
+                                <h3 className="text-lg font-medium text-white mb-3">Speaking Distribution</h3>
+                                <div className="h-6 rounded-full flex overflow-hidden">
                                         {meeting.attendees.map((attendee) => (
-                                            <div
-                                                key={attendee.id}
-                                                className={`${attendee.avatarColor} h-full`}
-                                                style={{ width: `${attendee.speaking}%` }}
-                                                title={`${attendee.name}: ${attendee.speaking}%`}
-                                            />
-                                        ))}
-                                    </div>
-                                    <div className="flex justify-between mt-2">
-                                        <p className="text-xs text-text-secondary">0:00</p>
-                                        <p className="text-xs text-text-secondary">{meeting.duration}:00</p>
-                                    </div>
+                                        <div
+                                            key={attendee.id}
+                                            className={`${attendee.avatarColor} h-full`}
+                                            style={{ width: `${attendee.speaking}%` }}
+                                            title={`${attendee.name}: ${attendee.speaking}%`}
+                                        />
+                                    ))}
                                 </div>
+                                <div className="flex justify-between mt-2">
+                                    <p className="text-xs text-text-secondary">0:00</p>
+                                    <p className="text-xs text-text-secondary">{meeting.duration}:00</p>
+                                </div>
+                            </div>
                             )}
                         </div>
                     </div>
@@ -671,29 +671,29 @@ export default function MeetingPage() {
                         <h2 className="text-xl font-semibold text-white mb-4">Agenda</h2>
                         <div className="glass-effect rounded-xl border border-white/10 p-6">
                             {meeting.agenda && meeting.agenda.length > 0 ? (
-                                <div className="space-y-4">
-                                    {meeting.agenda.map((item, index) => (
-                                        <div key={item.id} className="flex items-start gap-3">
-                                            <div className="min-w-6 mt-1">
-                                                <div className={`w-6 h-6 rounded-full flex items-center justify-center ${item.isCompleted ? 'bg-primary/20 text-primary-light' : 'bg-white/10 text-white/60'}`}>
-                                                    {item.isCompleted ? (
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                            <polyline points="20 6 9 17 4 12"></polyline>
-                                                        </svg>
-                                                    ) : (
-                                                        <span>{index + 1}</span>
-                                                    )}
-                                                </div>
-                                            </div>
-                                            <div className="flex-grow">
-                                                <p className={`font-medium ${item.isCompleted ? 'text-white/60' : 'text-white'}`}>
-                                                    {item.title}
-                                                </p>
-                                                <p className="text-sm text-text-secondary">{item.duration} minutes</p>
+                            <div className="space-y-4">
+                                {meeting.agenda.map((item, index) => (
+                                    <div key={item.id} className="flex items-start gap-3">
+                                        <div className="min-w-6 mt-1">
+                                            <div className={`w-6 h-6 rounded-full flex items-center justify-center ${item.isCompleted ? 'bg-primary/20 text-primary-light' : 'bg-white/10 text-white/60'}`}>
+                                                {item.isCompleted ? (
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                                    </svg>
+                                                ) : (
+                                                    <span>{index + 1}</span>
+                                                )}
                                             </div>
                                         </div>
-                                    ))}
-                                </div>
+                                        <div className="flex-grow">
+                                            <p className={`font-medium ${item.isCompleted ? 'text-white/60' : 'text-white'}`}>
+                                                {item.title}
+                                            </p>
+                                            <p className="text-sm text-text-secondary">{item.duration} minutes</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                             ) : (
                                 <p className="text-text-secondary text-center">No agenda items available</p>
                             )}
@@ -707,34 +707,34 @@ export default function MeetingPage() {
                         </div>
                         <div className="glass-effect rounded-xl border border-white/10 p-6">
                             {meeting.actions && meeting.actions.length > 0 ? (
-                                <div className="space-y-4">
-                                    {meeting.actions.map((action) => (
-                                        <div key={action.id} className="flex items-start gap-3">
-                                            <div className="min-w-6 mt-1">
-                                                <div className={`w-6 h-6 rounded-full flex items-center justify-center ${action.isCompleted ? 'bg-primary/20 text-primary-light' : 'bg-white/10 text-white/60'}`}>
-                                                    {action.isCompleted ? (
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                            <polyline points="20 6 9 17 4 12"></polyline>
-                                                        </svg>
-                                                    ) : (
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                                                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                                                        </svg>
-                                                    )}
-                                                </div>
-                                            </div>
-                                            <div className="flex-grow">
-                                                <p className={`font-medium ${action.isCompleted ? 'text-white/60' : 'text-white'}`}>
-                                                    {action.description}
-                                                </p>
-                                                <div className="flex justify-between text-sm mt-1">
-                                                    <p className="text-text-secondary">Assigned to: <span className="text-primary-light">{action.assignee}</span></p>
-                                                    <p className="text-text-secondary">Due: {new Date(action.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
-                                                </div>
+                            <div className="space-y-4">
+                                {meeting.actions.map((action) => (
+                                    <div key={action.id} className="flex items-start gap-3">
+                                        <div className="min-w-6 mt-1">
+                                            <div className={`w-6 h-6 rounded-full flex items-center justify-center ${action.isCompleted ? 'bg-primary/20 text-primary-light' : 'bg-white/10 text-white/60'}`}>
+                                                {action.isCompleted ? (
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                                    </svg>
+                                                ) : (
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                                    </svg>
+                                                )}
                                             </div>
                                         </div>
-                                    ))}
+                                        <div className="flex-grow">
+                                            <p className={`font-medium ${action.isCompleted ? 'text-white/60' : 'text-white'}`}>
+                                                {action.description}
+                                            </p>
+                                            <div className="flex justify-between text-sm mt-1">
+                                                <p className="text-text-secondary">Assigned to: <span className="text-primary-light">{action.assignee}</span></p>
+                                                <p className="text-text-secondary">Due: {new Date(action.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
                                 </div>
                             ) : (
                                 <p className="text-text-secondary text-center">No action items available</p>
