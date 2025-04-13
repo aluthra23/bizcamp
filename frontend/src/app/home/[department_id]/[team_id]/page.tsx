@@ -459,7 +459,7 @@ export default function TeamPage() {
                                     headerToolbar={{
                                         left: 'prev,next',
                                         center: 'title',
-                                        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                                        right: 'timeGridDay,timeGridWeek,dayGridMonth'
                                     }}
                                     customButtons={{
                                         prev: {
