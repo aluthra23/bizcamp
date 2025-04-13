@@ -55,94 +55,94 @@ interface PdfDocument {
 }
 
 interface DurationModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    onConfirm: (durationMs: number) => void;
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: (durationMs: number) => void;
 }
 
 function DurationModal({ isOpen, onClose, onConfirm }: DurationModalProps) {
-    const [hours, setHours] = useState(1);
-    const [minutes, setMinutes] = useState(15);
+  const [hours, setHours] = useState(1);
+  const [minutes, setMinutes] = useState(15);
 
-    if (!isOpen) return null;
+  if (!isOpen) return null;
 
-    const handleConfirm = () => {
-        const durationMs = (hours * 60 * 60 * 1000) + (minutes * 60 * 1000);
-        onConfirm(durationMs);
-        onClose();
-    };
+  const handleConfirm = () => {
+    const durationMs = (hours * 60 * 60 * 1000) + (minutes * 60 * 1000);
+    onConfirm(durationMs);
+    onClose();
+  };
 
-    return (
+  return (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
             <div className="glass-effect rounded-2xl border border-white/20 p-8 w-full max-w-md mx-auto shadow-2xl animate-fadeIn">
                 <h2 className="text-2xl font-bold gradient-text mb-6 text-center">Set Recording Duration</h2>
 
                 <div className="flex flex-col sm:flex-row gap-6 mb-8">
-                    {/* Hours */}
-                    <div className="flex-1">
+          {/* Hours */}
+          <div className="flex-1">
                         <label className="block text-sm font-medium text-white mb-2">Hours</label>
-                        <select
-                            value={hours}
-                            onChange={(e) => setHours(Number(e.target.value))}
+            <select 
+              value={hours}
+              onChange={(e) => setHours(Number(e.target.value))}
                             className="w-full px-4 py-3 bg-surface/70 border border-white/20 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-primary shadow-inner transition-all"
-                        >
-                            {[...Array(5)].map((_, i) => (
-                                <option key={i} value={i}>{i}</option>
-                            ))}
-                        </select>
-                    </div>
+            >
+              {[...Array(5)].map((_, i) => (
+                <option key={i} value={i}>{i}</option>
+              ))}
+            </select>
+          </div>
 
-                    {/* Minutes */}
-                    <div className="flex-1">
+          {/* Minutes */}
+          <div className="flex-1">
                         <label className="block text-sm font-medium text-white mb-2">Minutes</label>
-                        <select
-                            value={minutes}
-                            onChange={(e) => setMinutes(Number(e.target.value))}
+            <select 
+              value={minutes}
+              onChange={(e) => setMinutes(Number(e.target.value))}
                             className="w-full px-4 py-3 bg-surface/70 border border-white/20 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-primary shadow-inner transition-all"
-                        >
-                            {[...Array(12)].map((_, i) => (
+            >
+              {[...Array(12)].map((_, i) => (
                                 <option key={i} value={i * 5}>{i * 5}</option>
-                            ))}
-                        </select>
-                    </div>
-                </div>
+              ))}
+            </select>
+          </div>
+        </div>
 
                 <div className="flex flex-col-reverse sm:flex-row justify-center gap-4">
-                    <button
-                        onClick={onClose}
+          <button
+            onClick={onClose}
                         className="w-full sm:w-auto px-6 py-3 bg-surface/80 border border-white/10 rounded-xl text-white hover:bg-surface-light transition-all hover:shadow-md"
-                    >
-                        Cancel
-                    </button>
-                    <button
-                        onClick={handleConfirm}
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleConfirm}
                         className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-primary to-accent text-white rounded-xl hover:opacity-90 transition-all shadow-md hover:shadow-lg"
-                    >
-                        Start Recording
-                    </button>
-                </div>
-            </div>
+          >
+            Start Recording
+          </button>
         </div>
-    );
+      </div>
+    </div>
+  );
 }
 
 // Sample data for parts not provided by the API
 const sampleExtendedData = {
-        startTime: '10:00',
-        endTime: '11:00',
-        duration: 60,
-        attendees: [
-            { id: 'user1', name: 'Sarah Chen', role: 'Product Manager', avatarColor: 'bg-gradient-to-br from-purple-500 to-indigo-500', speaking: 35 },
+    startTime: '10:00',
+    endTime: '11:00',
+    duration: 60,
+    attendees: [
+        { id: 'user1', name: 'Sarah Chen', role: 'Product Manager', avatarColor: 'bg-gradient-to-br from-purple-500 to-indigo-500', speaking: 35 },
             { id: 'user2', name: 'Alex Johnson', role: 'Tech Lead', avatarColor: 'bg-gradient-to-br from-blue-500 to-cyan-500', speaking: 30 },
-            { id: 'user3', name: 'Kai Ramirez', role: 'Frontend Dev', avatarColor: 'bg-gradient-to-br from-teal-500 to-emerald-500', speaking: 20 },
-            { id: 'user4', name: 'Jamie Wu', role: 'UX Designer', avatarColor: 'bg-gradient-to-br from-amber-500 to-orange-500', speaking: 15 },
-        ],
-        agenda: [
-            { id: 'ag1', title: 'Review previous sprint', isCompleted: true, duration: 10 },
-            { id: 'ag2', title: 'Discuss new feature priorities', isCompleted: true, duration: 15 },
-            { id: 'ag3', title: 'Estimate user stories', isCompleted: true, duration: 25 },
-        ],
-        actions: [
+            { id: 'user3', name: 'Kai Havertz', role: 'Frontend Dev', avatarColor: 'bg-gradient-to-br from-teal-500 to-emerald-500', speaking: 20 },
+        { id: 'user4', name: 'Jamie Wu', role: 'UX Designer', avatarColor: 'bg-gradient-to-br from-amber-500 to-orange-500', speaking: 15 },
+    ],
+    agenda: [
+        { id: 'ag1', title: 'Review previous sprint', isCompleted: true, duration: 10 },
+        { id: 'ag2', title: 'Discuss new feature priorities', isCompleted: true, duration: 15 },
+        { id: 'ag3', title: 'Estimate user stories', isCompleted: true, duration: 25 },
+    ],
+    actions: [
         { id: 'ac1', description: 'Create technical specs', assignee: 'Alex Johnson', dueDate: '2023-05-17', isCompleted: false },
         { id: 'ac2', description: 'Update UI mockups', assignee: 'Jamie Wu', dueDate: '2023-05-18', isCompleted: false },
     ],
@@ -184,9 +184,9 @@ export default function MeetingPage() {
                 if (!response.ok) {
                     throw new Error('Failed to fetch meeting');
                 }
-
+                
                 const meetingData = await response.json();
-
+                
                 // Extract time from the ISO date string
                 const meetingDate = new Date(meetingData.meeting_date);
                 const startTime = meetingDate.toLocaleTimeString('en-US', {
@@ -194,7 +194,7 @@ export default function MeetingPage() {
                     minute: '2-digit',
                     hour12: false
                 });
-
+                
                 // Calculate end time (60 min after start time)
                 const endTime = new Date(meetingDate);
                 endTime.setMinutes(endTime.getMinutes() + 60);
@@ -203,7 +203,7 @@ export default function MeetingPage() {
                     minute: '2-digit',
                     hour12: false
                 });
-
+                
                 // Combine API data with sample extended data for UI purposes
                 // But preserve the start and end time from the actual meeting data
                 setMeeting({
@@ -212,7 +212,7 @@ export default function MeetingPage() {
                     startTime,
                     endTime: endTimeString
                 });
-
+                
                 // After successfully fetching the meeting, fetch associated PDFs
                 await fetchPdfDocuments(meetingId);
 
@@ -223,7 +223,7 @@ export default function MeetingPage() {
                 setIsLoading(false);
             }
         };
-
+        
         fetchMeeting();
 
         return () => {
@@ -288,7 +288,7 @@ export default function MeetingPage() {
 
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             streamRef.current = stream;
-
+            
             // Start first interval
             await startNewRecordingInterval();
 
@@ -538,15 +538,15 @@ export default function MeetingPage() {
                             <p className="text-text-secondary text-lg">{meeting.description}</p>
                         </div>
 
-                        {transcriptionStarted && (
+                            {transcriptionStarted && (
                             <div className="flex items-center bg-primary/20 rounded-full px-4 py-2 text-primary-light gap-2 border border-primary/30 shadow-md">
-                                <div className="relative">
-                                    <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                                    <div className="absolute inset-0 w-3 h-3 bg-red-500 rounded-full animate-ping"></div>
-                                </div>
+                                    <div className="relative">
+                                        <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                                        <div className="absolute inset-0 w-3 h-3 bg-red-500 rounded-full animate-ping"></div>
+                                    </div>
                                 <span className="text-sm font-medium">Recording in Progress</span>
-                            </div>
-                        )}
+                                </div>
+                            )}
                     </div>
 
                     {/* Meeting info cards */}
@@ -599,11 +599,11 @@ export default function MeetingPage() {
 
                     {/* Action buttons */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-                        <button
-                            onClick={transcriptionStarted ? handleStopTranscription : () => setIsModalOpen(true)}
-                            className={`
+                            <button
+                                onClick={transcriptionStarted ? handleStopTranscription : () => setIsModalOpen(true)}
+                                className={`
                                 px-4 py-3 rounded-xl transition-all text-white font-medium flex items-center justify-center gap-2 shadow-md hover:shadow-lg
-                                ${transcriptionStarted
+                                    ${transcriptionStarted 
                                     ? 'bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600'
                                     : 'bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700'}
                             `}
@@ -625,19 +625,19 @@ export default function MeetingPage() {
                                     Start Recording
                                 </>
                             )}
-                        </button>
+                            </button>
 
-                        <Link
-                            href={`/home/${departmentId}/${teamId}/${meetingId}/transcription`}
+                            <Link
+                                href={`/home/${departmentId}/${teamId}/${meetingId}/transcription`}
                             className="bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white px-4 py-3 rounded-xl font-medium flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-                                <path d="M19.07 5.93a10 10 0 0 1 0 12.14"></path>
-                            </svg>
-                            View Transcription
-                        </Link>
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                                    <path d="M19.07 5.93a10 10 0 0 1 0 12.14"></path>
+                                </svg>
+                                View Transcription
+                            </Link>
 
                         <div className="relative">
                             <input
@@ -705,35 +705,35 @@ export default function MeetingPage() {
                                     {meeting.attendees.map((attendee) => (
                                         <div key={attendee.id} className="flex items-center gap-4 group transition-all hover:bg-white/5 p-2 rounded-xl cursor-pointer">
                                             <div className={`w-12 h-12 rounded-full ${attendee.avatarColor} flex items-center justify-center text-white font-medium text-lg shadow-md group-hover:scale-105 transition-transform`}>
-                                                {attendee.name.charAt(0)}
-                                            </div>
-                                            <div className="flex-grow">
-                                                <p className="text-white font-medium">{attendee.name}</p>
-                                                <p className="text-sm text-text-secondary">{attendee.role}</p>
-                                            </div>
+                                            {attendee.name.charAt(0)}
+                                        </div>
+                                        <div className="flex-grow">
+                                            <p className="text-white font-medium">{attendee.name}</p>
+                                            <p className="text-sm text-text-secondary">{attendee.role}</p>
+                                        </div>
                                             <div className="text-right flex flex-col items-center justify-center bg-white/5 rounded-lg p-2 shadow-inner">
                                                 <p className="text-white font-bold text-lg">{attendee.speaking}%</p>
                                                 <p className="text-xs text-text-secondary">speaking</p>
                                             </div>
-                                        </div>
-                                    ))}
+                                    </div>
+                                ))}
 
-                                    <div className="mt-6 pt-6 border-t border-white/10">
-                                        <h3 className="text-lg font-medium text-white mb-3">Speaking Distribution</h3>
+                            <div className="mt-6 pt-6 border-t border-white/10">
+                                <h3 className="text-lg font-medium text-white mb-3">Speaking Distribution</h3>
                                         <div className="h-8 rounded-full flex overflow-hidden shadow-md">
-                                            {meeting.attendees.map((attendee) => (
-                                                <div
-                                                    key={attendee.id}
+                                    {meeting.attendees.map((attendee) => (
+                                        <div
+                                            key={attendee.id}
                                                     className={`${attendee.avatarColor} h-full relative group`}
-                                                    style={{ width: `${attendee.speaking}%` }}
+                                            style={{ width: `${attendee.speaking}%` }}
                                                 >
                                                     <div className="opacity-0 group-hover:opacity-100 absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-2 py-1 rounded text-xs whitespace-nowrap transition-opacity">
                                                         {attendee.name}: {attendee.speaking}%
                                                     </div>
                                                 </div>
-                                            ))}
-                                        </div>
-                                        <div className="flex justify-between mt-2">
+                                    ))}
+                                </div>
+                                <div className="flex justify-between mt-2">
                                             <p className="text-sm text-text-secondary">0:00</p>
                                             <p className="text-sm text-text-secondary">{meeting.duration}:00</p>
                                         </div>
@@ -750,7 +750,7 @@ export default function MeetingPage() {
                                         </svg>
                                     </div>
                                     <p className="text-text-secondary">No attendees available</p>
-                                </div>
+                            </div>
                             )}
                         </div>
                     </div>
@@ -764,34 +764,34 @@ export default function MeetingPage() {
                         <div className="glass-effect rounded-2xl border border-white/20 p-6 shadow-lg min-h-[400px]">
                             {meeting.agenda && meeting.agenda.length > 0 ? (
                                 <div className="space-y-5">
-                                    {meeting.agenda.map((item, index) => (
+                                {meeting.agenda.map((item, index) => (
                                         <div key={item.id} className="flex items-start gap-4 group hover:bg-white/5 p-3 rounded-xl transition-all">
                                             <div className="min-w-8 mt-1">
                                                 <div className={`w-8 h-8 rounded-xl flex items-center justify-center shadow-md ${item.isCompleted ? 'bg-primary/30 text-primary-light' : 'bg-white/10 text-white/60'}`}>
-                                                    {item.isCompleted ? (
+                                                {item.isCompleted ? (
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                            <polyline points="20 6 9 17 4 12"></polyline>
-                                                        </svg>
-                                                    ) : (
-                                                        <span>{index + 1}</span>
-                                                    )}
-                                                </div>
+                                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                                    </svg>
+                                                ) : (
+                                                    <span>{index + 1}</span>
+                                                )}
                                             </div>
-                                            <div className="flex-grow">
+                                        </div>
+                                        <div className="flex-grow">
                                                 <p className={`font-medium text-lg ${item.isCompleted ? 'text-white/60' : 'text-white'}`}>
-                                                    {item.title}
-                                                </p>
+                                                {item.title}
+                                            </p>
                                                 <div className="flex items-center mt-2">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary-light mr-1">
                                                         <circle cx="12" cy="12" r="10"></circle>
                                                         <polyline points="12 6 12 12 16 14"></polyline>
                                                     </svg>
-                                                    <p className="text-sm text-text-secondary">{item.duration} minutes</p>
+                                            <p className="text-sm text-text-secondary">{item.duration} minutes</p>
                                                 </div>
-                                            </div>
                                         </div>
-                                    ))}
-                                </div>
+                                    </div>
+                                ))}
+                            </div>
                             ) : (
                                 <div className="flex flex-col items-center justify-center h-full py-8">
                                     <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4">
@@ -817,28 +817,28 @@ export default function MeetingPage() {
                                     <h2 className="text-xl font-bold text-white">Action Items</h2>
                                 </div>
                                 <div className="glass-effect rounded-2xl border border-white/20 p-6 shadow-lg">
-                                    {meeting.actions && meeting.actions.length > 0 ? (
+                            {meeting.actions && meeting.actions.length > 0 ? (
                                         <div className="space-y-5">
-                                            {meeting.actions.map((action) => (
+                                {meeting.actions.map((action) => (
                                                 <div key={action.id} className="flex items-start gap-4 group hover:bg-white/5 p-3 rounded-xl transition-all">
                                                     <div className="min-w-8 mt-1">
                                                         <div className={`w-8 h-8 rounded-xl flex items-center justify-center shadow-md ${action.isCompleted ? 'bg-primary/30 text-primary-light' : 'bg-white/10 text-white/60'}`}>
-                                                            {action.isCompleted ? (
+                                                {action.isCompleted ? (
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                                    <polyline points="20 6 9 17 4 12"></polyline>
-                                                                </svg>
-                                                            ) : (
+                                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                                    </svg>
+                                                ) : (
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                                                                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                                                                </svg>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                    <div className="flex-grow">
+                                                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                                    </svg>
+                                                )}
+                                            </div>
+                                        </div>
+                                        <div className="flex-grow">
                                                         <p className={`font-medium text-lg ${action.isCompleted ? 'text-white/60' : 'text-white'}`}>
-                                                            {action.description}
-                                                        </p>
+                                                {action.description}
+                                            </p>
                                                         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-0 mt-2">
                                                             <div className="flex items-center">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary-light mr-1">
@@ -856,12 +856,12 @@ export default function MeetingPage() {
                                                                 </svg>
                                                                 <p className="text-sm text-text-secondary">Due: {new Date(action.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
                                                             </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            ))}
+                                            </div>
                                         </div>
-                                    ) : (
+                                    </div>
+                                ))}
+                            </div>
+                            ) : (
                                         <div className="flex flex-col items-center justify-center py-8">
                                             <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white/40">
@@ -956,9 +956,9 @@ export default function MeetingPage() {
                     </div>
                 </div>
             </main>
-
+            
             {/* Duration Modal */}
-            <DurationModal
+            <DurationModal 
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 onConfirm={(durationMs) => {
