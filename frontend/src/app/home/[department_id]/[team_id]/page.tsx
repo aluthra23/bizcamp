@@ -91,8 +91,8 @@ export default function TeamPage() {
 
     // Meeting form state
     const [newMeeting, setNewMeeting] = useState<MeetingFormData>({
-        title: '',
-        description: '',
+        title: '', 
+        description: '', 
         meeting_date: getTodayDate(),
         meeting_time: getCurrentTime()
     });
@@ -101,18 +101,18 @@ export default function TeamPage() {
         const fetchTeamData = async () => {
             setIsLoading(true);
             setError(null);
-
+            
             try {
                 // Fetch the specific team directly by its ID
                 const teamResponse = await fetch(`/api/backend/teams/${teamId}`);
-
+                
                 if (!teamResponse.ok) {
                     throw new Error('Failed to fetch team');
                 }
-
+                
                 const teamData = await teamResponse.json();
                 setTeam(teamData);
-
+                
                 // Now fetch meetings for this team
                 await fetchMeetings(teamId);
             } catch (err) {
@@ -122,10 +122,10 @@ export default function TeamPage() {
                 setIsLoading(false);
             }
         };
-
+        
         fetchTeamData();
     }, [departmentId, teamId]);
-
+    
     const fetchMeetings = async (teamId: string) => {
         try {
             setIsFetchingMeetings(true);
@@ -207,7 +207,7 @@ export default function TeamPage() {
         });
         setAddMeetingError(null);
     };
-
+    
     const handleAddMeeting = async (e: React.FormEvent) => {
         e.preventDefault();
         
@@ -232,14 +232,14 @@ export default function TeamPage() {
                     teamId: teamId
                 }),
             });
-
+            
             if (!response.ok) {
                 throw new Error('Failed to add meeting');
             }
-
+            
             // Refresh the meetings list
             await fetchMeetings(teamId);
-
+            
             // Reset the form and close the modal
             resetMeetingForm();
             setShowAddMeetingModal(false);
@@ -347,15 +347,15 @@ export default function TeamPage() {
                             Back to Teams
                         </Link>
                     </div>
-                    
+
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                         <div>
                             <h1 className="text-3xl font-bold gradient-text mb-1">
                                 {team ? team.name : 'Loading...'}
                             </h1>
                         </div>
-                        <button
-                            onClick={() => setShowAddMeetingModal(true)}
+                        <button 
+                            onClick={() => setShowAddMeetingModal(true)} 
                             className="bg-gradient-to-r from-primary to-accent text-white px-5 py-2.5 rounded-full font-medium flex items-center gap-2 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transform hover:scale-105 transition-all duration-200"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -365,7 +365,7 @@ export default function TeamPage() {
                         </button>
                     </div>
                 </div>
-                
+
                 <div className="bg-[rgba(13,13,15,0.6)] rounded-xl border border-white/10 p-6 mb-6 shadow-lg transition-all duration-300 hover:border-primary/20 hover:shadow-primary/10">
                     {/* Calendar Header with Stats */}
                     <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6">
@@ -434,7 +434,7 @@ export default function TeamPage() {
                                 <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center mr-3">
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-accent" viewBox="0 0 20 20" fill="currentColor">
                                         <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
-                                    </svg>
+                                                    </svg>
                                 </div>
                                 <div>
                                     <div className="text-text-secondary text-sm">Transcribed</div>
@@ -498,9 +498,9 @@ export default function TeamPage() {
                         </>
                     )}
                 </div>
-
-                {/* Add Meeting Modal */}
-                {showAddMeetingModal && (
+            
+            {/* Add Meeting Modal */}
+            {showAddMeetingModal && (
                     <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fadeIn">
                         <div onClick={(e) => e.stopPropagation()} className="glass-effect rounded-xl border border-white/10 w-full max-w-md relative overflow-hidden shadow-xl shadow-primary/20">
                             {/* Modal Header with Gradient Line */}
@@ -526,18 +526,18 @@ export default function TeamPage() {
                                     <div className="w-full md:col-span-2 space-y-2 group">
                                         <label className="block text-sm font-medium text-text-secondary group-focus-within:text-primary-light transition-colors">
                                             Meeting Title <span className="text-primary-light">*</span>
-                                        </label>
+                                </label>
                                         <div className="relative">
-                                            <input
-                                                type="text"
-                                                value={newMeeting.title}
+                                <input
+                                    type="text"
+                                    value={newMeeting.title}
                                                 onChange={(e) => setNewMeeting({ ...newMeeting, title: e.target.value })}
                                                 placeholder="Weekly Standup, Project Review, etc."
                                                 className={`w-full py-3 px-4 pl-10 bg-surface border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-transparent transition-all ${
                                                     formErrors.title ? 'border-red-500' : 'focus:shadow-[0_0_20px_rgba(147,51,234,0.15)]'
                                                 }`}
-                                                required
-                                            />
+                                    required
+                                />
                                             <div className="absolute left-3 top-3.5 text-primary-light opacity-70 group-focus-within:opacity-100 transition-colors">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
@@ -553,16 +553,16 @@ export default function TeamPage() {
                                                 {formErrors.title}
                                             </p>
                                         )}
-                                    </div>
-
+                            </div>
+                            
                                     <div className="w-full space-y-2 group">
                                         <label className="block text-sm font-medium text-text-secondary group-focus-within:text-primary-light transition-colors">
                                             Date <span className="text-primary-light">*</span>
-                                        </label>
+                                </label>
                                         <div className="relative">
-                                            <input
-                                                type="date"
-                                                value={newMeeting.meeting_date}
+                                <input
+                                    type="date"
+                                    value={newMeeting.meeting_date}
                                                 onChange={(e) => setNewMeeting({ ...newMeeting, meeting_date: e.target.value })}
                                                 className={`w-full py-3 px-4 pl-10 bg-surface border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-transparent transition-all ${
                                                     formErrors.meeting_date ? 'border-red-500' : 'focus:shadow-[0_0_20px_rgba(147,51,234,0.15)]'
@@ -600,8 +600,8 @@ export default function TeamPage() {
                                                 className={`w-full py-3 px-4 pl-10 bg-surface border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-transparent transition-all ${
                                                     formErrors.meeting_time ? 'border-red-500' : 'focus:shadow-[0_0_20px_rgba(147,51,234,0.15)]'
                                                 }`}
-                                                required
-                                            />
+                                    required
+                                />
                                             <div className="absolute left-3 top-3.5 text-primary-light opacity-70 group-focus-within:opacity-100 transition-colors">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                                     <circle cx="12" cy="12" r="10"></circle>
@@ -617,15 +617,15 @@ export default function TeamPage() {
                                                 {formErrors.meeting_time}
                                             </p>
                                         )}
-                                    </div>
-
+                            </div>
+                            
                                     <div className="w-full md:col-span-2 space-y-2 group">
                                         <label className="block text-sm font-medium text-text-secondary group-focus-within:text-primary-light transition-colors">
                                             Description <span className="text-primary-light">*</span>
-                                        </label>
+                                </label>
                                         <div className="relative">
-                                            <textarea
-                                                value={newMeeting.description}
+                                <textarea
+                                    value={newMeeting.description}
                                                 onChange={(e) => setNewMeeting({ ...newMeeting, description: e.target.value })}
                                                 placeholder="Enter meeting details..."
                                                 className={`w-full h-24 py-3 px-4 pl-10 bg-surface border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-transparent transition-all ${
@@ -746,28 +746,28 @@ export default function TeamPage() {
                                     </button>
                                     
                                     <div className="flex gap-3">
-                                        <button
+                                <button
                                             onClick={() => setShowMeetingDetailsModal(false)}
                                             className="px-4 py-2 border border-white/10 rounded-lg text-white hover:bg-white/5 transition-colors"
-                                        >
+                                >
                                             Close
-                                        </button>
+                                </button>
                                         
-                                        <button
+                                <button
                                             onClick={handleBeginMeeting}
                                             className="px-5 py-2 bg-gradient-to-r from-primary to-accent text-white rounded-lg flex items-center gap-2 shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 transition-all"
-                                        >
+                                >
                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
                                             </svg>
-                                            Begin Meeting
-                                        </button>
+                                            Next
+                                </button>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                     </div>
-                )}
+                </div>
+            )}
 
                 <style jsx>{`
                     @keyframes fadeInUp {

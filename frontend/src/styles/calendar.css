@@ -221,14 +221,23 @@
 
 /* Day numbers (dates) */
 .fc .fc-daygrid-day-top {
-    flex-direction: row;
-    justify-content: center;
-    padding: 5px;
+  flex-direction: row !important;
+  justify-content: center !important;
+  padding: 5px !important;
+  position: relative !important;
+  z-index: 2 !important;
 }
 
 .fc .fc-daygrid-day-number {
-    color: rgba(255, 255, 255, 0.8);
-    font-weight: 500;
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-weight: 500 !important;
+  font-size: 0.9rem !important;
+}
+
+/* Style for today's day number */
+.fc-day-today .fc-daygrid-day-number {
+  color: white !important;
+  font-weight: 600 !important;
 }
 
 /* Event styling - fix the time display */
@@ -301,8 +310,9 @@
 }
 
 .fc-daygrid-event-harness {
-    margin-right: 4px !important;
-    margin-left: 4px !important;
+    margin: 2px 4px !important;
+    position: relative !important;
+    z-index: 3 !important;
 }
 
 /* Ensure time and title are properly spaced */
@@ -409,18 +419,58 @@ button.fc-button-primary:hover {
 
 /* Fix calendar days vertical alignment */
 .fc .fc-daygrid-day-frame {
-    min-height: 70px !important;
+  min-height: 70px !important;
+  padding: 4px !important;
+  transition: all 0.2s ease !important;
+  position: relative !important;
+  overflow: visible !important;
 }
 
-/* Fix event time display */
-.fc .fc-daygrid-event {
-    white-space: normal !important;
-    margin-bottom: 3px !important;
+/* Improved hover effect for calendar days */
+.fc-daygrid-day:hover .fc-daygrid-day-frame::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(30, 30, 35, 0.3);
+  pointer-events: none;
+  z-index: 1;
 }
 
-.fc-v-event .fc-event-main {
-    flex-direction: column !important;
-    padding: 2px !important;
+/* Ensure day content is above the hover effect */
+.fc-daygrid-day-events,
+.fc-daygrid-day-top,
+.fc-event {
+  position: relative;
+  z-index: 2;
+}
+
+/* Improve event appearance when hovering over days */
+.fc-event {
+  border: none !important;
+  border-radius: 6px !important;
+  padding: 4px 8px !important;
+  margin-bottom: 4px !important;
+  background: linear-gradient(135deg, #9333ea, #a855f7) !important;
+  color: white !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  cursor: pointer !important;
+}
+
+/* Style for today's day */
+.fc-day-today .fc-daygrid-day-frame::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, rgba(147, 51, 234, 0.15), transparent 70%) !important;
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* Fix the calendar width to ensure it doesn't get cut off */
@@ -432,12 +482,6 @@ button.fc-button-primary:hover {
 .fc-view-harness {
     border-radius: 10px;
     overflow: hidden !important;
-}
-
-/* Ensure the events are properly contained within days */
-.fc-daygrid-event-harness {
-    margin-right: 4px !important;
-    margin-left: 4px !important;
 }
 
 /* Fix event text contrast */
@@ -468,7 +512,7 @@ button.fc-button-primary:hover {
 
 .fc-event:hover {
     transform: translateY(-2px) !important;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2) !important;
 }
 
 /* Event with transcription */
@@ -546,59 +590,11 @@ button.fc-button-primary:hover {
   color: white !important;
 }
 
-.fc-daygrid-day-frame {
-  padding: 4px !important;
-  transition: all 0.2s ease !important;
-}
-
-.fc-daygrid-day-frame:hover {
-  background-color: rgba(30, 30, 35, 0.3) !important;
-}
-
+/* Enhance column header styling */
 .fc-col-header-cell {
   background-color: rgba(13, 13, 15, 0.6) !important;
   color: white !important;
   padding: 10px !important;
-}
-
-.fc-daygrid-day-number {
-  color: white !important;
-  font-weight: 500 !important;
-}
-
-.fc-day-today {
-  background-color: rgba(124, 58, 237, 0.15) !important;
-}
-
-.fc-event {
-  border: none !important;
-  border-radius: 6px !important;
-  padding: 4px 8px !important;
-  margin-bottom: 4px !important;
-  background-color: rgba(76, 29, 149, 0.7) !important;
-  color: white !important;
-  cursor: pointer !important;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important;
-  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
-}
-
-.fc-event:hover {
-  transform: translateY(-2px) !important;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
-}
-
-.fc-event-time {
-  font-weight: 600 !important;
-}
-
-.fc-event-title {
-  font-weight: 500 !important;
-  font-size: 0.9rem !important;
-}
-
-.has-transcription {
-  background: linear-gradient(90deg, rgba(76, 29, 149, 0.8) 0%, rgba(124, 58, 237, 0.8) 100%) !important;
-  border-left: 3px solid rgb(167, 139, 250) !important;
 }
 
 /* Media queries for responsive calendar */
@@ -620,4 +616,39 @@ button.fc-button-primary:hover {
     width: 32px !important;
     height: 32px !important;
   }
+}
+
+/* Event time and title styling */
+.fc-event-time {
+  font-weight: 400 !important;
+  font-size: 0.75rem !important;
+  opacity: 0.9 !important;
+}
+
+.fc-event-title {
+  font-weight: 500 !important;
+  font-size: 0.85rem !important;
+  line-height: 1.2 !important;
+}
+
+/* Event hover effect */
+.fc-event:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Fix AM/PM display */
+.fc-event-time .fc-event-time-meridiem {
+  text-transform: lowercase !important;
+  font-size: 0.7rem !important;
+  opacity: 0.8 !important;
+  margin-left: 1px !important;
+}
+
+/* Fix white-space for events with descriptions */
+.fc .fc-daygrid-event {
+  white-space: normal !important;
+  margin-bottom: 3px !important;
+  display: flex !important;
+  flex-direction: column !important;
 } 

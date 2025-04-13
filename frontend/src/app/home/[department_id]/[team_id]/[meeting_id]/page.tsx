@@ -215,7 +215,7 @@ export default function MeetingPage() {
                 
                 // After successfully fetching the meeting, fetch associated PDFs
                 await fetchPdfDocuments(meetingId);
-
+                
             } catch (err) {
                 console.error('Error fetching meeting:', err);
                 setError('Failed to load meeting');
@@ -714,7 +714,7 @@ export default function MeetingPage() {
                                             <div className="text-right flex flex-col items-center justify-center bg-white/5 rounded-lg p-2 shadow-inner">
                                                 <p className="text-white font-bold text-lg">{attendee.speaking}%</p>
                                                 <p className="text-xs text-text-secondary">speaking</p>
-                                            </div>
+                                        </div>
                                     </div>
                                 ))}
 
