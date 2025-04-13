@@ -16,6 +16,12 @@ export default function Navbar() {
           <span className="text-xl font-bold gradient-text">BizCamp</span>
         </Link>
 
+        <div className="hidden md:flex items-center space-x-6">
+          <a href="#features" className="text-white/80 hover:text-white transition">
+            Features
+          </a>
+        </div>
+
         <div className="flex items-center space-x-4">
           <Button
             variant="outline"
