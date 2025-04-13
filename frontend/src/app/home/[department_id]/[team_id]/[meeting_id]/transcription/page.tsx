@@ -19,6 +19,8 @@ interface TranscriptSegment {
     text: string;
     isHighlighted?: boolean;
     sentiment?: 'positive' | 'neutral' | 'negative';
+    start_time?: number; // from API, in seconds
+    end_time?: number; // from API, in seconds
 }
 
 interface TranscriptData {
@@ -138,6 +140,24 @@ export default function TranscriptionPage() {
 
     // State for speaker filter
     const [selectedSpeakers, setSelectedSpeakers] = useState<string[]>([]);
+    
+    // State for API transcriptions
+    const [apiTranscriptions, setApiTranscriptions] = useState<TranscriptSegment[]>([]);
+    const [isLoadingTranscriptions, setIsLoadingTranscriptions] = useState(false);
+    const [transcriptError, setTranscriptError] = useState<string | null>(null);
+
+    // Helper function to format seconds to "HH:MM:SS" format
+    const formatTime = (seconds: number): string => {
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const secs = Math.floor(seconds % 60);
+        
+        return [
+            hours.toString().padStart(2, '0'),
+            minutes.toString().padStart(2, '0'),
+            secs.toString().padStart(2, '0')
+        ].join(':');
+    };
 
     useEffect(() => {
         const fetchMeeting = async () => {
@@ -163,6 +183,9 @@ export default function TranscriptionPage() {
                         date: meetingData.meeting_date,
                     });
                 }
+
+                // Fetch transcriptions from API
+                await fetchTranscriptions(meetingId);
                 
             } catch (err) {
                 console.error('Error fetching meeting:', err);
@@ -173,6 +196,60 @@ export default function TranscriptionPage() {
         
         fetchMeeting();
     }, [meetingId]);
+
+    // Fetch transcriptions from API
+    const fetchTranscriptions = async (meetingId: string) => {
+        setIsLoadingTranscriptions(true);
+        setTranscriptError(null);
+        try {
+            const response = await fetch(`/api/backend/meetings/${meetingId}/transcriptions`);
+            
+            if (!response.ok) {
+                throw new Error('Failed to fetch transcriptions');
+            }
+            
+            const data = await response.json();
+            const transcriptions = data.transcriptions || [];
+            
+            // Map API transcriptions to our TranscriptSegment format
+            // Assign random speakers for demo purposes
+            const speakerIds = transcript?.speakers.map(s => s.id) || [];
+            
+            const formattedTranscriptions = transcriptions.map((t: any, index: number) => {
+                // Randomly assign a speaker from our sample speakers
+                const randomSpeakerId = speakerIds[index % speakerIds.length];
+                
+                return {
+                    id: `api-seg-${index}`,
+                    speakerId: randomSpeakerId,
+                    timestamp: formatTime(t.start_time),
+                    text: t.text,
+                    start_time: t.start_time,
+                    end_time: t.end_time,
+                    sentiment: 'neutral' as 'positive' | 'neutral' | 'negative',
+                };
+            });
+            
+            setApiTranscriptions(formattedTranscriptions);
+            
+            // If we have API transcriptions, update the transcript object
+            if (formattedTranscriptions.length > 0) {
+                setTranscript(prev => {
+                    if (!prev) return prev;
+                    return {
+                        ...prev,
+                        segments: formattedTranscriptions,
+                    };
+                });
+            }
+            
+        } catch (err) {
+            console.error('Error fetching transcriptions:', err);
+            setTranscriptError('Failed to load transcriptions from API');
+        } finally {
+            setIsLoadingTranscriptions(false);
+        }
+    };
 
     // Filter segments by selected speakers or show all if none selected
     const filteredSegments = transcript?.segments.filter(segment =>

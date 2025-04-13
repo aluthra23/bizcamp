@@ -143,8 +143,6 @@ class QdrantManager:
                 points = scroll_result[0]
                 next_offset = scroll_result[1] 
 
-                print(points[0])
-
 
                 # Extract required fields and store as JSON objects
                 transcriptions = [
@@ -152,7 +150,6 @@ class QdrantManager:
                         "text": point.payload.get("text", ""),
                         "start_time": point.payload.get("start_time", 0),
                         "end_time": point.payload.get("end_time", 0),
-                        "vector": point.vector
                     }
                     for point in points
                 ]

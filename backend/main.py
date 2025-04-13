@@ -199,3 +199,15 @@ async def chat_with_meeting(meeting_id: str, request: Request):
         return response
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error processing chat request: {str(e)}")
+
+@app.get("/meetings/{meeting_id}/transcriptions")
+async def get_transcriptions(meeting_id: str):
+    try:
+        # Get transcriptions from Qdrant
+        transcriptions = qdrant_manager.get_transcriptions(collection_name=meeting_id)
+        
+        # Return the transcriptions
+        return {"transcriptions": transcriptions}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error retrieving transcriptions: {str(e)}")
+
