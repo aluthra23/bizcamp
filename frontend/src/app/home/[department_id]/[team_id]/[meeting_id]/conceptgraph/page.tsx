@@ -540,12 +540,12 @@ export default function ConceptGraphPage() {
                                                             {node.text_snippet}
                                                         </p>
                                                     )}
-                                                    {node.start_time !== undefined && node.end_time !== undefined && (
+                                                    {/* {node.start_time !== undefined && node.end_time !== undefined && (
                                                         <p className="text-xs text-white/50 mt-2">
                                                             {Math.floor(node.start_time / 60)}:{(node.start_time % 60).toString().padStart(2, '0')} -
                                                             {Math.floor(node.end_time / 60)}:{(node.end_time % 60).toString().padStart(2, '0')}
                                                         </p>
-                                                    )}
+                                                    )} */}
                                                 </div>
                                             ))}
                                     </div>
