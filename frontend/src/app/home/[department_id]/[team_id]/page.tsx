@@ -333,7 +333,7 @@ export default function TeamPage() {
                                         <line x1="19" y1="12" x2="5" y2="12"></line>
                                         <polyline points="12 19 5 12 12 5"></polyline>
                                     </svg>
-                                    <span>Back to Department</span>
+                                    <span>Back to Teams</span>
                                 </Link>
                             </div>
                             <div className="flex items-center gap-4">
