@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
+import ReactMarkdown from 'react-markdown';
 
 // Define types
 interface Speaker {
@@ -146,6 +147,11 @@ export default function TranscriptionPage() {
     const [isLoadingTranscriptions, setIsLoadingTranscriptions] = useState(false);
     const [transcriptError, setTranscriptError] = useState<string | null>(null);
 
+    // State for AI summary
+    const [aiSummary, setAiSummary] = useState<string | null>(null);
+    const [isLoadingSummary, setIsLoadingSummary] = useState(false);
+    const [summaryError, setSummaryError] = useState<string | null>(null);
+
     // Helper function to format seconds to "HH:MM:SS" format
     const formatTime = (seconds: number): string => {
         const hours = Math.floor(seconds / 3600);
@@ -157,6 +163,31 @@ export default function TranscriptionPage() {
             minutes.toString().padStart(2, '0'),
             secs.toString().padStart(2, '0')
         ].join(':');
+    };
+
+    // Fetch AI Summary from the API
+    const fetchAiSummary = async () => {
+        setIsLoadingSummary(true);
+        setSummaryError(null);
+        try {
+            const response = await fetch(`/api/backend/summaries/${meetingId}/fetch_summary`);
+            
+            if (!response.ok) {
+                throw new Error('Failed to fetch AI summary');
+            }
+            
+            const data = await response.json();
+            if (data.summary) {
+                setAiSummary(data.summary);
+            } else {
+                setSummaryError('Transcription is going on and we will generate after. If your transcription is over, we are generating summaries right now, ask again in 30 seconds');
+            }
+        } catch (err) {
+            console.error('Error fetching AI summary:', err);
+            setSummaryError('Transcription is going on and we will generate after. If your transcription is over, we are generating summaries right now, ask again in 30 seconds');
+        } finally {
+            setIsLoadingSummary(false);
+        }
     };
 
     useEffect(() => {
@@ -196,6 +227,13 @@ export default function TranscriptionPage() {
         
         fetchMeeting();
     }, [meetingId]);
+
+    // Effect to fetch AI summary when user switches to summary tab
+    useEffect(() => {
+        if (activeTab === 'summary' && !aiSummary && !isLoadingSummary) {
+            fetchAiSummary();
+        }
+    }, [activeTab]);
 
     // Fetch transcriptions from API
     const fetchTranscriptions = async (meetingId: string) => {
@@ -430,42 +468,69 @@ export default function TranscriptionPage() {
                             </div>
                         ) : (
                             <div className="glass-effect rounded-xl border border-white/10 p-6">
-                                <div className="mb-6">
-                                    <h3 className="text-lg font-semibold text-white mb-3">Meeting Summary</h3>
-                                    <p className="text-text-primary">{transcript.summary}</p>
-                                </div>
+                                {isLoadingSummary ? (
+                                    <div className="flex justify-center items-center py-8">
+                                        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
+                                    </div>
+                                ) : summaryError ? (
+                                    <div className="text-center py-8">
+                                        <p className="text-text-secondary mb-4">{summaryError}</p>
+                                        <button
+                                            onClick={fetchAiSummary}
+                                            className="bg-gradient-to-r from-primary to-accent text-white px-4 py-2 rounded-full font-medium"
+                                        >
+                                            Try Again
+                                        </button>
+                                    </div>
+                                ) : aiSummary ? (
+                                    <div className="prose prose-invert max-w-none">
+                                        <h3 className="text-lg font-semibold text-white mb-4">AI-Generated Summary</h3>
+                                        <div className="markdown-content">
+                                            <ReactMarkdown>
+                                                {aiSummary}
+                                            </ReactMarkdown>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <div className="mb-6">
+                                            <h3 className="text-lg font-semibold text-white mb-3">Meeting Summary</h3>
+                                            <p className="text-text-primary">{transcript.summary}</p>
+                                        </div>
 
-                                <div className="mb-6">
-                                    <h3 className="text-lg font-semibold text-white mb-3">Key Points</h3>
-                                    <ul className="space-y-2">
-                                        {transcript.keyPoints.map((point, index) => (
-                                            <li key={index} className="flex items-start gap-2">
-                                                <div className="w-5 h-5 rounded-full bg-primary/20 text-primary-light flex items-center justify-center flex-shrink-0 mt-0.5">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                                    </svg>
-                                                </div>
-                                                <span className="text-text-primary">{point}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
+                                        <div className="mb-6">
+                                            <h3 className="text-lg font-semibold text-white mb-3">Key Points</h3>
+                                            <ul className="space-y-2">
+                                                {transcript.keyPoints.map((point, index) => (
+                                                    <li key={index} className="flex items-start gap-2">
+                                                        <div className="w-5 h-5 rounded-full bg-primary/20 text-primary-light flex items-center justify-center flex-shrink-0 mt-0.5">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                                <polyline points="20 6 9 17 4 12"></polyline>
+                                                            </svg>
+                                                        </div>
+                                                        <span className="text-text-primary">{point}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
 
-                                <div>
-                                    <h3 className="text-lg font-semibold text-white mb-3">Action Items</h3>
-                                    <ul className="space-y-2">
-                                        {transcript.actionItems.map((item, index) => (
-                                            <li key={index} className="flex items-start gap-2">
-                                                <div className="w-5 h-5 rounded-full bg-accent/20 text-accent-light flex items-center justify-center flex-shrink-0 mt-0.5">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                        <path d="M3 10h18M7 15h10M12 3v6M14.5 13.5l-5-3M9.5 13.5l5-3"/>
-                                                    </svg>
-                                                </div>
-                                                <span className="text-text-primary">{item}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
+                                        <div>
+                                            <h3 className="text-lg font-semibold text-white mb-3">Action Items</h3>
+                                            <ul className="space-y-2">
+                                                {transcript.actionItems.map((item, index) => (
+                                                    <li key={index} className="flex items-start gap-2">
+                                                        <div className="w-5 h-5 rounded-full bg-accent/20 text-accent-light flex items-center justify-center flex-shrink-0 mt-0.5">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                                <path d="M3 10h18M7 15h10M12 3v6M14.5 13.5l-5-3M9.5 13.5l5-3"/>
+                                                            </svg>
+                                                        </div>
+                                                        <span className="text-text-primary">{item}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>

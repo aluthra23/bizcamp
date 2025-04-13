@@ -362,5 +362,8 @@ async def get_summary(meeting_id: str):
 
 @app.get("/summaries/{meeting_id}/fetch_summary")
 async def fetch_summary(meeting_id: str):
-    summary = db["summaries"].find_one({"meeting_id": meeting_id})
-    return {"summary": summary}
+    try:
+        summary = db["summaries"].find_one({"meeting_id": meeting_id})
+        return {"summary": summary['summary']}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching summary: {str(e)}")
