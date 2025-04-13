@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, HTTPException
+from fastapi import FastAPI, Request, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from db.mongo import db
 from bson import ObjectId #vedant import
@@ -11,6 +11,7 @@ from fastapi import UploadFile, File, Form
 import io
 import pdfplumber
 from summarize import Summarizer
+import threading
 load_dotenv()
 
 app = FastAPI()
@@ -349,16 +350,34 @@ async def get_concept_graph(meeting_id: str):
    except Exception as e:
        raise HTTPException(status_code=500, detail=f"Error retrieving concept graph: {str(e)}")
 
-
 @app.get("/meetings/{meeting_id}/summary")
 async def get_summary(meeting_id: str):
-    all_transcriptions = qdrant_manager.get_transcriptions(collection_name=meeting_id)
-    all_text = ""
-    for transcription in all_transcriptions:
-        all_text += transcription['text']
-    summary = Summarizer().summarize(all_text)['summary']
-    db["summaries"].insert_one({"meeting_id": meeting_id, "summary": summary})
-    return {"success": True, "message": "Summary inserted successfully"}
+    # Start a completely separate thread for summarization
+    # This is more isolated than background_tasks and won't block the main application
+    thread = threading.Thread(target=run_generate_summary, args=(meeting_id,))
+    thread.daemon = True  # Set as daemon so it doesn't prevent app shutdown
+    thread.start()
+    
+    # Return immediately
+    return {"success": True, "message": "Summary generation started in separate thread"}
+
+# Non-async function to run in a separate thread
+def run_generate_summary(meeting_id: str):
+    try:
+        all_transcriptions = qdrant_manager.get_transcriptions(collection_name=meeting_id)
+        all_text = ""
+        for transcription in all_transcriptions:
+            all_text += transcription['text']
+        summary = Summarizer().summarize(all_text)['summary']
+        
+        # Database operations
+        if db["summaries"].find_one({"meeting_id": meeting_id}):
+            db["summaries"].update_one({"meeting_id": meeting_id}, {"$set": {"summary": summary}})
+        else:
+            db["summaries"].insert_one({"meeting_id": meeting_id, "summary": summary})
+        print(f"Summary for meeting {meeting_id} generated and saved successfully")
+    except Exception as e:
+        print(f"Error generating summary for meeting {meeting_id}: {str(e)}")
 
 @app.get("/summaries/{meeting_id}/fetch_summary")
 async def fetch_summary(meeting_id: str):

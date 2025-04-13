@@ -486,7 +486,44 @@ export default function TranscriptionPage() {
                                     <div className="prose prose-invert max-w-none">
                                         <h3 className="text-lg font-semibold text-white mb-4">AI-Generated Summary</h3>
                                         <div className="markdown-content">
-                                            <ReactMarkdown>
+                                            <ReactMarkdown
+                                                components={{
+                                                    // Add specific styling for list items
+                                                    ul: ({node, ...props}) => (
+                                                        <ul className="space-y-2 my-4 list-disc pl-5" {...props} />
+                                                    ),
+                                                    ol: ({node, ...props}) => (
+                                                        <ol className="space-y-2 my-4 list-decimal pl-5" {...props} />
+                                                    ),
+                                                    li: ({node, ...props}) => (
+                                                        <li className="text-text-primary" {...props} />
+                                                    ),
+                                                    // Style headings
+                                                    h1: ({node, ...props}) => (
+                                                        <h1 className="text-xl font-bold text-white mt-6 mb-4" {...props} />
+                                                    ),
+                                                    h2: ({node, ...props}) => (
+                                                        <h2 className="text-lg font-semibold text-white mt-5 mb-3" {...props} />
+                                                    ),
+                                                    h3: ({node, ...props}) => (
+                                                        <h3 className="text-md font-medium text-white mt-4 mb-2" {...props} />
+                                                    ),
+                                                    // Style paragraphs and emphasis
+                                                    p: ({node, ...props}) => (
+                                                        <p className="text-text-primary mb-4" {...props} />
+                                                    ),
+                                                    strong: ({node, ...props}) => (
+                                                        <strong className="font-bold text-white" {...props} />
+                                                    ),
+                                                    em: ({node, ...props}) => (
+                                                        <em className="italic text-white/90" {...props} />
+                                                    ),
+                                                    // Style code blocks
+                                                    code: ({node, ...props}) => (
+                                                        <code className="bg-white/10 px-1 py-0.5 rounded text-white/90" {...props} />
+                                                    )
+                                                }}
+                                            >
                                                 {aiSummary}
                                             </ReactMarkdown>
                                         </div>
