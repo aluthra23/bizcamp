@@ -465,14 +465,17 @@ export default function TeamPage() {
                                     plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                                     initialView="dayGridMonth"
                                     headerToolbar={{
-                                        left: 'prev,next today',
+                                        left: 'prev,next',
                                         center: 'title',
                                         right: 'dayGridMonth,timeGridWeek,timeGridDay',
                                     }}
                                     events={calendarEvents}
                                     eventClick={handleEventClick}
                                     height="auto"
+                                    contentHeight="auto"
                                     aspectRatio={1.8}
+                                    expandRows={true}
+                                    dayMaxEventRows={3}
                                     eventClassNames={(eventInfo) => {
                                         // Add different class based on event title/description
                                         let classes = [];
@@ -504,6 +507,12 @@ export default function TeamPage() {
                                             }
                                         }
                                         return '';
+                                    }}
+                                    eventTimeFormat={{
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        meridiem: true,
+                                        hour12: true
                                     }}
                                 />
                             </div>

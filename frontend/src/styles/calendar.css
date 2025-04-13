@@ -4,6 +4,8 @@
   margin-top: 20px;
   font-family: 'Inter', sans-serif;
   transition: all 0.3s ease;
+  padding: 0 5px;
+  box-sizing: border-box;
 }
 
 .calendar-container:hover {
@@ -113,49 +115,161 @@
     --fc-button-border-color: transparent;
     --fc-button-hover-bg-color: rgba(255, 255, 255, 0.2);
     --fc-button-hover-border-color: transparent;
-    --fc-button-active-bg-color: var(--primary);
+    --fc-button-active-bg-color: #9333ea;
     --fc-button-active-border-color: transparent;
     --fc-today-bg-color: transparent;
+    --fc-page-bg-color: transparent;
+    --fc-neutral-bg-color: transparent;
+    
+    /* Fix the calendar width issue */
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
 }
 
+/* Fix calendar buttons */
 .fc .fc-button-primary:not(:disabled).fc-button-active,
 .fc .fc-button-primary:not(:disabled):active {
-    background: linear-gradient(135deg, var(--primary), var(--accent)) !important;
+    background: #9333ea !important;
     border-color: transparent !important;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
+/* Remove any potential white backgrounds */
+.fc-theme-standard td,
+.fc-theme-standard th,
+.fc .fc-scrollgrid,
+.fc .fc-scrollgrid-section > td,
+.fc-daygrid-day,
+.fc-day {
+    background: transparent !important;
+}
+
+/* Fix the white header bar with white text issue */
+.fc .fc-col-header {
+    background: transparent !important;
+}
+
+.fc .fc-col-header-cell-cushion {
+    color: white !important;
+    font-weight: 500;
+    padding: 10px 4px;
+}
+
+.fc-theme-standard .fc-scrollgrid {
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
 .fc-col-header-cell {
     padding: 8px 0;
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: transparent !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
 }
 
 .fc-day-other .fc-daygrid-day-top {
     opacity: 0.5;
 }
 
+/* Fix day number styling */
+.fc-daygrid-day-number {
+    color: white !important;
+    opacity: 0.9;
+    font-size: 0.9rem;
+    margin: 5px;
+}
+
+/* Adjust the today highlighting */
 .fc-day-today {
     position: relative;
     background: radial-gradient(circle at center, rgba(147, 51, 234, 0.15), transparent 70%) !important;
 }
 
-/* Event styling */
+/* Day numbers (dates) */
+.fc .fc-daygrid-day-top {
+    flex-direction: row;
+    justify-content: center;
+    padding: 5px;
+}
+
+.fc .fc-daygrid-day-number {
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+}
+
+/* Event styling - fix the time display */
 .fc-event {
-    background: linear-gradient(135deg, var(--primary), var(--accent)) !important;
+    background: #9333ea !important;
     border: none !important;
     border-radius: 6px !important;
-    padding: 0.25rem 0.5rem !important;
+    padding: 0.35rem 0.5rem !important;
     font-size: 0.85rem !important;
     font-weight: 500 !important;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
     transition: transform 0.2s ease, box-shadow 0.2s ease !important;
     cursor: pointer !important;
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 1.7rem !important;
+    overflow: hidden !important;
 }
 
 .fc-event-title, .fc-event-time {
     white-space: normal !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
+    width: 100% !important;
+    color: white !important;
+}
+
+.fc-event-time {
+    display: inline-block !important;
+    padding-right: 4px !important;
+    font-size: 0.75rem !important;
+    font-weight: normal !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    white-space: nowrap !important;
+    min-width: 60px !important;
+}
+
+/* Fix AM/PM display */
+.fc-event-time .fc-event-time-meridiem {
+    text-transform: lowercase !important;
+    font-size: 0.7rem !important;
+    opacity: 0.8 !important;
+    margin-left: 1px !important;
+}
+
+.fc-event-title {
+    font-weight: 500 !important;
+    line-height: 1.2 !important;
+    display: block !important;
+    width: 100% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    padding-left: 2px !important;
+    margin-top: 2px !important;
+}
+
+/* Support for longer event times with AM/PM */
+.fc-daygrid-event .fc-event-time {
+    display: inline-block !important;
+    vertical-align: top !important;
+    padding-right: 3px !important;
+}
+
+/* Improve display when events have both time and title */
+.fc-daygrid-event {
+    display: flex !important;
+    flex-direction: column !important;
+    margin-bottom: 3px !important;
+}
+
+/* Make event title truncate with ellipsis when too long */
+.fc-event-title-container {
+    width: 100% !important;
+    display: block !important;
 }
 
 .fc-event:hover {
@@ -163,9 +277,24 @@
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
 }
 
+/* Fix for mobile view */
+@media (max-width: 768px) {
+    .fc-toolbar-chunk {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-bottom: 0.5rem;
+    }
+    
+    .fc .fc-toolbar {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
 /* Event with transcription */
 .fc-event.has-transcription {
-    background: linear-gradient(135deg, var(--accent), var(--accent)) !important;
+    background: #d946ef !important;
 }
 
 /* Animation for active events */
@@ -219,4 +348,75 @@
 .delay-10 { animation-delay: 0.55s; }
 .delay-11 { animation-delay: 0.6s; }
 .delay-12 { animation-delay: 0.65s; }
-.delay-13 { animation-delay: 0.7s; } 
+.delay-13 { animation-delay: 0.7s; }
+
+/* Fix button styling */
+button.fc-button-primary {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border: none !important;
+    margin: 0 3px !important;
+}
+
+button.fc-button-primary:hover {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Make month header larger and more visible */
+.fc .fc-toolbar-title {
+    font-size: 1.5rem !important;
+    font-weight: 600 !important;
+    color: white !important;
+}
+
+/* Fix calendar days vertical alignment */
+.fc .fc-daygrid-day-frame {
+    min-height: 70px !important;
+}
+
+/* Fix event time display */
+.fc .fc-daygrid-event {
+    white-space: normal !important;
+    margin-bottom: 3px !important;
+}
+
+.fc-v-event .fc-event-main {
+    flex-direction: column !important;
+    padding: 2px !important;
+}
+
+/* Fix the calendar width to ensure it doesn't get cut off */
+.fc-view {
+    width: 100% !important;
+    overflow: visible !important;
+}
+
+.fc-view-harness {
+    width: 100% !important;
+    overflow: visible !important;
+}
+
+/* Ensure the events are properly contained within days */
+.fc-daygrid-event-harness {
+    margin-right: 4px !important;
+    margin-left: 4px !important;
+}
+
+/* Fix event text contrast */
+.fc-event-title,
+.fc-event-title-container,
+.fc-event-main-frame {
+    width: 100% !important;
+    color: white !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Ensure time and title are properly spaced */
+.fc-daygrid-event .fc-event-main {
+    padding: 2px 4px !important;
+}
+
+/* Fix the calendar's handling of meridiem (am/pm) indicator */
+.fc .fc-daygrid-event .fc-event-time {
+    font-weight: normal !important;
+    line-height: 1.2 !important;
+} 
