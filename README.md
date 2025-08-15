@@ -1,6 +1,7 @@
 # BizCamp
 
 A business management application with a modern UI built with Next.js, FastAPI, and MongoDB.
+Demo: https://www.youtube.com/watch?v=0aQxmoBndzs
 
 ## Project Structure
 
